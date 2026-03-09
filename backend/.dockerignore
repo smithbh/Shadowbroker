@@ -5,6 +5,12 @@ __pycache__/
 .pytest_cache/
 .coverage
 cctv.db
-*.json
 *.txt
 !requirements.txt
+# Exclude debug/cache JSON but keep package.json and tracked_names
+ais_cache.json
+carrier_positions.json
+dump.json
+debug_fast.json
+nyc_full.json
+nyc_sample.json
