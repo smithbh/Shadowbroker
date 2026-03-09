@@ -29,7 +29,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # For prototyping, allow all
+    allow_origins=["*"],  # Must be permissive — users access from localhost, LAN IPs, Docker, custom ports
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
