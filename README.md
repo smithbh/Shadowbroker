@@ -219,33 +219,73 @@ cd Shadowbroker
 
 Open `http://localhost:3000` to view the dashboard.
 
-> **Deploying publicly or on a LAN?** The frontend **auto-detects** the
-> backend — it uses your browser's hostname with port `8000`
-> (e.g. if you visit `http://192.168.1.50:3000`, API calls go to
-> `http://192.168.1.50:8000`). **No configuration needed** for most setups.
+> **Deploying publicly or on a LAN?** No configuration needed for most setups.
+> The frontend proxies all API calls through the Next.js server to `BACKEND_URL`,
+> which defaults to `http://backend:8000` (Docker internal networking).
+> Port 8000 does not need to be exposed externally.
 >
-> If your backend runs on a **different port or host** (reverse proxy,
-> custom Docker port mapping, separate server), set `NEXT_PUBLIC_API_URL`:
+> If your backend runs on a **different host or port**, set `BACKEND_URL` at runtime — no rebuild required:
 >
 > ```bash
 > # Linux / macOS
-> NEXT_PUBLIC_API_URL=http://myserver.com:9096 docker-compose up -d --build
+> BACKEND_URL=http://myserver.com:9096 docker-compose up -d
 >
 > # Podman (via compose.sh wrapper)
-> NEXT_PUBLIC_API_URL=http://192.168.1.50:9096 ./compose.sh up -d --build
+> BACKEND_URL=http://192.168.1.50:9096 ./compose.sh up -d
 >
 > # Windows (PowerShell)
-> $env:NEXT_PUBLIC_API_URL="http://myserver.com:9096"; docker-compose up -d --build
+> $env:BACKEND_URL="http://myserver.com:9096"; docker-compose up -d
 >
 > # Or add to a .env file next to docker-compose.yml:
-> # NEXT_PUBLIC_API_URL=http://myserver.com:9096
+> # BACKEND_URL=http://myserver.com:9096
 > ```
->
-> This is a **build-time** variable (Next.js limitation) — it gets baked into
-> the frontend during `npm run build`. Changing it requires a rebuild.
 
 If you prefer to call the container engine directly, Podman users can run `podman compose up -d`, or force the wrapper to use Podman with `./compose.sh --engine podman up -d`.
 Depending on your local Podman configuration, `podman compose` may still delegate to an external compose provider while talking to the Podman socket.
+
+---
+
+### 🐋 Standalone Deploy (Portainer, Uncloud, NAS, etc.)
+
+No need to clone the repo. Use the pre-built images published to the GitHub Container Registry.
+
+Create a `docker-compose.yml` with the following content and deploy it directly — paste it into Portainer's stack editor, `uncloud deploy`, or any Docker host:
+
+```yaml
+services:
+  backend:
+    image: ghcr.io/bigbodycobain/shadowbroker-backend:latest
+    container_name: shadowbroker-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - AIS_API_KEY=your_aisstream_key          # Required — get one free at aisstream.io
+      - OPENSKY_CLIENT_ID=                       # Optional — higher flight data rate limits
+      - OPENSKY_CLIENT_SECRET=                   # Optional — paired with Client ID above
+      - LTA_ACCOUNT_KEY=                         # Optional — Singapore CCTV cameras
+      - CORS_ORIGINS=                            # Optional — comma-separated allowed origins
+    volumes:
+      - backend_data:/app/data
+    restart: unless-stopped
+
+  frontend:
+    image: ghcr.io/bigbodycobain/shadowbroker-frontend:latest
+    container_name: shadowbroker-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - BACKEND_URL=http://backend:8000   # Docker internal networking — no rebuild needed
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  backend_data:
+```
+
+> **How it works:** The frontend container proxies all `/api/*` requests through the Next.js server to `BACKEND_URL` using Docker's internal networking. The browser only ever talks to port 3000 — port 8000 does not need to be exposed externally.
+>
+> `BACKEND_URL` is a plain runtime environment variable (not a build-time `NEXT_PUBLIC_*`), so you can change it in Portainer, Uncloud, or any compose editor without rebuilding the image. Set it to the address where your backend is reachable from inside the Docker network (e.g. `http://backend:8000`, `http://192.168.1.50:8000`).
 
 ---
 
@@ -420,16 +460,13 @@ OPENSKY_CLIENT_SECRET=your_opensky_secret     # OAuth2 — paired with Client ID
 LTA_ACCOUNT_KEY=your_lta_key                  # Singapore CCTV cameras
 ```
 
-### Frontend (optional)
+### Frontend
 
 | Variable | Where to set | Purpose |
 |---|---|---|
-| `NEXT_PUBLIC_API_URL` | `.env` next to `docker-compose.yml`, or shell env | Override backend URL when deploying publicly or behind a reverse proxy. Leave unset for auto-detection. |
+| `BACKEND_URL` | `environment` in `docker-compose.yml`, or shell env | URL the Next.js server uses to proxy API calls to the backend. Defaults to `http://backend:8000`. **Runtime variable — no rebuild needed.** |
 
-**How auto-detection works:** When `NEXT_PUBLIC_API_URL` is not set, the frontend
-reads `window.location.hostname` in the browser and calls `{protocol}//{hostname}:8000`.
-This means the dashboard works on `localhost`, LAN IPs, and public domains without
-any configuration — as long as the backend is reachable on port 8000 of the same host.
+**How it works:** The frontend proxies all `/api/*` requests through the Next.js server to `BACKEND_URL` using Docker's internal networking. Browsers only talk to port 3000; port 8000 never needs to be exposed externally. For local dev without Docker, `BACKEND_URL` defaults to `http://localhost:8000`.
 
 ---
 
