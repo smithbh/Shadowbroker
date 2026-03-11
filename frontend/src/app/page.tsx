@@ -592,7 +592,7 @@ export default function Dashboard() {
       {backendStatus === 'disconnected' && (
         <div className="absolute top-0 left-0 right-0 z-[9000] flex items-center justify-center py-2 bg-red-950/90 border-b border-red-500/40 backdrop-blur-sm">
           <span className="text-[10px] font-mono tracking-widest text-red-400">
-            BACKEND OFFLINE — Cannot reach {API_BASE}. Start the backend server or check your connection.
+            BACKEND OFFLINE — Cannot reach backend server. Check that the backend container is running and BACKEND_URL is correct.
           </span>
         </div>
       )}
