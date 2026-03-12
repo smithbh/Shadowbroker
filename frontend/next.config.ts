@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
-// BACKEND_URL is a plain (non-NEXT_PUBLIC_) env var read at server startup —
-// not baked at build time — so it can be set in docker-compose `environment`.
-// Defaults to localhost for local dev where both services run on the same host.
-const backendUrl = process.env.BACKEND_URL ?? "http://localhost:8000";
+// /api/* requests are proxied to the backend by the catch-all route handler at
+// src/app/api/[...path]/route.ts, which reads BACKEND_URL at request time.
+// Do NOT add rewrites for /api/* here — next.config is evaluated at build time,
+// so any URL baked in here ignores the runtime BACKEND_URL env var.
 
 const nextConfig: NextConfig = {
   transpilePackages: ['react-map-gl', 'mapbox-gl', 'maplibre-gl'],
@@ -13,14 +13,6 @@ const nextConfig: NextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: `${backendUrl}/api/:path*`,
-      },
-    ];
   },
 };
 

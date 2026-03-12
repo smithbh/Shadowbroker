@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "WebFetch(domain:localhost)",
+      "Bash(curl -s http://localhost:8000/api/settings/api-keys | head -50)",
+      "Bash(docker ps:*)",
+      "Bash(docker compose:*)",
+      "Bash(sleep 3 && curl -s http://localhost:3000/api/settings/api-keys | head -c 200)",
+      "Bash(sleep 4 && curl -s http://localhost:3000/api/settings/api-keys | head -c 200)",
+      "Bash(git commit:*)",
+      "WebSearch"
+    ]
+  }
+}
