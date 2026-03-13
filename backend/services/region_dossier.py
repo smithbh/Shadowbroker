@@ -50,7 +50,7 @@ def _reverse_geocode(lat: float, lng: float) -> dict:
                 continue
             else:
                 logger.warning(f"Nominatim returned {res.status_code}")
-        except Exception as e:
+        except (_requests.RequestException, ConnectionError, TimeoutError, OSError) as e:
             logger.warning(f"Reverse geocode failed: {e}")
     return {}
 
@@ -66,7 +66,7 @@ def _fetch_country_data(country_code: str) -> dict:
         res = fetch_with_curl(url, timeout=10)
         if res.status_code == 200:
             return res.json()
-    except Exception as e:
+    except (ConnectionError, TimeoutError, ValueError, KeyError, OSError) as e:
         logger.warning(f"RestCountries failed for {country_code}: {e}")
     return {}
 
@@ -96,7 +96,7 @@ def _fetch_wikidata_leader(country_name: str) -> dict:
                     "leader": r.get("leaderLabel", {}).get("value", "Unknown"),
                     "government_type": r.get("govTypeLabel", {}).get("value", "Unknown"),
                 }
-    except Exception as e:
+    except (ConnectionError, TimeoutError, ValueError, KeyError, OSError) as e:
         logger.warning(f"Wikidata SPARQL failed for {country_name}: {e}")
     return {"leader": "Unknown", "government_type": "Unknown"}
 
@@ -122,7 +122,7 @@ def _fetch_local_wiki_summary(place_name: str, country_name: str = "") -> dict:
                         "extract": data.get("extract", ""),
                         "thumbnail": data.get("thumbnail", {}).get("source", ""),
                     }
-        except Exception:
+        except (ConnectionError, TimeoutError, ValueError, KeyError, OSError):  # Intentional: optional enrichment
             continue
     return {}
 
@@ -158,22 +158,22 @@ def get_region_dossier(lat: float, lng: float) -> dict:
 
     try:
         country_data = country_fut.result(timeout=12)
-    except Exception:
+    except Exception:  # Intentional: optional enrichment
         logger.warning("Country data fetch timed out or failed")
         country_data = {}
     try:
         leader_data = leader_fut.result(timeout=12)
-    except Exception:
+    except Exception:  # Intentional: optional enrichment
         logger.warning("Leader data fetch timed out or failed")
         leader_data = {"leader": "Unknown", "government_type": "Unknown"}
     try:
         local_data = local_fut.result(timeout=12)
-    except Exception:
+    except Exception:  # Intentional: optional enrichment
         logger.warning("Local wiki fetch timed out or failed")
         local_data = {}
     try:
         country_wiki_data = country_wiki_fut.result(timeout=12)
-    except Exception:
+    except Exception:  # Intentional: optional enrichment
         country_wiki_data = {}
 
     # If no local data but we have country wiki summary, use that

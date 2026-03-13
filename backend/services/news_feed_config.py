@@ -31,7 +31,7 @@ def get_feeds() -> list[dict]:
             feeds = data.get("feeds", []) if isinstance(data, dict) else data
             if isinstance(feeds, list) and len(feeds) > 0:
                 return feeds
-    except Exception as e:
+    except (IOError, OSError, json.JSONDecodeError, ValueError) as e:
         logger.warning(f"Failed to read news feed config: {e}")
     return list(DEFAULT_FEEDS)
 
@@ -64,7 +64,7 @@ def save_feeds(feeds: list[dict]) -> bool:
             encoding="utf-8",
         )
         return True
-    except Exception as e:
+    except (IOError, OSError) as e:
         logger.error(f"Failed to write news feed config: {e}")
         return False
 

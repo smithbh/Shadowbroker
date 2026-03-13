@@ -58,6 +58,8 @@ tmp/
 *.log
 *.tmp
 *.bak
+*.swp
+*.swo
 out.txt
 out_sys.txt
 rss_output.txt
@@ -75,7 +77,11 @@ backend/out_liveua.json
 frontend/server_logs*.txt
 frontend/cctv.db
 *.zip
+*.tar.gz
 .git_backup/
+coverage/
+.coverage
+dist/
 
 # Test files (may contain hardcoded keys)
 backend/test_*.py

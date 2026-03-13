@@ -5,284 +5,44 @@ import React, { useMemo, useState, useEffect, useCallback, useRef } from "react"
 import Map, { Source, Layer, MapRef, ViewState, Popup, Marker } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { computeNightPolygon } from "@/utils/solarTerminator";
+import { interpolatePosition } from "@/utils/positioning";
+import { darkStyle, lightStyle } from "@/components/map/styles/mapStyles";
 import ScaleBar from "@/components/ScaleBar";
 import maplibregl from "maplibre-gl";
 import { AlertTriangle } from "lucide-react";
 import WikiImage from "@/components/WikiImage";
 import { useTheme } from "@/lib/ThemeContext";
 
-const svgPlaneCyan = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="cyan" stroke="black"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" /></svg>`)}`;
-const svgPlaneYellow = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="yellow" stroke="black"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" /></svg>`)}`;
-const svgPlaneOrange = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#FF8C00" stroke="black"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" /></svg>`)}`;
-const svgPlanePurple = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#9B59B6" stroke="black"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" /></svg>`)}`;
-const svgFighter = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="yellow" stroke="black"><path d="M12 2L14 8L18 10L14 16L15 22L12 20L9 22L10 16L6 10L10 8L12 2Z"/></svg>`)}`;
-const svgHeli = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="yellow" stroke="black"><path d="M10 6L10 14L8 16L8 18L10 17L12 22L14 17L16 18L16 16L14 14L14 6C14 4 13 2 12 2C11 2 10 4 10 6Z"/><circle cx="12" cy="12" r="8" fill="none" stroke="black" stroke-dasharray="2 2" stroke-width="1"/></svg>`)}`;
-const svgHeliCyan = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="cyan" stroke="black"><path d="M10 6L10 14L8 16L8 18L10 17L12 22L14 17L16 18L16 16L14 14L14 6C14 4 13 2 12 2C11 2 10 4 10 6Z"/><circle cx="12" cy="12" r="8" fill="none" stroke="cyan" stroke-dasharray="2 2" stroke-width="1"/></svg>`)}`;
-const svgHeliOrange = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#FF8C00" stroke="black"><path d="M10 6L10 14L8 16L8 18L10 17L12 22L14 17L16 18L16 16L14 14L14 6C14 4 13 2 12 2C11 2 10 4 10 6Z"/><circle cx="12" cy="12" r="8" fill="none" stroke="#FF8C00" stroke-dasharray="2 2" stroke-width="1"/></svg>`)}`;
-const svgHeliPurple = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#9B59B6" stroke="black"><path d="M10 6L10 14L8 16L8 18L10 17L12 22L14 17L16 18L16 16L14 14L14 6C14 4 13 2 12 2C11 2 10 4 10 6Z"/><circle cx="12" cy="12" r="8" fill="none" stroke="#9B59B6" stroke-dasharray="2 2" stroke-width="1"/></svg>`)}`;
-const svgTanker = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="yellow" stroke="black"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" /><line x1="12" y1="20" x2="12" y2="24" stroke="yellow" stroke-width="2" /></svg>`)}`;
-const svgRecon = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="yellow" stroke="black"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" /><ellipse cx="12" cy="11" rx="5" ry="3" fill="none" stroke="red" stroke-width="1.5"/></svg>`)}`;
-const svgPlanePink = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#FF1493" stroke="black"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" /></svg>`)}`;
-const svgPlaneAlertRed = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#FF2020" stroke="black"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" /></svg>`)}`;
-const svgPlaneDarkBlue = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#1A3A8A" stroke="#4A80D0"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" /></svg>`)}`;
-const svgPlaneWhiteAlert = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white" stroke="#ff0000" stroke-width="2"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" /></svg>`)}`;
-const svgHeliPink = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#FF1493" stroke="black"><path d="M10 6L10 14L8 16L8 18L10 17L12 22L14 17L16 18L16 16L14 14L14 6C14 4 13 2 12 2C11 2 10 4 10 6Z"/><circle cx="12" cy="12" r="8" fill="none" stroke="#FF1493" stroke-dasharray="2 2" stroke-width="1"/></svg>`)}`;
-const svgHeliAlertRed = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#ff0000" stroke="black"><path d="M10 6L10 14L8 16L8 18L10 17L12 22L14 17L16 18L16 16L14 14L14 6C14 4 13 2 12 2C11 2 10 4 10 6Z"/><circle cx="12" cy="12" r="8" fill="none" stroke="#ff0000" stroke-dasharray="2 2" stroke-width="1"/></svg>`)}`;
-const svgHeliDarkBlue = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#000080" stroke="#4A80D0"><path d="M10 6L10 14L8 16L8 18L10 17L12 22L14 17L16 18L16 16L14 14L14 6C14 4 13 2 12 2C11 2 10 4 10 6Z"/><circle cx="12" cy="12" r="8" fill="none" stroke="#4A80D0" stroke-dasharray="2 2" stroke-width="1"/></svg>`)}`;
-const svgHeliBlue = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#3b82f6" stroke="black"><path d="M10 6L10 14L8 16L8 18L10 17L12 22L14 17L16 18L16 16L14 14L14 6C14 4 13 2 12 2C11 2 10 4 10 6Z"/><circle cx="12" cy="12" r="8" fill="none" stroke="#3b82f6" stroke-dasharray="2 2" stroke-width="1"/></svg>`)}`;
-const svgHeliLime = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#32CD32" stroke="black"><path d="M10 6L10 14L8 16L8 18L10 17L12 22L14 17L16 18L16 16L14 14L14 6C14 4 13 2 12 2C11 2 10 4 10 6Z"/><circle cx="12" cy="12" r="8" fill="none" stroke="#32CD32" stroke-dasharray="2 2" stroke-width="1"/></svg>`)}`;
-const svgHeliWhiteAlert = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white" stroke="#666"><path d="M10 6L10 14L8 16L8 18L10 17L12 22L14 17L16 18L16 16L14 14L14 6C14 4 13 2 12 2C11 2 10 4 10 6Z"/><circle cx="12" cy="12" r="8" fill="none" stroke="#999" stroke-dasharray="2 2" stroke-width="1"/></svg>`)}`;
-const svgPlaneBlack = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#222" stroke="#444"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" /></svg>`)}`;
-const svgHeliBlack = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#222" stroke="#444"><path d="M10 6L10 14L8 16L8 18L10 17L12 22L14 17L16 18L16 16L14 14L14 6C14 4 13 2 12 2C11 2 10 4 10 6Z"/><circle cx="12" cy="12" r="8" fill="none" stroke="#444" stroke-dasharray="2 2" stroke-width="1"/></svg>`)}`;
-const svgDrone = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="orange" stroke="black"><path d="M12 2L15 8H9L12 2Z" /><rect x="8" y="8" width="8" height="2" /><path d="M4 10L10 14H14L20 10V12L14 16H10L4 12V10Z" /><circle cx="12" cy="14" r="2" fill="red"/></svg>`)}`;
-const svgDataCenter = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.5"><rect x="3" y="3" width="18" height="6" rx="1" fill="#2e1065"/><rect x="3" y="11" width="18" height="6" rx="1" fill="#2e1065"/><circle cx="7" cy="6" r="1" fill="#a78bfa"/><circle cx="7" cy="14" r="1" fill="#a78bfa"/><line x1="11" y1="6" x2="17" y2="6" stroke="#a78bfa" stroke-width="1"/><line x1="11" y1="14" x2="17" y2="14" stroke="#a78bfa" stroke-width="1"/><line x1="12" y1="19" x2="12" y2="22" stroke="#a78bfa" stroke-width="1.5"/></svg>`)}`;
-const svgShipGray = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 20 L6 8 L12 2 L18 8 L18 20 C18 22 6 22 6 20 Z" fill="gray" stroke="#000" stroke-width="1"/><polygon points="12,6 16,16 8,16" fill="#fff" stroke="#000" stroke-width="1"/></svg>`)}`;
-const svgShipRed = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="32" viewBox="0 0 24 24" fill="none"><path d="M6 22 L6 6 L12 2 L18 6 L18 22 Z" fill="#ff2222" stroke="#000" stroke-width="1"/><rect x="8" y="15" width="8" height="4" fill="#880000" stroke="#000" stroke-width="1"/><rect x="8" y="7" width="8" height="6" fill="#444" stroke="#000" stroke-width="1"/></svg>`)}`;
-const svgShipYellow = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="14" height="34" viewBox="0 0 24 24" fill="none"><path d="M7 22 L7 6 L12 1 L17 6 L17 22 Z" fill="yellow" stroke="#000" stroke-width="1"/><rect x="9" y="8" width="6" height="8" fill="#555" stroke="#000" stroke-width="1"/><circle cx="12" cy="18" r="1.5" fill="#000"/><line x1="12" y1="18" x2="12" y2="24" stroke="#000" stroke-width="1.5"/></svg>`)}`;
-const svgShipBlue = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="32" viewBox="0 0 24 24" fill="none"><path d="M6 22 L6 6 L12 2 L18 6 L18 22 Z" fill="#3b82f6" stroke="#000" stroke-width="1"/></svg>`)}`;
-const svgShipWhite = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="18" height="36" viewBox="0 0 24 24" fill="none"><path d="M5 21 L5 8 L12 2 L19 8 L19 21 C19 23 5 23 5 21 Z" fill="white" stroke="#000" stroke-width="1"/><rect x="7" y="10" width="10" height="8" fill="#90cdf4" stroke="#000" stroke-width="1"/><circle cx="12" cy="14" r="2" fill="yellow" stroke="#000"/></svg>`)}`;
-const svgCarrier = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="orange" stroke="black"><polygon points="3,21 21,21 20,4 16,4 16,3 12,3 12,4 4,4" /><rect x="15" y="6" width="3" height="10" /></svg>`)}`;
-const svgCctv = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="cyan" stroke-width="2"><path d="M16.75 12h3.632a1 1 0 0 1 .894 1.447l-2.034 4.069a1 1 0 0 1-.894.553H5.652a1 1 0 0 1-.894-.553L2.724 13.447A1 1 0 0 1 3.618 12h3.632M14 12V8a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v4a4 4 0 1 0 8 0Z" /></svg>`)}`;
-const svgWarning = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="yellow" stroke="black"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>`)}`;
-const svgThreat = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#ffff00" stroke="#ff0000" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>`)}`;
-const svgTriangleYellow = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#ffaa00" stroke="#000" stroke-width="1"><path d="M1 21h22L12 2 1 21z"/></svg>`)}`;
-const svgTriangleRed = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#ff0000" stroke="#fff" stroke-width="1"><path d="M1 21h22L12 2 1 21z"/></svg>`)}`;
-
-// --- Aircraft type-specific SVG paths (top-down silhouettes) ---
-// Airliner: wide swept wings with engine pods, narrow fuselage
-const AIRLINER_PATH = "M12 2C11.2 2 10.5 2.8 10.5 3.5V8.5L3 13V15L10.5 12.5V18L8 19.5V21L12 19.5L16 21V19.5L13.5 18V12.5L21 15V13L13.5 8.5V3.5C13.5 2.8 12.8 2 12 2Z M5.5 13.5L3.5 14.5 M18.5 13.5L20.5 14.5";
-// Turboprop: straight high wings, shorter body
-const TURBOPROP_PATH = "M12 3C11.3 3 10.8 3.5 10.8 4V9L3 12V13.5L10.8 11.5V18.5L9 19.5V21L12 20L15 21V19.5L13.2 18.5V11.5L21 13.5V12L13.2 9V4C13.2 3.5 12.7 3 12 3Z";
-// Bizjet: sleek, small swept wings, T-tail
-const BIZJET_PATH = "M12 1.5C11.4 1.5 11 2 11 2.8V9L5 12.5V14L11 12V18.5L8.5 20V21.5L12 20.5L15.5 21.5V20L13 18.5V12L19 14V12.5L13 9V2.8C13 2 12.6 1.5 12 1.5Z";
-
-// --- Fire icon SVGs for FIRMS hotspots (multi-tongue flame, unmistakably fire) ---
-function makeFireSvg(fill: string, innerFill: string, size = 18) {
-    // Multi-forked flame: main body + left tongue + right tongue + inner glow
-    return `data:image/svg+xml;utf8,${encodeURIComponent(
-        `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 28">` +
-        // Main flame body (wide base, pointed top)
-        `<path d="M12 1C12 1 9 5 8 8C7 11 5.5 13 5.5 16.5C5.5 20.5 8 23.5 12 23.5C16 23.5 18.5 20.5 18.5 16.5C18.5 13 17 11 16 8C15 5 12 1 12 1Z" fill="${fill}" stroke="rgba(0,0,0,0.7)" stroke-width="0.7"/>` +
-        // Left tongue (forks out left from top)
-        `<path d="M10 8C10 8 7.5 4.5 7 2.5C7 2.5 6 5.5 7 9C7.5 10.5 8.5 11.5 9.5 12" fill="${fill}" stroke="rgba(0,0,0,0.5)" stroke-width="0.4"/>` +
-        // Right tongue (forks out right from top)
-        `<path d="M14 8C14 8 16.5 4.5 17 2.5C17 2.5 18 5.5 17 9C16.5 10.5 15.5 11.5 14.5 12" fill="${fill}" stroke="rgba(0,0,0,0.5)" stroke-width="0.4"/>` +
-        // Inner bright core
-        `<path d="M12 8C12 8 10.5 11 10.5 14.5C10.5 17.5 11 19.5 12 20C13 19.5 13.5 17.5 13.5 14.5C13.5 11 12 8 12 8Z" fill="${innerFill}" opacity="0.85"/>` +
-        `</svg>`
-    )}`;
-}
-const svgFireYellow = makeFireSvg('#ffcc00', '#fff5aa', 16);
-const svgFireOrange = makeFireSvg('#ff8800', '#ffcc00', 18);
-const svgFireRed = makeFireSvg('#ff2200', '#ff8800', 20);
-const svgFireDarkRed = makeFireSvg('#cc0000', '#ff2200', 22);
-// Larger fire icons for cluster markers (visually distinct from Global Incidents circles)
-const svgFireClusterSmall = makeFireSvg('#ff6600', '#ffcc00', 32);
-const svgFireClusterMed = makeFireSvg('#ff3300', '#ff8800', 40);
-const svgFireClusterLarge = makeFireSvg('#cc0000', '#ff3300', 48);
-const svgFireClusterXL = makeFireSvg('#880000', '#cc0000', 56);
-
-function makeAircraftSvg(type: 'airliner' | 'turboprop' | 'bizjet' | 'generic', fill: string, stroke = 'black', size = 20) {
-    const paths: Record<string, string> = { airliner: AIRLINER_PATH, turboprop: TURBOPROP_PATH, bizjet: BIZJET_PATH, generic: "M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" };
-    const p = paths[type] || paths.generic;
-    // Airliner gets engine pod circles
-    const extras = type === 'airliner' ? `<circle cx="7" cy="12.5" r="1.2" fill="${fill}" stroke="${stroke}" stroke-width="0.5"/><circle cx="17" cy="12.5" r="1.2" fill="${fill}" stroke="${stroke}" stroke-width="0.5"/>` : '';
-    return `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}"><path d="${p}"/>${extras}</svg>`)}`;
-}
-
-// POTUS fleet — oversized hot pink with yellow halo ring
-const svgPotusPlane = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="none" stroke="gold" stroke-width="2" stroke-dasharray="4 2"/><g transform="translate(4,4)"><path d="${AIRLINER_PATH}" fill="#FF1493" stroke="black"/><circle cx="7" cy="12.5" r="1.2" fill="#FF1493" stroke="black" stroke-width="0.5"/><circle cx="17" cy="12.5" r="1.2" fill="#FF1493" stroke="black" stroke-width="0.5"/></g></svg>`)}`;
-const svgPotusHeli = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="none" stroke="gold" stroke-width="2" stroke-dasharray="4 2"/><g transform="translate(6,4)"><path d="M10 6L10 14L8 16L8 18L10 17L12 22L14 17L16 18L16 16L14 14L14 6C14 4 13 2 12 2C11 2 10 4 10 6Z" fill="#FF1493" stroke="black"/><circle cx="12" cy="12" r="8" fill="none" stroke="#FF1493" stroke-dasharray="2 2" stroke-width="1"/></g></svg>`)}`;
-
-// POTUS fleet ICAO hex codes (verified FAA registry)
-const POTUS_ICAOS = new Set([
-    'ADFDF8','ADFDF9',                                          // Air Force One (VC-25A)
-    'ADFEB7','ADFEB8','ADFEB9','ADFEBA',                        // Air Force Two (C-32A)
-    'AE4AE6','AE4AE8','AE4AEA','AE4AEC',                        // Air Force Two (C-32B)
-    'AE0865','AE5E76','AE5E77','AE5E79',                         // Marine One (VH-3D / VH-92A)
-]);
-
-// Pre-built aircraft SVGs by type & color
-const svgAirlinerCyan = makeAircraftSvg('airliner', 'cyan');
-const svgAirlinerOrange = makeAircraftSvg('airliner', '#FF8C00');
-const svgAirlinerPurple = makeAircraftSvg('airliner', '#9B59B6');
-const svgAirlinerYellow = makeAircraftSvg('airliner', 'yellow');
-const svgAirlinerPink = makeAircraftSvg('airliner', '#FF1493', 'black', 22);
-const svgAirlinerRed = makeAircraftSvg('airliner', '#FF2020', 'black', 22);
-const svgAirlinerDarkBlue = makeAircraftSvg('airliner', '#1A3A8A', '#4A80D0', 22);
-const svgAirlinerBlue = makeAircraftSvg('airliner', '#3b82f6', 'black', 22);
-const svgAirlinerLime = makeAircraftSvg('airliner', '#32CD32', 'black', 22);
-const svgAirlinerBlack = makeAircraftSvg('airliner', '#222', '#555', 22);
-const svgAirlinerWhite = makeAircraftSvg('airliner', 'white', '#666', 22);
-
-const svgTurbopropCyan = makeAircraftSvg('turboprop', 'cyan');
-const svgTurbopropOrange = makeAircraftSvg('turboprop', '#FF8C00');
-const svgTurbopropPurple = makeAircraftSvg('turboprop', '#9B59B6');
-const svgTurbopropYellow = makeAircraftSvg('turboprop', 'yellow');
-const svgTurbopropPink = makeAircraftSvg('turboprop', '#FF1493', 'black', 22);
-const svgTurbopropRed = makeAircraftSvg('turboprop', '#FF2020', 'black', 22);
-const svgTurbopropDarkBlue = makeAircraftSvg('turboprop', '#1A3A8A', '#4A80D0', 22);
-const svgTurbopropBlue = makeAircraftSvg('turboprop', '#3b82f6', 'black', 22);
-const svgTurbopropLime = makeAircraftSvg('turboprop', '#32CD32', 'black', 22);
-const svgTurbopropBlack = makeAircraftSvg('turboprop', '#222', '#555', 22);
-const svgTurbopropWhite = makeAircraftSvg('turboprop', 'white', '#666', 22);
-
-const svgBizjetCyan = makeAircraftSvg('bizjet', 'cyan');
-const svgBizjetOrange = makeAircraftSvg('bizjet', '#FF8C00');
-const svgBizjetPurple = makeAircraftSvg('bizjet', '#9B59B6');
-const svgBizjetYellow = makeAircraftSvg('bizjet', 'yellow');
-const svgBizjetPink = makeAircraftSvg('bizjet', '#FF1493', 'black', 22);
-const svgBizjetRed = makeAircraftSvg('bizjet', '#FF2020', 'black', 22);
-const svgBizjetDarkBlue = makeAircraftSvg('bizjet', '#1A3A8A', '#4A80D0', 22);
-const svgBizjetBlue = makeAircraftSvg('bizjet', '#3b82f6', 'black', 22);
-const svgBizjetLime = makeAircraftSvg('bizjet', '#32CD32', 'black', 22);
-const svgBizjetBlack = makeAircraftSvg('bizjet', '#222', '#555', 22);
-const svgBizjetWhite = makeAircraftSvg('bizjet', 'white', '#666', 22);
-
-// Grey variants for grounded/parked aircraft (altitude 0)
-const svgAirlinerGrey = makeAircraftSvg('airliner', '#555', '#333');
-const svgTurbopropGrey = makeAircraftSvg('turboprop', '#555', '#333');
-const svgBizjetGrey = makeAircraftSvg('bizjet', '#555', '#333');
-const svgHeliGrey = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#555" stroke="#333"><path d="M10 6L10 14L8 16L8 18L10 17L12 22L14 17L16 18L16 16L14 14L14 6C14 4 13 2 12 2C11 2 10 4 10 6Z"/><circle cx="12" cy="12" r="8" fill="none" stroke="#555" stroke-dasharray="2 2" stroke-width="1"/></svg>`)}`;
-
-// Grey icon map for grounded aircraft
-const GROUNDED_ICON_MAP: Record<string, string> = { heli: 'svgHeliGrey', turboprop: 'svgTurbopropGrey', bizjet: 'svgBizjetGrey', airliner: 'svgAirlinerGrey' };
-
-// Per-layer color maps (module-level to avoid re-allocation every render tick)
-const COLOR_MAP_COMMERCIAL: Record<string, string> = { heli: 'svgHeliCyan', turboprop: 'svgTurbopropCyan', bizjet: 'svgBizjetCyan', airliner: 'svgAirlinerCyan' };
-const COLOR_MAP_PRIVATE: Record<string, string> = { heli: 'svgHeliOrange', turboprop: 'svgTurbopropOrange', bizjet: 'svgBizjetOrange', airliner: 'svgAirlinerOrange' };
-const COLOR_MAP_JETS: Record<string, string> = { heli: 'svgHeliPurple', turboprop: 'svgTurbopropPurple', bizjet: 'svgBizjetPurple', airliner: 'svgAirlinerPurple' };
-const COLOR_MAP_MILITARY: Record<string, string> = { heli: 'svgHeli', turboprop: 'svgTurbopropYellow', bizjet: 'svgBizjetYellow', airliner: 'svgAirlinerYellow' };
-const MIL_SPECIAL_MAP: Record<string, string> = { fighter: 'svgFighter', tanker: 'svgTanker', recon: 'svgRecon' };
-
-// ICAO type code -> aircraft shape classification
-const HELI_TYPES = new Set(['R22', 'R44', 'R66', 'B06', 'B05', 'B47G', 'B105', 'B212', 'B222', 'B230', 'B407', 'B412', 'B429', 'B430', 'B505', 'BK17', 'S55', 'S58', 'S61', 'S64', 'S70', 'S76', 'S92', 'A109', 'A119', 'A139', 'A169', 'A189', 'AW09', 'EC20', 'EC25', 'EC30', 'EC35', 'EC45', 'EC55', 'EC75', 'H125', 'H130', 'H135', 'H145', 'H155', 'H160', 'H175', 'H215', 'H225', 'AS32', 'AS35', 'AS50', 'AS55', 'AS65', 'MD52', 'MD60', 'MDHI', 'MD90', 'NOTR', 'HUEY', 'GAMA', 'CABR', 'EXE', 'R300', 'R480', 'LAMA', 'ALLI', 'PUMA', 'NH90', 'CH47', 'UH1', 'UH60', 'AH64', 'MI8', 'MI24', 'MI26', 'MI28', 'KA52', 'K32', 'LYNX', 'WILD', 'MRLX', 'A149', 'A119']);
-const TURBOPROP_TYPES = new Set(['AT43', 'AT45', 'AT72', 'AT73', 'AT75', 'AT76', 'B190', 'B350', 'BE20', 'BE30', 'BE40', 'BE9L', 'BE99', 'C130', 'C160', 'C208', 'C212', 'C295', 'CN35', 'D228', 'D328', 'DHC2', 'DHC3', 'DHC4', 'DHC5', 'DHC6', 'DHC7', 'DHC8', 'DO28', 'DH8A', 'DH8B', 'DH8C', 'DH8D', 'E110', 'E120', 'F27', 'F406', 'F50', 'G159', 'G73T', 'J328', 'JS31', 'JS32', 'JS41', 'L188', 'MA60', 'M28', 'N262', 'P68', 'P180', 'PA31', 'PA42', 'PC12', 'PC21', 'PC24', 'S2', 'S340', 'SF34', 'SF50', 'SW4', 'TRIS', 'TBM7', 'TBM8', 'TBM9', 'C30J', 'C5M', 'AN12', 'AN24', 'AN26', 'AN30', 'AN32', 'IL18', 'L410', 'Y12', 'BALL', 'AEST', 'AC68', 'AC80', 'AC90', 'AC95', 'AC11', 'C172', 'C182', 'C206', 'C210', 'C310', 'C337', 'C402', 'C414', 'C421', 'C425', 'C441', 'M20P', 'M20T', 'PA28', 'PA32', 'PA34', 'PA44', 'PA46', 'PA60', 'P28A', 'P28B', 'P28R', 'P32R', 'P46T', 'SR20', 'SR22', 'DA40', 'DA42', 'DA62', 'RV10', 'BE33', 'BE35', 'BE36', 'BE55', 'BE58', 'DR40', 'TB20', 'AA5']);
-const BIZJET_TYPES = new Set(['ASTR', 'C25A', 'C25B', 'C25C', 'C25M', 'C500', 'C501', 'C510', 'C525', 'C526', 'C550', 'C551', 'C560', 'C56X', 'C650', 'C680', 'C700', 'C750', 'CL30', 'CL35', 'CL60', 'CONI', 'CRJX', 'E35L', 'E45X', 'E50P', 'E55P', 'F2TH', 'F900', 'FA10', 'FA20', 'FA50', 'FA7X', 'FA8X', 'G100', 'G150', 'G200', 'G280', 'GA5C', 'GA6C', 'GALX', 'GL5T', 'GL7T', 'GLEX', 'GLF2', 'GLF3', 'GLF4', 'GLF5', 'GLF6', 'H25A', 'H25B', 'H25C', 'HA4T', 'HDJT', 'LJ23', 'LJ24', 'LJ25', 'LJ28', 'LJ31', 'LJ35', 'LJ40', 'LJ45', 'LJ55', 'LJ60', 'LJ70', 'LJ75', 'MU30', 'PC24', 'PRM1', 'SBR1', 'SBR2', 'WW24', 'BE40', 'BLCF']);
-
-function classifyAircraft(model: string, category?: string): 'heli' | 'turboprop' | 'bizjet' | 'airliner' {
-    const m = (model || '').toUpperCase();
-    if (category === 'heli' || HELI_TYPES.has(m)) return 'heli';
-    if (BIZJET_TYPES.has(m)) return 'bizjet';
-    if (TURBOPROP_TYPES.has(m)) return 'turboprop';
-    return 'airliner';
-}
-
-// --- Smooth position interpolation helpers ---
-// Given heading (degrees) and speed (knots), compute new lat/lng after dt seconds
-function interpolatePosition(lat: number, lng: number, headingDeg: number, speedKnots: number, dtSeconds: number, maxDist = 0, maxDt = 65): [number, number] {
-    if (!speedKnots || speedKnots <= 0 || dtSeconds <= 0) return [lat, lng];
-    // Cap interpolation time to prevent runaway drift when data is stale
-    const clampedDt = Math.min(dtSeconds, maxDt);
-    // 1 knot = 1 nautical mile/hour = 1852 m/h
-    const speedMps = speedKnots * 0.5144; // meters per second
-    const dist = maxDist > 0 ? Math.min(speedMps * clampedDt, maxDist) : speedMps * clampedDt;
-    const R = 6371000; // Earth radius in meters
-    const headingRad = (headingDeg * Math.PI) / 180;
-    const latRad = (lat * Math.PI) / 180;
-    const lngRad = (lng * Math.PI) / 180;
-    const newLatRad = Math.asin(
-        Math.sin(latRad) * Math.cos(dist / R) +
-        Math.cos(latRad) * Math.sin(dist / R) * Math.cos(headingRad)
-    );
-    const newLngRad = lngRad + Math.atan2(
-        Math.sin(headingRad) * Math.sin(dist / R) * Math.cos(latRad),
-        Math.cos(dist / R) - Math.sin(latRad) * Math.sin(newLatRad)
-    );
-    return [(newLatRad * 180) / Math.PI, (newLngRad * 180) / Math.PI];
-}
-
-const darkStyle = {
-    version: 8,
-    glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
-    sources: {
-        'carto-dark': {
-            type: 'raster',
-            tiles: [
-                "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
-                "https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
-                "https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
-                "https://d.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png"
-            ],
-            tileSize: 256
-        }
-    },
-    layers: [
-        { id: 'carto-dark-layer', type: 'raster', source: 'carto-dark', minzoom: 0, maxzoom: 22 },
-        { id: 'imagery-ceiling', type: 'background', paint: { 'background-opacity': 0 } }
-    ]
-};
-
-const lightStyle = {
-    version: 8,
-    glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
-    sources: {
-        'carto-light': {
-            type: 'raster',
-            tiles: [
-                "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png",
-                "https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png",
-                "https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png",
-                "https://d.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png"
-            ],
-            tileSize: 256
-        }
-    },
-    layers: [
-        { id: 'carto-light-layer', type: 'raster', source: 'carto-light', minzoom: 0, maxzoom: 22 },
-        { id: 'imagery-ceiling', type: 'background', paint: { 'background-opacity': 0 } }
-    ]
-};
-
-// Satellite icon SVG builder — module-level constant (no re-creation per render)
-const makeSatSvg = (color: string) => {
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <rect x="9" y="9" width="6" height="6" rx="1" fill="${color}" stroke="#0a0e1a" stroke-width="0.5"/>
-        <rect x="1" y="10" width="7" height="4" rx="1" fill="${color}" opacity="0.7" stroke="#0a0e1a" stroke-width="0.3"/>
-        <rect x="16" y="10" width="7" height="4" rx="1" fill="${color}" opacity="0.7" stroke="#0a0e1a" stroke-width="0.3"/>
-        <line x1="8" y1="12" x2="1" y2="12" stroke="${color}" stroke-width="0.8"/>
-        <line x1="16" y1="12" x2="23" y2="12" stroke="${color}" stroke-width="0.8"/>
-        <circle cx="12" cy="12" r="1.5" fill="#fff" opacity="0.8"/>
-    </svg>`;
-    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-};
-const MISSION_COLORS: Record<string, string> = {
-    'military_recon': '#ff3333', 'military_sar': '#ff3333',
-    'sar': '#00e5ff', 'sigint': '#ffffff',
-    'navigation': '#4488ff', 'early_warning': '#ff00ff',
-    'commercial_imaging': '#44ff44', 'space_station': '#ffdd00'
-};
-const MISSION_ICON_MAP: Record<string, string> = {
-    'military_recon': 'sat-mil', 'military_sar': 'sat-mil',
-    'sar': 'sat-sar', 'sigint': 'sat-sigint',
-    'navigation': 'sat-nav', 'early_warning': 'sat-ew',
-    'commercial_imaging': 'sat-com', 'space_station': 'sat-station'
-};
-
-// Empty GeoJSON constant — avoids recreating empty objects on every render
-const EMPTY_FC: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
-
-// Imperatively push GeoJSON data to a MapLibre source, bypassing React reconciliation.
-// This is critical for high-volume layers (flights, ships, satellites, fires) where
-// React's prop diffing on thousands of coordinate arrays causes memory pressure.
-function useImperativeSource(map: MapRef | null, sourceId: string, geojson: any, debounceMs = 0) {
-    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    useEffect(() => {
-        if (!map) return;
-        const push = () => {
-            const src = map.getSource(sourceId) as any;
-            if (src && typeof src.setData === 'function') {
-                src.setData(geojson || EMPTY_FC);
-            }
-        };
-        if (debounceMs > 0) {
-            if (timerRef.current) clearTimeout(timerRef.current);
-            timerRef.current = setTimeout(push, debounceMs);
-            return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-        }
-        push();
-    }, [map, sourceId, geojson, debounceMs]);
-}
+import {
+    svgPlaneCyan, svgPlaneYellow, svgPlaneOrange, svgPlanePurple,
+    svgFighter, svgHeli, svgHeliCyan, svgHeliOrange, svgHeliPurple,
+    svgTanker, svgRecon, svgPlanePink, svgPlaneAlertRed, svgPlaneDarkBlue,
+    svgPlaneWhiteAlert, svgHeliPink, svgHeliAlertRed, svgHeliDarkBlue,
+    svgHeliBlue, svgHeliLime, svgHeliWhiteAlert, svgPlaneBlack, svgHeliBlack,
+    svgDrone, svgDataCenter, svgShipGray, svgShipRed, svgShipYellow,
+    svgShipBlue, svgShipWhite, svgCarrier, svgCctv, svgWarning, svgThreat,
+    svgTriangleYellow, svgTriangleRed,
+    svgFireYellow, svgFireOrange, svgFireRed, svgFireDarkRed,
+    svgFireClusterSmall, svgFireClusterMed, svgFireClusterLarge, svgFireClusterXL,
+    svgPotusPlane, svgPotusHeli, POTUS_ICAOS,
+    svgAirlinerCyan, svgAirlinerOrange, svgAirlinerPurple, svgAirlinerYellow,
+    svgAirlinerPink, svgAirlinerRed, svgAirlinerDarkBlue, svgAirlinerBlue,
+    svgAirlinerLime, svgAirlinerBlack, svgAirlinerWhite,
+    svgTurbopropCyan, svgTurbopropOrange, svgTurbopropPurple, svgTurbopropYellow,
+    svgTurbopropPink, svgTurbopropRed, svgTurbopropDarkBlue, svgTurbopropBlue,
+    svgTurbopropLime, svgTurbopropBlack, svgTurbopropWhite,
+    svgBizjetCyan, svgBizjetOrange, svgBizjetPurple, svgBizjetYellow,
+    svgBizjetPink, svgBizjetRed, svgBizjetDarkBlue, svgBizjetBlue,
+    svgBizjetLime, svgBizjetBlack, svgBizjetWhite,
+    svgAirlinerGrey, svgTurbopropGrey, svgBizjetGrey, svgHeliGrey,
+    GROUNDED_ICON_MAP, COLOR_MAP_COMMERCIAL, COLOR_MAP_PRIVATE,
+    COLOR_MAP_JETS, COLOR_MAP_MILITARY, MIL_SPECIAL_MAP,
+} from "@/components/map/icons/AircraftIcons";
+import { classifyAircraft } from "@/utils/aircraftClassification";
+import { makeSatSvg, MISSION_COLORS, MISSION_ICON_MAP } from "@/components/map/icons/SatelliteIcons";
+import { EMPTY_FC } from "@/components/map/mapConstants";
+import { useImperativeSource } from "@/components/map/hooks/useImperativeSource";
+import { ClusterCountLabels, TrackedFlightLabels, CarrierLabels, UavLabels, EarthquakeLabels, ThreatMarkers } from "@/components/map/MapMarkers";
 
 const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, selectedEntity, onMouseCoords, onRightClick, regionDossier, regionDossierLoading, onViewStateChange, measureMode, onMeasureClick, measurePoints, gibsDate, gibsOpacity }: any) => {
     const mapRef = useRef<MapRef>(null);
@@ -799,7 +559,7 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
                 const [iLng, iLat] = interpFlight(f);
                 return {
                     type: 'Feature',
-                    properties: { id: f.icao24 || i, type: 'flight', callsign: f.callsign || f.icao24, rotation: f.true_track || f.heading || 0, iconId: grounded ? GROUNDED_ICON_MAP[acType] : COLOR_MAP_COMMERCIAL[acType] },
+                    properties: { id: f.callsign || f.icao24 || `flight-${i}`, type: 'flight', callsign: f.callsign || f.icao24, rotation: f.true_track || f.heading || 0, iconId: grounded ? GROUNDED_ICON_MAP[acType] : COLOR_MAP_COMMERCIAL[acType] },
                     geometry: { type: 'Point', coordinates: [iLng, iLat] }
                 };
             }).filter(Boolean)
@@ -819,7 +579,7 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
                 const [iLng, iLat] = interpFlight(f);
                 return {
                     type: 'Feature',
-                    properties: { id: f.icao24 || i, type: 'private_flight', callsign: f.callsign || f.icao24, rotation: f.heading || 0, iconId: grounded ? GROUNDED_ICON_MAP[acType] : COLOR_MAP_PRIVATE[acType] },
+                    properties: { id: f.callsign || f.icao24 || `pflight-${i}`, type: 'private_flight', callsign: f.callsign || f.icao24, rotation: f.heading || 0, iconId: grounded ? GROUNDED_ICON_MAP[acType] : COLOR_MAP_PRIVATE[acType] },
                     geometry: { type: 'Point', coordinates: [iLng, iLat] }
                 };
             }).filter(Boolean)
@@ -839,7 +599,7 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
                 const [iLng, iLat] = interpFlight(f);
                 return {
                     type: 'Feature',
-                    properties: { id: f.icao24 || i, type: 'private_jet', callsign: f.callsign || f.icao24, rotation: f.heading || 0, iconId: grounded ? GROUNDED_ICON_MAP[acType] : COLOR_MAP_JETS[acType] },
+                    properties: { id: f.callsign || f.icao24 || `pjet-${i}`, type: 'private_jet', callsign: f.callsign || f.icao24, rotation: f.heading || 0, iconId: grounded ? GROUNDED_ICON_MAP[acType] : COLOR_MAP_JETS[acType] },
                     geometry: { type: 'Point', coordinates: [iLng, iLat] }
                 };
             }).filter(Boolean)
@@ -867,7 +627,7 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
                 const [iLng, iLat] = interpFlight(f);
                 return {
                     type: 'Feature',
-                    properties: { id: f.icao24 || i, type: 'military_flight', callsign: f.callsign || f.icao24, rotation: f.heading || 0, iconId },
+                    properties: { id: f.callsign || f.icao24 || `mflight-${i}`, type: 'military_flight', callsign: f.callsign || f.icao24, rotation: f.heading || 0, iconId },
                     geometry: { type: 'Point', coordinates: [iLng, iLat] }
                 };
             }).filter(Boolean)
@@ -875,31 +635,37 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
     }, [activeLayers.military, data?.military_flights, trackedIcaoSet, dtSeconds, inView]);
 
     const shipsGeoJSON = useMemo(() => {
-        if (!(activeLayers.ships_important || activeLayers.ships_civilian || activeLayers.ships_passenger) || !data?.ships) return null;
+        if (!(activeLayers.ships_military || activeLayers.ships_cargo || activeLayers.ships_civilian || activeLayers.ships_passenger) || !data?.ships) return null;
         return {
             type: 'FeatureCollection',
             features: data.ships.map((s: any, i: number) => {
                 if (s.lat == null || s.lng == null) return null;
                 if (!inView(s.lat, s.lng)) return null;
-                const isImportant = s.type === 'carrier' || s.type === 'military_vessel' || s.type === 'tanker' || s.type === 'cargo';
+                const isMilitary = s.type === 'carrier' || s.type === 'military_vessel';
+                const isCargo = s.type === 'tanker' || s.type === 'cargo';
                 const isPassenger = s.type === 'passenger';
-                if (s.type === 'carrier') return null;
-                if (isImportant && activeLayers?.ships_important === false) return null;
+                
+                if (s.type === 'carrier') return null; // Handled by carriersGeoJSON
+                
+                if (isMilitary && activeLayers?.ships_military === false) return null;
+                if (isCargo && activeLayers?.ships_cargo === false) return null;
                 if (isPassenger && activeLayers?.ships_passenger === false) return null;
-                if (!isImportant && !isPassenger && activeLayers?.ships_civilian === false) return null;
+                if (!isMilitary && !isCargo && !isPassenger && activeLayers?.ships_civilian === false) return null;
+                
                 let iconId = 'svgShipBlue';
-                if (s.type === 'tanker' || s.type === 'cargo') iconId = 'svgShipRed';
-                else if (s.type === 'yacht' || s.type === 'passenger') iconId = 'svgShipWhite';
-                else if (s.type === 'military_vessel') iconId = 'svgShipYellow';
+                if (isCargo) iconId = 'svgShipRed';
+                else if (s.type === 'yacht' || isPassenger) iconId = 'svgShipWhite';
+                else if (isMilitary) iconId = 'svgShipYellow';
+                
                 const [iLng, iLat] = interpShip(s);
                 return {
                     type: 'Feature',
-                    properties: { id: s.mmsi || i, type: 'ship', name: s.name, rotation: s.heading || 0, iconId },
+                    properties: { id: s.mmsi || s.name || `ship-${i}`, type: 'ship', name: s.name, rotation: s.heading || 0, iconId },
                     geometry: { type: 'Point', coordinates: [iLng, iLat] }
                 };
             }).filter(Boolean)
         };
-    }, [activeLayers.ships_important, activeLayers.ships_civilian, activeLayers.ships_passenger, data?.ships, inView]);
+    }, [activeLayers.ships_military, activeLayers.ships_cargo, activeLayers.ships_civilian, activeLayers.ships_passenger, data?.ships, inView]);
 
     // Extract ship cluster positions from the map source for HTML labels
     const shipClusterHandlerRef = useRef<(() => void) | null>(null);
@@ -975,19 +741,19 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
     }, [earthquakesGeoJSON]);
 
     const carriersGeoJSON = useMemo(() => {
-        if (!activeLayers.ships_important || !data?.ships) return null;
+        if (!activeLayers.ships_military || !data?.ships) return null;
         return {
             type: 'FeatureCollection',
             features: data.ships.map((s: any, i: number) => {
                 if (s.type !== 'carrier' || s.lat == null || s.lng == null) return null;
                 return {
                     type: 'Feature',
-                    properties: { id: s.mmsi || i, type: 'ship', name: s.name, rotation: s.heading || 0, iconId: 'svgCarrier' },
+                    properties: { id: s.mmsi || s.name || `carrier-${i}`, type: 'ship', name: s.name, rotation: s.heading || 0, iconId: 'svgCarrier' },
                     geometry: { type: 'Point', coordinates: [s.lng, s.lat] }
                 };
             }).filter(Boolean)
         };
-    }, [activeLayers.ships_important, data?.ships]);
+    }, [activeLayers.ships_military, data?.ships]);
 
     const activeRouteGeoJSON = useMemo(() => {
         if (!selectedEntity || !data) return null;
@@ -1180,11 +946,17 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
             item.offsetY = Math.max(-MAX_OFFSET, Math.min(MAX_OFFSET, item.offsetY));
         }
 
-        return items.map((item: any) => ({
-            ...item,
-            showLine: Math.abs(item.offsetX) > 5 || Math.abs(item.offsetY) > 5
-        }));
-    }, [data?.news, Math.round(viewState.zoom)]);
+        return items
+            .filter((item: any) => {
+                const alertKey = `${item.title}|${item.coords?.[0]},${item.coords?.[1]}`;
+                return !dismissedAlerts.has(alertKey);
+            })
+            .map((item: any) => ({
+                ...item,
+                alertKey: `${item.title}|${item.coords?.[0]},${item.coords?.[1]}`,
+                showLine: Math.abs(item.offsetX) > 5 || Math.abs(item.offsetY) > 5
+            }));
+    }, [data?.news, Math.round(viewState.zoom), dismissedAlerts]);
 
     // Tracked flights GeoJSON with interpolation
     const trackedFlightsGeoJSON = useMemo(() => {
@@ -1802,246 +1574,35 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
                 )}
 
                 {/* HTML labels for ship cluster counts (hidden when any entity popup is active) */}
-                {shipsGeoJSON && !selectedEntity && shipClusters.map((c: any) => (
-                    <Marker key={`sc-${c.id}`} longitude={c.lng} latitude={c.lat} anchor="center" style={{ zIndex: 1 }}>
-                        <div style={{ color: '#fff', fontSize: '11px', fontFamily: 'monospace', fontWeight: 'bold', textShadow: '0 0 3px #000, 0 0 3px #000', pointerEvents: 'none', textAlign: 'center' }}>
-                            {c.count}
-                        </div>
-                    </Marker>
-                ))}
+                {shipsGeoJSON && !selectedEntity && <ClusterCountLabels clusters={shipClusters} prefix="sc" />}
 
                 {/* HTML labels for tracked flights — color-matched, zoom-gated for non-HVA */}
-                {trackedFlightsGeoJSON && !selectedEntity && data?.tracked_flights?.map((f: any, i: number) => {
-                    if (f.lat == null || f.lng == null) return null;
-                    if (!inView(f.lat, f.lng)) return null;
-
-                    const alertColor = f.alert_color || '#ff1493';
-                    // Always hide military labels (yellow) — too many, clutters map
-                    if (alertColor === 'yellow') return null;
-                    // Hide black (PIA) labels — they want to stay hidden
-                    if (alertColor === 'black') return null;
-
-                    // Only show non-HVA/non-red labels when zoomed in (~2000mi or closer = zoom >= 5)
-                    const isHighPriority = alertColor === '#ff1493' || alertColor === 'pink' || alertColor === 'red';
-                    if (!isHighPriority && viewState.zoom < 5) return null;
-
-                    let displayName = f.alert_operator || f.operator || f.owner || f.name || f.callsign || f.icao24 || "UNKNOWN";
-                    // Strip redundant "Private" labels — tells you nothing
-                    if (displayName === 'Private' || displayName === 'private') return null;
-
-                    // Map alert_color to a visible label color (some hex colors render near-white)
-                    const labelColorMap: Record<string, string> = {
-                        '#ff1493': '#ff1493', pink: '#ff1493', red: '#ff4444',
-                        blue: '#3b82f6', orange: '#FF8C00', '#32cd32': '#32cd32',
-                        purple: '#b266ff', white: '#cccccc',
-                    };
-                    const grounded = f.alt != null && f.alt <= 100;
-                    const labelColor = grounded ? '#888' : (labelColorMap[alertColor] || alertColor);
-                    const [iLng, iLat] = interpFlight(f);
-
-                    return (
-                        <Marker key={`tf-label-${i}`} longitude={iLng} latitude={iLat} anchor="top" offset={[0, 10]} style={{ zIndex: 2 }}>
-                            <div style={{
-                                color: labelColor,
-                                fontSize: '10px',
-                                fontFamily: 'monospace',
-                                fontWeight: 'bold',
-                                textShadow: '0 0 3px #000, 0 0 3px #000, 1px 1px 2px #000',
-                                whiteSpace: 'nowrap',
-                                pointerEvents: 'none'
-                            }}>
-                                {String(displayName)}
-                            </div>
-                        </Marker>
-                    );
-                })}
+                {trackedFlightsGeoJSON && !selectedEntity && data?.tracked_flights && (
+                    <TrackedFlightLabels flights={data.tracked_flights} viewState={viewState} inView={inView} interpFlight={interpFlight} />
+                )}
 
                 {/* HTML labels for carriers (orange names, with ESTIMATED badge for OSINT positions) */}
-                {carriersGeoJSON && !selectedEntity && data?.ships?.map((s: any, i: number) => {
-                    if (s.type !== 'carrier' || s.lat == null || s.lng == null) return null;
-                    if (!inView(s.lat, s.lng)) return null;
-                    const [iLng, iLat] = interpShip(s);
-                    return (
-                        <Marker key={`carrier-label-${i}`} longitude={iLng} latitude={iLat} anchor="top" offset={[0, 12]} style={{ zIndex: 2 }}>
-                            <div style={{ fontFamily: 'monospace', textShadow: '0 0 3px #000, 0 0 3px #000, 1px 1px 2px #000', whiteSpace: 'nowrap', pointerEvents: 'none', textAlign: 'center' }}>
-                                <div style={{ color: '#ffaa00', fontSize: '11px', fontWeight: 'bold' }}>
-                                    [[{s.name}]]
-                                </div>
-                                {s.estimated && (
-                                    <div style={{ color: '#ff6644', fontSize: '8px', letterSpacing: '1.5px' }}>
-                                        EST. POSITION — OSINT
-                                    </div>
-                                )}
-                            </div>
-                        </Marker>
-                    );
-                })}
+                {carriersGeoJSON && !selectedEntity && data?.ships && (
+                    <CarrierLabels ships={data.ships} inView={inView} interpShip={interpShip} />
+                )}
 
                 {/* HTML labels for earthquake cluster counts (hidden when any entity popup is active) */}
-                {earthquakesGeoJSON && !selectedEntity && eqClusters.map((c: any) => (
-                    <Marker key={`eqc-${c.id}`} longitude={c.lng} latitude={c.lat} anchor="center" style={{ zIndex: 1 }}>
-                        <div style={{ color: '#fff', fontSize: '11px', fontFamily: 'monospace', fontWeight: 'bold', textShadow: '0 0 3px #000, 0 0 3px #000', pointerEvents: 'none', textAlign: 'center' }}>
-                            {c.count}
-                        </div>
-                    </Marker>
-                ))}
+                {earthquakesGeoJSON && !selectedEntity && <ClusterCountLabels clusters={eqClusters} prefix="eqc" />}
 
                 {/* HTML labels for UAVs (orange names) */}
-                {uavGeoJSON && !selectedEntity && data?.uavs?.map((uav: any, i: number) => {
-                    if (uav.lat == null || uav.lng == null) return null;
-                    if (!inView(uav.lat, uav.lng)) return null;
-                    const name = uav.aircraft_model ? `[UAV: ${uav.aircraft_model}]` : `[UAV: ${uav.callsign}]`;
-                    return (
-                        <Marker key={`uav-label-${i}`} longitude={uav.lng} latitude={uav.lat} anchor="top" offset={[0, 10]} style={{ zIndex: 2 }}>
-                            <div style={{ color: '#ff8c00', fontSize: '10px', fontFamily: 'monospace', fontWeight: 'bold', textShadow: '0 0 3px #000, 0 0 3px #000, 1px 1px 2px #000', whiteSpace: 'nowrap', pointerEvents: 'none' }}>
-                                {name}
-                            </div>
-                        </Marker>
-                    );
-                })}
+                {uavGeoJSON && !selectedEntity && data?.uavs && (
+                    <UavLabels uavs={data.uavs} inView={inView} />
+                )}
 
                 {/* HTML labels for earthquakes (yellow) - only show when zoomed in (~2000 miles = zoom ~5) */}
-                {earthquakesGeoJSON && !selectedEntity && viewState.zoom >= 5 && data?.earthquakes?.map((eq: any, i: number) => {
-                    if (eq.lat == null || eq.lng == null) return null;
-                    if (!inView(eq.lat, eq.lng)) return null;
-                    return (
-                        <Marker key={`eq-label-${i}`} longitude={eq.lng} latitude={eq.lat} anchor="top" offset={[0, 14]} style={{ zIndex: 1 }}>
-                            <div style={{ color: '#ffcc00', fontSize: '10px', fontFamily: 'monospace', fontWeight: 'bold', textShadow: '0 0 3px #000, 0 0 3px #000, 1px 1px 2px #000', whiteSpace: 'nowrap', pointerEvents: 'none' }}>
-                                [M{eq.mag}] {eq.place || ''}
-                            </div>
-                        </Marker>
-                    );
-                })}
+                {earthquakesGeoJSON && !selectedEntity && viewState.zoom >= 5 && data?.earthquakes && (
+                    <EarthquakeLabels earthquakes={data.earthquakes} inView={inView} />
+                )}
 
                 {/* Maplibre HTML Custom Markers for high-importance Threat Overlays (highest z-index) */}
-                {activeLayers.global_incidents && spreadAlerts.map((n: any) => {
-                    const idx = n.originalIdx;
-                    // Stable key: survives data.news array reorder/replacement across polling cycles
-                    const alertKey = `${n.title || ''}_${(n.coords || []).join(',')}`;
-                    if (dismissedAlerts.has(alertKey)) return null;
-
-                    const count = n.cluster_count || 1;
-                    const score = n.risk_score || 0;
-
-                    let riskColor = '#22c55e'; // Green (0)
-                    if (score >= 9) riskColor = '#ef4444'; // Red
-                    else if (score >= 7) riskColor = '#f97316'; // Orange
-                    else if (score >= 4) riskColor = '#eab308'; // Yellow
-                    else if (score >= 1) riskColor = '#3b82f6'; // Blue
-
-                    // Hide alerts when any entity is selected (focus mode)
-                    let isVisible = viewState.zoom >= 1;
-                    if (selectedEntity) {
-                        if (selectedEntity.type === 'news') {
-                            if (selectedEntity.id !== idx) isVisible = false;
-                        } else {
-                            isVisible = false;
-                        }
-                    }
-
-                    return (
-                        <Marker
-                            key={`threat-${alertKey}`}
-                            longitude={n.coords[1]}
-                            latitude={n.coords[0]}
-                            anchor="center"
-                            offset={[n.offsetX, n.offsetY]}
-                            style={{ zIndex: 50 + score }}
-                            onClick={(e) => {
-                                e.originalEvent.stopPropagation();
-                                onEntityClick?.({ id: idx, type: 'news' });
-                            }}
-                        >
-                            <div className="relative group/alert">
-                                {/* Connector Line */}
-                                {n.showLine && isVisible && (
-                                    <svg className="absolute pointer-events-none" style={{ left: '50%', top: '50%', width: 1, height: 1, overflow: 'visible', zIndex: -1 }}>
-                                        <line x1={0} y1={0} x2={-n.offsetX} y2={-n.offsetY} stroke={riskColor} strokeWidth="1.5" strokeDasharray="3,3" className="opacity-80" />
-                                        <circle cx={-n.offsetX} cy={-n.offsetY} r="2" fill={riskColor} />
-                                    </svg>
-                                )}
-
-                                <div
-                                    className="cursor-pointer transition-all duration-300 relative"
-                                    style={{
-                                        opacity: isVisible ? 1.0 : 0.0,
-                                        pointerEvents: isVisible ? 'auto' : 'none',
-                                        backgroundColor: 'rgba(5, 5, 5, 0.95)',
-                                        border: `1.5px solid ${riskColor}`,
-                                        borderRadius: '4px',
-                                        padding: '5px 24px 5px 8px',
-                                        color: riskColor,
-                                        fontFamily: 'monospace',
-                                        fontSize: '9px',
-                                        fontWeight: 'bold',
-                                        textAlign: 'center',
-                                        boxShadow: `0 0 12px ${riskColor}60`,
-                                        zIndex: 10,
-                                        lineHeight: '1.2',
-                                        minWidth: '120px',
-                                        position: 'relative',
-                                    }}
-                                >
-                                    {/* Bubble Tail */}
-                                    {n.showLine && isVisible && (
-                                        <div
-                                            className="absolute"
-                                            style={{
-                                                width: 0,
-                                                height: 0,
-                                                borderLeft: '6px solid transparent',
-                                                borderRight: '6px solid transparent',
-                                                borderTop: n.offsetY < 0 ? `6px solid ${riskColor}` : 'none',
-                                                borderBottom: n.offsetY > 0 ? `6px solid ${riskColor}` : 'none',
-                                                left: '50%',
-                                                [n.offsetY < 0 ? 'bottom' : 'top']: '-6px',
-                                                transform: 'translateX(-50%)'
-                                            }}
-                                        />
-                                    )}
-
-                                    {/* Dismiss button */}
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setDismissedAlerts(prev => new Set(prev).add(alertKey));
-                                            if (selectedEntity?.type === 'news' && selectedEntity.id === idx) {
-                                                onEntityClick?.(null);
-                                            }
-                                        }}
-                                        aria-label="Dismiss alert"
-                                        style={{
-                                            position: 'absolute',
-                                            top: '3px',
-                                            right: '4px',
-                                            background: 'none',
-                                            border: 'none',
-                                            color: riskColor,
-                                            cursor: 'pointer',
-                                            fontSize: '11px',
-                                            lineHeight: 1,
-                                            padding: '0 2px',
-                                            opacity: 0.8,
-                                        }}
-                                    >
-                                        ×
-                                    </button>
-
-                                    <div className="absolute inset-0 border border-current rounded opacity-50 animate-pulse" style={{ color: riskColor, zIndex: -1 }}></div>
-                                    <div style={{ fontSize: '10px', letterSpacing: '0.5px' }}>!! ALERT LVL {score} !!</div>
-                                    <div style={{ color: '#fff', fontSize: '9px', marginTop: '2px', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                        {n.title}
-                                    </div>
-                                    {count > 1 && (
-                                        <div style={{ color: riskColor, opacity: 0.8, fontSize: '8px', marginTop: '2px' }}>
-                                            [+{count - 1} ACTIVE THREATS IN AREA]
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </Marker>
-                    );
-                })}
+                {activeLayers.global_incidents && (
+                    <ThreatMarkers spreadAlerts={spreadAlerts} viewState={viewState} selectedEntity={selectedEntity} onEntityClick={onEntityClick} onDismiss={(alertKey: string) => { setDismissedAlerts(prev => new Set(prev).add(alertKey)); if (selectedEntity?.type === 'news') onEntityClick?.(null); }} />
+                )}
 
                 {frontlineGeoJSON && (
                     <Source id="frontlines" type="geojson" data={frontlineGeoJSON as any}>
@@ -2396,34 +1957,30 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
                             onClose={() => onEntityClick?.(null)}
                             anchor="bottom" offset={12}
                         >
-                            <div style={{
-                                background: 'rgba(10,14,26,0.95)', border: '1px solid rgba(0,200,255,0.3)',
-                                borderRadius: 6, padding: '10px 14px', color: '#e0e6f0',
-                                fontFamily: 'monospace', fontSize: 11, minWidth: 220, maxWidth: 320
-                            }}>
-                                <div style={{ color: '#00c8ff', fontWeight: 700, fontSize: 13, marginBottom: 6, letterSpacing: 1 }}>
+                            <div className="map-popup border border-cyan-500/30">
+                                <div className="map-popup-title text-[#00c8ff]">
                                     🛰️ {sat.name}
                                 </div>
-                                <div style={{ color: '#8899aa', marginBottom: 4 }}>
-                                    NORAD ID: <span style={{ color: '#fff' }}>{sat.id}</span>
+                                <div className="map-popup-row text-[#8899aa]">
+                                    NORAD ID: <span className="text-white">{sat.id}</span>
                                 </div>
                                 {sat.sat_type && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Type: <span style={{ color: '#ffcc00' }}>{sat.sat_type}</span>
+                                    <div className="map-popup-row">
+                                        Type: <span className="text-[#ffcc00]">{sat.sat_type}</span>
                                     </div>
                                 )}
                                 {sat.country && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Country: <span style={{ color: '#fff' }}>{sat.country}</span>
+                                    <div className="map-popup-row">
+                                        Country: <span className="text-white">{sat.country}</span>
                                     </div>
                                 )}
                                 {sat.mission && (
-                                    <div style={{ marginBottom: 4, fontWeight: 600 }}>
+                                    <div className="map-popup-row font-semibold">
                                         {missionLabels[sat.mission] || `⚪ ${sat.mission.toUpperCase()}`}
                                     </div>
                                 )}
-                                <div style={{ marginBottom: 4 }}>
-                                    Altitude: <span style={{ color: '#44ff88' }}>{sat.alt_km?.toLocaleString()} km</span>
+                                <div className="map-popup-row">
+                                    Altitude: <span className="text-[#44ff88]">{sat.alt_km?.toLocaleString()} km</span>
                                 </div>
                                 {sat.wiki && (
                                     <div className="mt-2 border-t border-[var(--border-primary)]/50 pt-2">
@@ -2446,48 +2003,44 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
                             onClose={() => onEntityClick?.(null)}
                             anchor="bottom" offset={12}
                         >
-                            <div style={{
-                                background: 'rgba(10,14,26,0.95)', border: '1px solid rgba(255,68,68,0.4)',
-                                borderRadius: 6, padding: '10px 14px', color: '#e0e6f0',
-                                fontFamily: 'monospace', fontSize: 11, minWidth: 220, maxWidth: 320
-                            }}>
-                                <div style={{ color: '#ff4444', fontWeight: 700, fontSize: 13, marginBottom: 6, letterSpacing: 1 }}>
+                            <div className="map-popup border border-red-500/40">
+                                <div className="map-popup-title text-[#ff4444]">
                                     {uav.callsign}
                                 </div>
-                                <div style={{ color: '#ff8844', fontSize: 9, marginBottom: 6, letterSpacing: 1.5, textTransform: 'uppercase' as const }}>
+                                <div className="map-popup-subtitle text-[#ff8844]">
                                     LIVE ADS-B TRANSPONDER
                                 </div>
                                 {uav.aircraft_model && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Model: <span style={{ color: '#fff' }}>{uav.aircraft_model}</span>
+                                    <div className="map-popup-row">
+                                        Model: <span className="text-white">{uav.aircraft_model}</span>
                                     </div>
                                 )}
                                 {uav.uav_type && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Classification: <span style={{ color: '#ffcc00' }}>{uav.uav_type}</span>
+                                    <div className="map-popup-row">
+                                        Classification: <span className="text-[#ffcc00]">{uav.uav_type}</span>
                                     </div>
                                 )}
                                 {uav.country && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Registration: <span style={{ color: '#fff' }}>{uav.country}</span>
+                                    <div className="map-popup-row">
+                                        Registration: <span className="text-white">{uav.country}</span>
                                     </div>
                                 )}
                                 {uav.icao24 && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        ICAO: <span style={{ color: '#888' }}>{uav.icao24}</span>
+                                    <div className="map-popup-row">
+                                        ICAO: <span className="text-[#888]">{uav.icao24}</span>
                                     </div>
                                 )}
-                                <div style={{ marginBottom: 4 }}>
-                                    Altitude: <span style={{ color: '#44ff88' }}>{uav.alt?.toLocaleString()} m</span>
+                                <div className="map-popup-row">
+                                    Altitude: <span className="text-[#44ff88]">{uav.alt?.toLocaleString()} m</span>
                                 </div>
                                 {uav.speed_knots > 0 && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Speed: <span style={{ color: '#00e5ff' }}>{uav.speed_knots} kn</span>
+                                    <div className="map-popup-row">
+                                        Speed: <span className="text-[#00e5ff]">{uav.speed_knots} kn</span>
                                     </div>
                                 )}
                                 {uav.squawk && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Squawk: <span style={{ color: '#888' }}>{uav.squawk}</span>
+                                    <div className="map-popup-row">
+                                        Squawk: <span className="text-[#888]">{uav.squawk}</span>
                                     </div>
                                 )}
                                 {uav.wiki && (
@@ -2502,7 +2055,10 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
 
                 {/* Ship / carrier click popup */}
                 {selectedEntity?.type === 'ship' && (() => {
-                    const ship = data?.ships?.find((s: any) => s.mmsi === selectedEntity.id);
+                    const ship = data?.ships?.find((s: any, i: number) => {
+                        return (s.mmsi || s.name || `ship-${i}`) === selectedEntity.id ||
+                               (s.mmsi || s.name || `carrier-${i}`) === selectedEntity.id;
+                    });
                     if (!ship) return null;
                     const [iLng, iLat] = interpShip(ship);
                     return (
@@ -2512,83 +2068,79 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
                             onClose={() => onEntityClick?.(null)}
                             anchor="bottom" offset={12}
                         >
-                            <div style={{
-                                background: 'rgba(10,14,26,0.95)', border: `1px solid ${ship.type === 'carrier' ? 'rgba(255,170,0,0.5)' : 'rgba(59,130,246,0.4)'}`,
-                                borderRadius: 6, padding: '10px 14px', color: '#e0e6f0',
-                                fontFamily: 'monospace', fontSize: 11, minWidth: 220, maxWidth: 320
-                            }}>
+                            <div className="map-popup" style={{ borderWidth: 1, borderStyle: 'solid', borderColor: ship.type === 'carrier' ? 'rgba(255,170,0,0.5)' : 'rgba(59,130,246,0.4)' }}>
                                 <div className="flex justify-between items-start mb-1">
-                                    <div style={{ color: ship.type === 'carrier' ? '#ffaa00' : '#3b82f6', fontWeight: 700, fontSize: 13, letterSpacing: 1 }}>
+                                    <div className="map-popup-title" style={{ color: ship.type === 'carrier' ? '#ffaa00' : '#3b82f6' }}>
                                         {ship.name || 'UNKNOWN VESSEL'}
                                     </div>
                                     <button onClick={() => onEntityClick?.(null)} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] ml-2">✕</button>
                                 </div>
                                 {ship.estimated && (
-                                    <div style={{ color: '#ff6644', fontSize: 9, marginBottom: 6, letterSpacing: 1.5, textTransform: 'uppercase' as const, borderBottom: '1px solid rgba(255,102,68,0.3)', paddingBottom: 4 }}>
+                                    <div className="map-popup-subtitle text-[#ff6644] border-b border-[#ff664450] pb-1">
                                         ESTIMATED POSITION — {ship.source || 'OSINT DERIVED'}
                                     </div>
                                 )}
                                 {ship.type && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Type: <span style={{ color: '#fff', textTransform: 'capitalize' as const }}>{ship.type.replace('_', ' ')}</span>
+                                    <div className="map-popup-row">
+                                        Type: <span className="text-white capitalize">{ship.type.replace('_', ' ')}</span>
                                     </div>
                                 )}
                                 {ship.mmsi && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        MMSI: <span style={{ color: '#888' }}>{ship.mmsi}</span>
+                                    <div className="map-popup-row">
+                                        MMSI: <span className="text-[#888]">{ship.mmsi}</span>
                                     </div>
                                 )}
                                 {ship.imo && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        IMO: <span style={{ color: '#888' }}>{ship.imo}</span>
+                                    <div className="map-popup-row">
+                                        IMO: <span className="text-[#888]">{ship.imo}</span>
                                     </div>
                                 )}
                                 {ship.callsign && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Callsign: <span style={{ color: '#00e5ff' }}>{ship.callsign}</span>
+                                    <div className="map-popup-row">
+                                        Callsign: <span className="text-[#00e5ff]">{ship.callsign}</span>
                                     </div>
                                 )}
                                 {ship.country && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Flag: <span style={{ color: '#fff' }}>{ship.country}</span>
+                                    <div className="map-popup-row">
+                                        Flag: <span className="text-white">{ship.country}</span>
                                     </div>
                                 )}
                                 {ship.destination && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Destination: <span style={{ color: '#44ff88' }}>{ship.destination}</span>
+                                    <div className="map-popup-row">
+                                        Destination: <span className="text-[#44ff88]">{ship.destination}</span>
                                     </div>
                                 )}
                                 {typeof ship.sog === 'number' && ship.sog > 0 && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Speed: <span style={{ color: '#00e5ff' }}>{ship.sog.toFixed(1)} kn</span>
+                                    <div className="map-popup-row">
+                                        Speed: <span className="text-[#00e5ff]">{ship.sog.toFixed(1)} kn</span>
                                     </div>
                                 )}
-                                <div style={{ marginBottom: 4 }}>
+                                <div className="map-popup-row">
                                     Heading: <span style={{ color: ship.heading != null ? '#888' : '#ff6644' }}>
                                         {ship.heading != null ? `${Math.round(ship.heading)}°` : 'UNKNOWN'}
                                     </span>
                                 </div>
                                 {ship.type === 'carrier' && ship.source && (
-                                    <div style={{ marginTop: 6, padding: '5px 7px', background: 'rgba(255,170,0,0.08)', border: '1px solid rgba(255,170,0,0.3)', borderRadius: 4, fontSize: 9, letterSpacing: 1 }}>
-                                        <div style={{ color: '#ffaa00', marginBottom: 3 }}>
+                                    <div className="mt-1.5 p-[5px_7px] bg-[rgba(255,170,0,0.08)] border border-[rgba(255,170,0,0.3)] rounded text-[9px] tracking-wide">
+                                        <div className="text-[#ffaa00] mb-0.5">
                                             SOURCE: {ship.source_url ? (
                                                 <a href={ship.source_url} target="_blank" rel="noopener noreferrer"
-                                                    style={{ color: '#00e5ff', textDecoration: 'underline' }}>{ship.source}</a>
+                                                    className="text-[#00e5ff] underline">{ship.source}</a>
                                             ) : (
-                                                <span style={{ color: '#fff' }}>{ship.source}</span>
+                                                <span className="text-white">{ship.source}</span>
                                             )}
                                         </div>
                                         {ship.last_osint_update && (
-                                            <div style={{ color: '#888' }}>LAST OSINT UPDATE: {new Date(ship.last_osint_update).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</div>
+                                            <div className="text-[#888]">LAST OSINT UPDATE: {new Date(ship.last_osint_update).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</div>
                                         )}
                                         {ship.desc && (
-                                            <div style={{ color: '#aaa', marginTop: 3, fontSize: 8, lineHeight: 1.3 }}>{ship.desc}</div>
+                                            <div className="text-[#aaa] mt-0.5 text-[8px] leading-tight">{ship.desc}</div>
                                         )}
                                     </div>
                                 )}
                                 {ship.type !== 'carrier' && ship.last_osint_update && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Last OSINT Update: <span style={{ color: '#888' }}>{new Date(ship.last_osint_update).toLocaleDateString()}</span>
+                                    <div className="map-popup-row">
+                                        Last OSINT Update: <span className="text-[#888]">{new Date(ship.last_osint_update).toLocaleDateString()}</span>
                                     </div>
                                 )}
                             </div>
@@ -2614,36 +2166,36 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
                             className="threat-popup"
                             maxWidth="280px"
                         >
-                            <div style={{ background: '#1a1035', padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(167,139,250,0.4)', fontFamily: 'monospace', fontSize: 11, color: '#e9d5ff', minWidth: 200 }}>
-                                <div style={{ fontWeight: 'bold', fontSize: 13, color: '#a78bfa', marginBottom: 6, borderBottom: '1px solid rgba(167,139,250,0.2)', paddingBottom: 4 }}>
+                            <div className="map-popup bg-[#1a1035] border border-violet-400/40 text-[#e9d5ff] min-w-[200px]">
+                                <div className="map-popup-title text-violet-400 border-b border-violet-400/20 pb-1">
                                     {dc.name}
                                 </div>
                                 {dc.company && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Operator: <span style={{ color: '#c4b5fd' }}>{dc.company}</span>
+                                    <div className="map-popup-row">
+                                        Operator: <span className="text-[#c4b5fd]">{dc.company}</span>
                                     </div>
                                 )}
                                 {dc.street && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Address: <span style={{ color: '#fff' }}>{dc.street}{dc.zip ? ` ${dc.zip}` : ''}</span>
+                                    <div className="map-popup-row">
+                                        Address: <span className="text-white">{dc.street}{dc.zip ? ` ${dc.zip}` : ''}</span>
                                     </div>
                                 )}
                                 {dc.city && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Location: <span style={{ color: '#fff' }}>{dc.city}{dc.country ? `, ${dc.country}` : ''}</span>
+                                    <div className="map-popup-row">
+                                        Location: <span className="text-white">{dc.city}{dc.country ? `, ${dc.country}` : ''}</span>
                                     </div>
                                 )}
                                 {!dc.city && dc.country && (
-                                    <div style={{ marginBottom: 4 }}>
-                                        Country: <span style={{ color: '#fff' }}>{dc.country}</span>
+                                    <div className="map-popup-row">
+                                        Country: <span className="text-white">{dc.country}</span>
                                     </div>
                                 )}
                                 {outagesInCountry.length > 0 && (
-                                    <div style={{ marginTop: 6, padding: '4px 8px', background: 'rgba(255,0,0,0.15)', border: '1px solid rgba(255,80,80,0.4)', borderRadius: 4, fontSize: 10, color: '#ff6b6b' }}>
+                                    <div className="mt-1.5 px-2 py-1 bg-red-500/15 border border-red-400/40 rounded text-[10px] text-[#ff6b6b]">
                                         OUTAGE IN REGION — {outagesInCountry.map((o: any) => `${o.region_name} (${o.severity}%)`).join(', ')}
                                     </div>
                                 )}
-                                <div style={{ marginTop: 6, fontSize: 9, color: '#7c3aed', letterSpacing: '0.05em' }}>
+                                <div className="mt-1.5 text-[9px] text-violet-600 tracking-wider">
                                     DATA CENTER
                                 </div>
                             </div>

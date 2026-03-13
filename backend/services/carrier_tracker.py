@@ -218,7 +218,7 @@ def _load_cache() -> Dict[str, dict]:
             data = json.loads(CACHE_FILE.read_text())
             logger.info(f"Carrier cache loaded: {len(data)} carriers from {CACHE_FILE}")
             return data
-    except Exception as e:
+    except (IOError, OSError, json.JSONDecodeError, ValueError) as e:
         logger.warning(f"Failed to load carrier cache: {e}")
     return {}
 
@@ -228,7 +228,7 @@ def _save_cache(positions: Dict[str, dict]):
     try:
         CACHE_FILE.write_text(json.dumps(positions, indent=2))
         logger.info(f"Carrier cache saved: {len(positions)} carriers")
-    except Exception as e:
+    except (IOError, OSError) as e:
         logger.warning(f"Failed to save carrier cache: {e}")
 
 
@@ -275,15 +275,15 @@ def _fetch_gdelt_carrier_news() -> List[dict]:
         try:
             url = f"https://api.gdeltproject.org/api/v2/doc/doc?query={term}&mode=artlist&maxrecords=5&format=json&timespan=14d"
             raw = fetch_with_curl(url, timeout=8)
-            if not raw:
+            if not raw or not hasattr(raw, 'text'):
                 continue
-            data = json.loads(raw)
+            data = raw.json()
             articles = data.get("articles", [])
             for art in articles:
                 title = art.get("title", "")
                 url = art.get("url", "")
                 results.append({"title": title, "url": url})
-        except Exception as e:
+        except (ConnectionError, TimeoutError, ValueError, KeyError, OSError) as e:
             logger.debug(f"GDELT search failed for '{term}': {e}")
             continue
 
@@ -323,13 +323,8 @@ def _parse_carrier_positions_from_news(articles: List[dict]) -> Dict[str, dict]:
     return updates
 
 
-def update_carrier_positions():
-    """Main update function — called on startup and every 12h."""
-    global _last_update
-
-    logger.info("Carrier tracker: updating positions from OSINT sources...")
-
-    # Start with fallback positions (sourced from USNI News Fleet Tracker)
+def _load_carrier_fallbacks() -> Dict[str, dict]:
+    """Build carrier positions from static fallbacks + disk cache (instant, no network)."""
     positions: Dict[str, dict] = {}
     for hull, info in CARRIER_REGISTRY.items():
         positions[hull] = {
@@ -344,11 +339,10 @@ def update_carrier_positions():
             "updated": datetime.now(timezone.utc).isoformat()
         }
 
-    # Load cached positions (may have better data from previous runs)
+    # Overlay cached positions from previous runs (may have GDELT data)
     cached = _load_cache()
     for hull, cached_pos in cached.items():
         if hull in positions:
-            # Only use cache if it has a real OSINT source (not just static)
             if cached_pos.get("source", "").startswith("GDELT") or cached_pos.get("source", "").startswith("News"):
                 positions[hull].update({
                     "lat": cached_pos["lat"],
@@ -357,8 +351,29 @@ def update_carrier_positions():
                     "source": cached_pos.get("source", "Cached OSINT"),
                     "updated": cached_pos.get("updated", "")
                 })
+    return positions
 
-    # Try GDELT news for fresh positions
+
+def update_carrier_positions():
+    """Main update function — called on startup and every 12h.
+
+    Phase 1 (instant): publish fallback + cached positions so the map has carriers immediately.
+    Phase 2 (slow):    query GDELT for fresh OSINT positions and update in-place.
+    """
+    global _last_update
+
+    # --- Phase 1: instant fallback + cache ---
+    positions = _load_carrier_fallbacks()
+
+    with _positions_lock:
+        # Only overwrite if positions are currently empty (first startup).
+        # If we already have data from a previous cycle, keep it while GDELT runs.
+        if not _carrier_positions:
+            _carrier_positions.update(positions)
+            _last_update = datetime.now(timezone.utc)
+    logger.info(f"Carrier tracker: {len(positions)} carriers loaded from fallback/cache (GDELT enrichment starting...)")
+
+    # --- Phase 2: slow GDELT enrichment ---
     try:
         articles = _fetch_gdelt_carrier_news()
         news_positions = _parse_carrier_positions_from_news(articles)
@@ -369,7 +384,7 @@ def update_carrier_positions():
     except Exception as e:
         logger.warning(f"GDELT carrier fetch failed: {e}")
 
-    # Save and update the global state
+    # Save and update the global state with enriched positions
     with _positions_lock:
         _carrier_positions.clear()
         _carrier_positions.update(positions)

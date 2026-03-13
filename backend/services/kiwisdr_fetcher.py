@@ -6,6 +6,7 @@ Data is embedded as HTML comments inside each entry div.
 
 import re
 import logging
+import requests
 from cachetools import TTLCache, cached
 
 logger = logging.getLogger(__name__)
@@ -92,6 +93,6 @@ def fetch_kiwisdr_nodes() -> list[dict]:
         logger.info(f"KiwiSDR: parsed {len(nodes)} online receivers")
         return nodes
 
-    except Exception as e:
+    except (requests.RequestException, ConnectionError, TimeoutError, ValueError, KeyError) as e:
         logger.error(f"KiwiSDR fetch exception: {e}")
         return []

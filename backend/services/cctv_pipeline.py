@@ -41,7 +41,7 @@ class BaseCCTVIngestor(ABC):
             cursor = self.conn.cursor()
             for cam in cameras:
                 cursor.execute("""
-                    INSERT INTO cameras 
+                    INSERT INTO cameras
                     (id, source_agency, lat, lon, direction_facing, media_url, refresh_rate_seconds)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
                     ON CONFLICT(id) DO UPDATE SET
@@ -59,6 +59,10 @@ class BaseCCTVIngestor(ABC):
             self.conn.commit()
             logger.info(f"Successfully ingested {len(cameras)} cameras from {self.__class__.__name__}")
         except Exception as e:
+            try:
+                self.conn.rollback()
+            except Exception:
+                pass
             logger.error(f"Failed to ingest cameras in {self.__class__.__name__}: {e}")
 
 class TFLJamCamIngestor(BaseCCTVIngestor):
@@ -220,7 +224,7 @@ class GlobalOSMCrawlingIngestor(BaseCCTVIngestor):
                     direction_str = item.get("tags", {}).get("camera:direction", "0")
                     try:
                         bearing = int(float(direction_str))
-                    except:
+                    except (ValueError, TypeError):
                         bearing = 0
                         
                     mapbox_key = "YOUR_MAPBOX_TOKEN_HERE"

@@ -45,10 +45,10 @@ const MarketsPanel = React.memo(function MarketsPanel({ data }: { data: any }) {
                                     <div key={ticker} className="flex items-center justify-between border border-cyan-500/10 bg-cyan-950/10 p-1.5 rounded-sm relative group overflow-hidden">
                                         <span className="font-bold text-cyan-300 z-10 text-[10px]">[{ticker}]</span>
                                         <div className="flex items-center gap-3 text-right z-10">
-                                            <span className="text-[var(--text-primary)] font-bold text-xs">${info.price.toFixed(2)}</span>
+                                            <span className="text-[var(--text-primary)] font-bold text-xs">${(info.price ?? 0).toFixed(2)}</span>
                                             <span className={`flex items-center gap-0.5 w-12 justify-end text-[9px] ${info.up ? 'text-cyan-400' : 'text-red-400'}`}>
                                                 {info.up ? <ArrowUpRight size={10} /> : <ArrowDownRight size={10} />}
-                                                {Math.abs(info.change_percent).toFixed(2)}%
+                                                {Math.abs(info.change_percent ?? 0).toFixed(2)}%
                                             </span>
                                         </div>
                                     </div>
@@ -65,10 +65,10 @@ const MarketsPanel = React.memo(function MarketsPanel({ data }: { data: any }) {
                                     <div key={name} className="flex flex-col border border-cyan-500/10 bg-cyan-950/10 p-1.5 rounded-sm justify-between">
                                         <span className="font-bold text-cyan-500 text-[9px] uppercase mb-0.5">{name}</span>
                                         <div className="flex items-center justify-between">
-                                            <span className="text-[var(--text-primary)] font-bold text-[11px]">${info.price.toFixed(2)}</span>
+                                            <span className="text-[var(--text-primary)] font-bold text-[11px]">${(info.price ?? 0).toFixed(2)}</span>
                                             <span className={`flex items-center gap-0.5 text-[9px] ${info.up ? 'text-cyan-400' : 'text-red-400'}`}>
                                                 {info.up ? <ArrowUpRight size={10} /> : <ArrowDownRight size={10} />}
-                                                {Math.abs(info.change_percent).toFixed(2)}%
+                                                {Math.abs(info.change_percent ?? 0).toFixed(2)}%
                                             </span>
                                         </div>
                                     </div>

@@ -16,6 +16,7 @@ import SettingsPanel from "@/components/SettingsPanel";
 import MapLegend from "@/components/MapLegend";
 import ScaleBar from "@/components/ScaleBar";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { DashboardDataProvider } from "@/lib/DashboardDataContext";
 import OnboardingModal, { useOnboarding } from "@/components/OnboardingModal";
 import ChangelogModal, { useChangelog } from "@/components/ChangelogModal";
 
@@ -135,7 +136,8 @@ export default function Dashboard() {
     military: true,
     tracked: true,
     satellites: true,
-    ships_important: true,
+    ships_military: true,
+    ships_cargo: true,
     ships_civilian: false,
     ships_passenger: true,
     earthquakes: true,
@@ -366,6 +368,7 @@ export default function Dashboard() {
   }, []);
 
   return (
+    <DashboardDataProvider data={data} selectedEntity={selectedEntity} setSelectedEntity={setSelectedEntity}>
     <main className="fixed inset-0 w-full h-full bg-[var(--bg-primary)] overflow-hidden font-sans">
 
       {/* MAPLIBRE WEBGL OVERLAY */}
@@ -435,10 +438,14 @@ export default function Dashboard() {
           {/* LEFT HUD CONTAINER */}
           <div className="absolute left-6 top-24 bottom-6 w-80 flex flex-col gap-6 z-[200] pointer-events-none">
             {/* LEFT PANEL - DATA LAYERS */}
-            <WorldviewLeftPanel data={data} activeLayers={activeLayers} setActiveLayers={setActiveLayers} onSettingsClick={() => setSettingsOpen(true)} onLegendClick={() => setLegendOpen(true)} gibsDate={gibsDate} setGibsDate={setGibsDate} gibsOpacity={gibsOpacity} setGibsOpacity={setGibsOpacity} onEntityClick={setSelectedEntity} onFlyTo={(lat, lng) => setFlyToLocation({ lat, lng, ts: Date.now() })} />
+            <ErrorBoundary name="WorldviewLeftPanel">
+              <WorldviewLeftPanel data={data} activeLayers={activeLayers} setActiveLayers={setActiveLayers} onSettingsClick={() => setSettingsOpen(true)} onLegendClick={() => setLegendOpen(true)} gibsDate={gibsDate} setGibsDate={setGibsDate} gibsOpacity={gibsOpacity} setGibsOpacity={setGibsOpacity} onEntityClick={setSelectedEntity} onFlyTo={(lat, lng) => setFlyToLocation({ lat, lng, ts: Date.now() })} />
+            </ErrorBoundary>
 
             {/* LEFT BOTTOM - DISPLAY CONFIG */}
-            <WorldviewRightPanel effects={effects} setEffects={setEffects} setUiVisible={setUiVisible} />
+            <ErrorBoundary name="WorldviewRightPanel">
+              <WorldviewRightPanel effects={effects} setEffects={setEffects} setUiVisible={setUiVisible} />
+            </ErrorBoundary>
           </div>
 
           {/* RIGHT HUD CONTAINER */}
@@ -466,29 +473,37 @@ export default function Dashboard() {
 
             {/* TOP RIGHT - MARKETS */}
             <div className="flex-shrink-0">
-              <MarketsPanel data={data} />
+              <ErrorBoundary name="MarketsPanel">
+                <MarketsPanel data={data} />
+              </ErrorBoundary>
             </div>
 
             {/* SIGINT & RADIO INTERCEPTS */}
             <div className="flex-shrink-0">
-              <RadioInterceptPanel
-                data={data}
-                isEavesdropping={isEavesdropping}
-                setIsEavesdropping={setIsEavesdropping}
-                eavesdropLocation={eavesdropLocation}
-                cameraCenter={cameraCenter}
-                selectedEntity={selectedEntity}
-              />
+              <ErrorBoundary name="RadioInterceptPanel">
+                <RadioInterceptPanel
+                  data={data}
+                  isEavesdropping={isEavesdropping}
+                  setIsEavesdropping={setIsEavesdropping}
+                  eavesdropLocation={eavesdropLocation}
+                  cameraCenter={cameraCenter}
+                  selectedEntity={selectedEntity}
+                />
+              </ErrorBoundary>
             </div>
 
             {/* DATA FILTERS */}
             <div className="flex-shrink-0">
-              <FilterPanel data={data} activeFilters={activeFilters} setActiveFilters={setActiveFilters} />
+              <ErrorBoundary name="FilterPanel">
+                <FilterPanel data={data} activeFilters={activeFilters} setActiveFilters={setActiveFilters} />
+              </ErrorBoundary>
             </div>
 
             {/* BOTTOM RIGHT - NEWS FEED (fills remaining space) */}
             <div className="flex-1 min-h-0 flex flex-col">
-              <NewsFeed data={data} selectedEntity={selectedEntity} regionDossier={regionDossier} regionDossierLoading={regionDossierLoading} />
+              <ErrorBoundary name="NewsFeed">
+                <NewsFeed data={data} selectedEntity={selectedEntity} regionDossier={regionDossier} regionDossierLoading={regionDossierLoading} />
+              </ErrorBoundary>
             </div>
           </div>
 
@@ -589,10 +604,14 @@ export default function Dashboard() {
       <div className="absolute inset-0 pointer-events-none z-[3] opacity-5 bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px)]" style={{ backgroundSize: '100% 4px' }}></div>
 
       {/* SETTINGS PANEL */}
-      <SettingsPanel isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <ErrorBoundary name="SettingsPanel">
+        <SettingsPanel isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      </ErrorBoundary>
 
       {/* MAP LEGEND */}
-      <MapLegend isOpen={legendOpen} onClose={() => setLegendOpen(false)} />
+      <ErrorBoundary name="MapLegend">
+        <MapLegend isOpen={legendOpen} onClose={() => setLegendOpen(false)} />
+      </ErrorBoundary>
 
       {/* ONBOARDING MODAL */}
       {showOnboarding && (
@@ -617,5 +636,6 @@ export default function Dashboard() {
       )}
 
     </main>
+    </DashboardDataProvider>
   );
 }

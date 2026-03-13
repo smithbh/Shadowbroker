@@ -35,16 +35,21 @@ for _var in _SECRET_VARS:
         except Exception as _e:
             logger.error(f"Failed to read secret file {_file_path} for {_var}: {_e}")
 
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request, Response, Query
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from services.data_fetcher import start_scheduler, stop_scheduler, get_latest_data, source_timestamps
 from services.ais_stream import start_ais_stream, stop_ais_stream
 from services.carrier_tracker import start_carrier_tracker, stop_carrier_tracker
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 import uvicorn
 import hashlib
 import json as json_mod
 import socket
+
+limiter = Limiter(key_func=get_remote_address)
 
 
 def _build_cors_origins():
@@ -74,10 +79,32 @@ def _build_cors_origins():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: Start background data fetching, AIS stream, and carrier tracker
-    start_carrier_tracker()
+    import threading
+
+    # Start AIS stream first — it loads the disk cache (instant ships) then
+    # begins accumulating live vessel data via WebSocket in the background.
     start_ais_stream()
+
+    # Carrier tracker runs its own initial update_carrier_positions() internally
+    # in _scheduler_loop, so we do NOT call it again in the preload thread.
+    start_carrier_tracker()
+
+    # Start the recurring scheduler (fast=60s, slow=30min).
     start_scheduler()
+
+    # Kick off the full data preload in a background thread so the server
+    # is listening on port 8000 instantly.  The frontend's adaptive polling
+    # (retries every 3s) will pick up data piecemeal as each fetcher finishes.
+    def _background_preload():
+        logger.info("=== PRELOADING DATA (background — server already accepting requests) ===")
+        try:
+            update_all_data()
+            logger.info("=== PRELOAD COMPLETE ===")
+        except Exception as e:
+            logger.error(f"Data preload failed (non-fatal): {e}")
+
+    threading.Thread(target=_background_preload, daemon=True).start()
+
     yield
     # Shutdown: Stop all background services
     stop_ais_stream()
@@ -85,6 +112,8 @@ async def lifespan(app: FastAPI):
     stop_carrier_tracker()
 
 app = FastAPI(title="Live Risk Dashboard API", lifespan=lifespan)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 from fastapi.middleware.gzip import GZipMiddleware
 app.add_middleware(GZipMiddleware, minimum_size=1000)
@@ -98,11 +127,23 @@ app.add_middleware(
 
 from services.data_fetcher import update_all_data
 
+_refresh_in_progress = False
+
 @app.get("/api/refresh")
-async def force_refresh():
-    # Force an immediate synchronous update of the data payload
+@limiter.limit("2/minute")
+async def force_refresh(request: Request):
+    global _refresh_in_progress
+    if _refresh_in_progress:
+        return {"status": "refresh already in progress"}
     import threading
-    t = threading.Thread(target=update_all_data)
+    def _do_refresh():
+        global _refresh_in_progress
+        try:
+            update_all_data()
+        finally:
+            _refresh_in_progress = False
+    _refresh_in_progress = True
+    t = threading.Thread(target=_do_refresh)
     t.start()
     return {"status": "refreshing in background"}
 
@@ -113,13 +154,14 @@ async def live_data():
 def _etag_response(request: Request, payload: dict, prefix: str = "", default=None):
     """Serialize once, hash the bytes for ETag, return 304 or full response."""
     content = json_mod.dumps(payload, default=default)
-    etag = hashlib.md5(f"{prefix}{content[:256]}".encode()).hexdigest()[:16]
+    etag = hashlib.md5(f"{prefix}{content}".encode()).hexdigest()[:16]
     if request.headers.get("if-none-match") == etag:
         return Response(status_code=304, headers={"ETag": etag, "Cache-Control": "no-cache"})
     return Response(content=content, media_type="application/json",
                     headers={"ETag": etag, "Cache-Control": "no-cache"})
 
 @app.get("/api/live-data/fast")
+@limiter.limit("120/minute")
 async def live_data_fast(request: Request):
     d = get_latest_data()
     payload = {
@@ -140,6 +182,7 @@ async def live_data_fast(request: Request):
     return _etag_response(request, payload, prefix="fast|")
 
 @app.get("/api/live-data/slow")
+@limiter.limit("60/minute")
 async def live_data_slow(request: Request):
     d = get_latest_data()
     payload = {
@@ -210,13 +253,20 @@ async def api_get_openmhz_calls(sys_name: str):
     return get_recent_openmhz_calls(sys_name)
 
 @app.get("/api/radio/nearest")
-async def api_get_nearest_radio(lat: float, lng: float):
+async def api_get_nearest_radio(
+    lat: float = Query(..., ge=-90, le=90),
+    lng: float = Query(..., ge=-180, le=180),
+):
     return find_nearest_openmhz_system(lat, lng)
 
 from services.radio_intercept import find_nearest_openmhz_systems_list
 
 @app.get("/api/radio/nearest-list")
-async def api_get_nearest_radios_list(lat: float, lng: float, limit: int = 5):
+async def api_get_nearest_radios_list(
+    lat: float = Query(..., ge=-90, le=90),
+    lng: float = Query(..., ge=-180, le=180),
+    limit: int = Query(5, ge=1, le=20),
+):
     return find_nearest_openmhz_systems_list(lat, lng, limit=limit)
 
 from services.network_utils import fetch_with_curl
@@ -249,14 +299,24 @@ async def get_flight_route(callsign: str, lat: float = 0.0, lng: float = 0.0):
 from services.region_dossier import get_region_dossier
 
 @app.get("/api/region-dossier")
-def api_region_dossier(lat: float, lng: float):
+@limiter.limit("30/minute")
+def api_region_dossier(
+    request: Request,
+    lat: float = Query(..., ge=-90, le=90),
+    lng: float = Query(..., ge=-180, le=180),
+):
     """Sync def so FastAPI runs it in a threadpool — prevents blocking the event loop."""
     return get_region_dossier(lat, lng)
 
 from services.sentinel_search import search_sentinel2_scene
 
 @app.get("/api/sentinel2/search")
-def api_sentinel2_search(lat: float, lng: float):
+@limiter.limit("30/minute")
+def api_sentinel2_search(
+    request: Request,
+    lat: float = Query(..., ge=-90, le=90),
+    lng: float = Query(..., ge=-180, le=180),
+):
     """Search for latest Sentinel-2 imagery at a point. Sync for threadpool execution."""
     return search_sentinel2_scene(lat, lng)
 
@@ -309,7 +369,28 @@ async def api_reset_news_feeds():
         return {"status": "reset", "feeds": get_feeds()}
     return {"status": "error", "message": "Failed to reset feeds"}
 
+# ---------------------------------------------------------------------------
+# System — self-update
+# ---------------------------------------------------------------------------
+from pathlib import Path
+from services.updater import perform_update, schedule_restart
+
+@app.post("/api/system/update")
+@limiter.limit("1/minute")
+async def system_update(request: Request):
+    """Download latest release, backup current files, extract update, and restart."""
+    project_root = str(Path(__file__).resolve().parent.parent)
+    result = perform_update(project_root)
+    if result.get("status") == "error":
+        return Response(
+            content=json_mod.dumps(result),
+            status_code=500,
+            media_type="application/json",
+        )
+    # Schedule restart AFTER response flushes (2s delay)
+    import threading
+    threading.Timer(2.0, schedule_restart, args=[project_root]).start()
+    return result
+
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
-
-# Application successfully initialized with background scraping tasks

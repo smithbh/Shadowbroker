@@ -10,9 +10,10 @@ from urllib3.util.retry import Retry
 
 logger = logging.getLogger(__name__)
 
-# Reusable session with connection pooling and retry logic
+# Reusable session with connection pooling and retry logic.
+# Only retry once (total=1) to fail fast — the curl fallback is the real safety net.
 _session = requests.Session()
-_retry = Retry(total=2, backoff_factor=0.5, status_forcelist=[502, 503, 504])
+_retry = Retry(total=1, backoff_factor=0.3, status_forcelist=[502, 503, 504])
 _session.mount("https://", HTTPAdapter(max_retries=_retry, pool_maxsize=20))
 _session.mount("http://", HTTPAdapter(max_retries=_retry, pool_maxsize=10))
 
@@ -68,16 +69,19 @@ def fetch_with_curl(url, method="GET", json_data=None, timeout=15, headers=None)
         pass  # Fall through to curl below
     else:
         try:
+            # Use a short connect timeout (3s) so firewall blocks fail fast,
+            # but allow the full timeout for reading the response body.
+            req_timeout = (min(3, timeout), timeout)
             if method == "POST":
-                res = _session.post(url, json=json_data, timeout=timeout, headers=default_headers)
+                res = _session.post(url, json=json_data, timeout=req_timeout, headers=default_headers)
             else:
-                res = _session.get(url, timeout=timeout, headers=default_headers)
+                res = _session.get(url, timeout=req_timeout, headers=default_headers)
             res.raise_for_status()
             # Clear failure caches on success
             _domain_fail_cache.pop(domain, None)
             _circuit_breaker.pop(domain, None)
             return res
-        except Exception as e:
+        except (requests.RequestException, ConnectionError, TimeoutError, OSError) as e:
             logger.warning(f"Python requests failed for {url} ({e}), falling back to bash curl...")
             _domain_fail_cache[domain] = time.time()
 
@@ -109,7 +113,7 @@ def fetch_with_curl(url, method="GET", json_data=None, timeout=15, headers=None)
                 logger.error(f"bash curl fallback failed: exit={res.returncode} stderr={res.stderr[:200]}")
                 _circuit_breaker[domain] = time.time()
                 return _DummyResponse(500, "")
-        except Exception as curl_e:
+        except (subprocess.SubprocessError, ConnectionError, TimeoutError, OSError) as curl_e:
             logger.error(f"bash curl fallback exception: {curl_e}")
             _circuit_breaker[domain] = time.time()
             return _DummyResponse(500, "")

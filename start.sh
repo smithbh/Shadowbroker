@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Graceful shutdown: kill all child processes on exit/interrupt
+trap 'kill 0' EXIT SIGINT SIGTERM
+
 echo "======================================================="
 echo "   S H A D O W B R O K E R   -   macOS / Linux Start   "
 echo "======================================================="

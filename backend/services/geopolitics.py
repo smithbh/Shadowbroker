@@ -1,5 +1,6 @@
 import requests
 import logging
+import zipfile
 from cachetools import cached, TTLCache
 from datetime import datetime
 from services.network_utils import fetch_with_curl
@@ -65,7 +66,7 @@ def fetch_ukraine_frontlines():
                     logger.error(f"Failed to fetch parsed Github Raw GeoJSON: {res_geo.status_code}")
         else:
             logger.error(f"Failed to fetch Github Tree for Deepstatemap: {res_tree.status_code}")
-    except Exception as e:
+    except (requests.RequestException, ConnectionError, TimeoutError, ValueError, KeyError) as e:
         logger.error(f"Error fetching DeepStateMap: {e}")
     return None
 
@@ -81,7 +82,7 @@ def _extract_domain(url):
         if host.startswith('www.'):
             host = host[4:]
         return host
-    except Exception:
+    except (ValueError, AttributeError, KeyError):  # non-critical
         return url[:40]
 
 def _url_to_headline(url):
@@ -137,7 +138,7 @@ def _url_to_headline(url):
         if len(headline) > 90:
             headline = headline[:87] + '...'
         return headline
-    except Exception:
+    except (ValueError, AttributeError, KeyError):  # non-critical
         return url[:60]
 
 
@@ -226,7 +227,7 @@ def _fetch_article_title(url):
         
         _article_title_cache[url] = None
         return None
-    except Exception:
+    except (requests.RequestException, ConnectionError, TimeoutError, ValueError, AttributeError):  # non-critical
         _article_title_cache[url] = None
         return None
 
@@ -242,7 +243,7 @@ def _batch_fetch_titles(urls):
             url = futures[future]
             try:
                 results[url] = future.result()
-            except Exception:
+            except Exception:  # non-critical: optional title enrichment
                 results[url] = None
     return results
 
@@ -308,7 +309,7 @@ def _parse_gdelt_export_zip(zip_bytes, conflict_codes, seen_locs, features, loc_
                     })
                 except (ValueError, IndexError):
                     continue
-    except Exception as e:
+    except (IOError, OSError, ValueError, KeyError, zipfile.BadZipFile) as e:
         logger.warning(f"Failed to parse GDELT export zip: {e}")
 
 def _download_gdelt_export(url):
@@ -317,16 +318,72 @@ def _download_gdelt_export(url):
         res = fetch_with_curl(url, timeout=15)
         if res.status_code == 200:
             return res.content
-    except Exception:
+    except (ConnectionError, TimeoutError, OSError):  # non-critical
         pass
     return None
 
-@cached(gdelt_cache)
+def _build_feature_html(features, fetched_titles=None):
+    """Build URL + headline arrays for frontend rendering.
+    Uses fetched_titles (real article titles) when available, falls back to URL slug parsing."""
+    import html as html_mod
+    for f in features:
+        urls = f["properties"].pop("_urls", [])
+        f["properties"].pop("_domains", None)
+        headlines = []
+        for u in urls:
+            real_title = fetched_titles.get(u) if fetched_titles else None
+            headlines.append(real_title if real_title else _url_to_headline(u))
+        f["properties"]["_urls_list"] = urls
+        f["properties"]["_headlines_list"] = headlines
+        if urls:
+            links = []
+            for u, h in zip(urls, headlines):
+                safe_url = u if u.startswith(('http://', 'https://')) else 'about:blank'
+                safe_h = html_mod.escape(h)
+                links.append(f'<div style="margin-bottom:6px;"><a href="{safe_url}" target="_blank" rel="noopener noreferrer">{safe_h}</a></div>')
+            f["properties"]["html"] = ''.join(links)
+        else:
+            f["properties"]["html"] = html_mod.escape(f["properties"]["name"])
+        f.pop("_loc_key", None)
+
+
+def _enrich_gdelt_titles_background(features, all_article_urls):
+    """Background thread: fetch real article titles then update features in-place."""
+    import html as html_mod
+    try:
+        logger.info(f"[BG] Fetching real article titles for {len(all_article_urls)} URLs...")
+        fetched_titles = _batch_fetch_titles(all_article_urls)
+        fetched_count = sum(1 for v in fetched_titles.values() if v)
+        logger.info(f"[BG] Resolved {fetched_count}/{len(all_article_urls)} article titles")
+
+        # Update features in-place with real titles
+        for f in features:
+            urls = f["properties"].get("_urls_list", [])
+            if not urls:
+                continue
+            headlines = []
+            for u in urls:
+                real_title = fetched_titles.get(u)
+                headlines.append(real_title if real_title else _url_to_headline(u))
+            f["properties"]["_headlines_list"] = headlines
+            links = []
+            for u, h in zip(urls, headlines):
+                safe_url = u if u.startswith(('http://', 'https://')) else 'about:blank'
+                safe_h = html_mod.escape(h)
+                links.append(f'<div style="margin-bottom:6px;"><a href="{safe_url}" target="_blank" rel="noopener noreferrer">{safe_h}</a></div>')
+            f["properties"]["html"] = ''.join(links)
+        logger.info(f"[BG] GDELT title enrichment complete")
+    except Exception as e:
+        logger.error(f"[BG] GDELT title enrichment failed: {e}")
+
+
 def fetch_global_military_incidents():
     """
     Fetches global military/conflict incidents from GDELT Events Export files.
     Aggregates the last ~8 hours of 15-minute exports to build ~1000 incidents.
+    Returns immediately with URL-slug headlines; enriches with real titles in background.
     """
+    import threading
     from datetime import timedelta
     from concurrent.futures import ThreadPoolExecutor
 
@@ -388,45 +445,29 @@ def fetch_global_military_incidents():
             if zip_bytes:
                 _parse_gdelt_export_zip(zip_bytes, CONFLICT_CODES, seen_locs, features, loc_index)
 
-        # Collect all unique article URLs for batch title fetching
+        # Collect all unique article URLs
         all_article_urls = set()
         for f in features:
             for u in f["properties"].get("_urls", []):
                 if u:
                     all_article_urls.add(u)
-        
-        logger.info(f"Fetching real article titles for {len(all_article_urls)} unique URLs...")
-        fetched_titles = _batch_fetch_titles(all_article_urls)
-        fetched_count = sum(1 for v in fetched_titles.values() if v)
-        logger.info(f"Resolved {fetched_count}/{len(all_article_urls)} article titles from HTML")
 
-        # Build URL + headline arrays for frontend rendering
-        for f in features:
-            urls = f["properties"].pop("_urls", [])
-            f["properties"].pop("_domains", None)
-            headlines = []
-            for u in urls:
-                # Try the real fetched title first, then fall back to URL slug parsing
-                real_title = fetched_titles.get(u)
-                headlines.append(real_title if real_title else _url_to_headline(u))
-            f["properties"]["_urls_list"] = urls
-            f["properties"]["_headlines_list"] = headlines
-            import html
-            # Keep html as fallback
-            if urls:
-                links = []
-                for u, h in zip(urls, headlines):
-                    safe_url = u if u.startswith(('http://', 'https://')) else 'about:blank'
-                    safe_h = html.escape(h)
-                    links.append(f'<div style="margin-bottom:6px;"><a href="{safe_url}" target="_blank" rel="noopener noreferrer">{safe_h}</a></div>')
-                f["properties"]["html"] = ''.join(links)
-            else:
-                f["properties"]["html"] = html.escape(f["properties"]["name"])
-            f.pop("_loc_key", None)
+        # Build HTML immediately with URL-slug headlines (instant, no network)
+        _build_feature_html(features)
 
-        logger.info(f"GDELT multi-file parsed: {len(features)} conflict locations from {successful} files")
+        logger.info(f"GDELT parsed: {len(features)} conflict locations from {successful} files (titles enriching in background)")
+
+        # Kick off background thread to enrich with real article titles
+        # Features list is shared — background thread updates in-place
+        t = threading.Thread(
+            target=_enrich_gdelt_titles_background,
+            args=(features, all_article_urls),
+            daemon=True,
+        )
+        t.start()
+
         return features
 
-    except Exception as e:
+    except (requests.RequestException, ConnectionError, TimeoutError, ValueError, KeyError, OSError) as e:
         logger.error(f"Error fetching GDELT data: {e}")
     return []

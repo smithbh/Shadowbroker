@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   backend:
-    build: 
+    build:
       context: ./backend
     container_name: shadowbroker-backend
     ports:
@@ -17,6 +15,17 @@ services:
     volumes:
       - backend_data:/app/data
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/live-data/fast"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2'
 
   frontend:
     build:
@@ -29,8 +38,20 @@ services:
       # Change this if your backend runs on a different host or port.
       - BACKEND_URL=http://backend:8000
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '1'
 
 volumes:
   backend_data:

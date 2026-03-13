@@ -28,7 +28,8 @@ const FRESHNESS_MAP: Record<string, string> = {
     tracked: "military_flights",
     earthquakes: "earthquakes",
     satellites: "satellites",
-    ships_important: "ships",
+    ships_military: "ships",
+    ships_cargo: "ships",
     ships_civilian: "ships",
     ships_passenger: "ships",
     ukraine_frontline: "frontlines",
@@ -91,17 +92,18 @@ const WorldviewLeftPanel = React.memo(function WorldviewLeftPanel({ data, active
     }, [gibsPlaying, gibsDate, setGibsDate]);
 
     // Compute ship category counts (memoized — ships array can be 1000+ items)
-    const { importantShipCount, passengerShipCount, civilianShipCount } = useMemo(() => {
+    const { militaryShipCount, cargoShipCount, passengerShipCount, civilianShipCount } = useMemo(() => {
         const ships = data?.ships;
-        if (!ships || !ships.length) return { importantShipCount: 0, passengerShipCount: 0, civilianShipCount: 0 };
-        let important = 0, passenger = 0, civilian = 0;
+        if (!ships || !ships.length) return { militaryShipCount: 0, cargoShipCount: 0, passengerShipCount: 0, civilianShipCount: 0 };
+        let military = 0, cargo = 0, passenger = 0, civilian = 0;
         for (const s of ships) {
             const t = s.type;
-            if (t === 'carrier' || t === 'military_vessel' || t === 'tanker' || t === 'cargo') important++;
+            if (t === 'carrier' || t === 'military_vessel') military++;
+            else if (t === 'tanker' || t === 'cargo') cargo++;
             else if (t === 'passenger') passenger++;
             else civilian++;
         }
-        return { importantShipCount: important, passengerShipCount: passenger, civilianShipCount: civilian };
+        return { militaryShipCount: military, cargoShipCount: cargo, passengerShipCount: passenger, civilianShipCount: civilian };
     }, [data?.ships]);
 
     // Find POTUS fleet planes currently airborne from tracked flights
@@ -127,7 +129,8 @@ const WorldviewLeftPanel = React.memo(function WorldviewLeftPanel({ data, active
         { id: "tracked", name: "Tracked Aircraft", source: "Plane-Alert DB", count: data?.tracked_flights?.length || 0, icon: Eye },
         { id: "earthquakes", name: "Earthquakes (24h)", source: "USGS", count: data?.earthquakes?.length || 0, icon: Activity },
         { id: "satellites", name: "Satellites", source: data?.satellite_source === "celestrak" ? "CelesTrak SGP4" : data?.satellite_source === "tle_api" ? "TLE API · SGP4" : data?.satellite_source === "disk_cache" ? "Cached · SGP4 (est.)" : "CelesTrak SGP4", count: data?.satellites?.length || 0, icon: Satellite },
-        { id: "ships_important", name: "Carriers / Mil / Cargo", source: "AIS Stream", count: importantShipCount, icon: Ship },
+        { id: "ships_military", name: "Military / Carriers", source: "AIS Stream", count: militaryShipCount, icon: Ship },
+        { id: "ships_cargo", name: "Cargo / Tankers", source: "AIS Stream", count: cargoShipCount, icon: Ship },
         { id: "ships_civilian", name: "Civilian Vessels", source: "AIS Stream", count: civilianShipCount, icon: Anchor },
         { id: "ships_passenger", name: "Cruise / Passenger", source: "AIS Stream", count: passengerShipCount, icon: Anchor },
         { id: "ukraine_frontline", name: "Ukraine Frontline", source: "DeepStateMap", count: data?.frontlines ? 1 : 0, icon: AlertTriangle },
@@ -298,7 +301,7 @@ const WorldviewLeftPanel = React.memo(function WorldviewLeftPanel({ data, active
                                             >
                                                 <div className="flex gap-3">
                                                     <div className={`mt-1 ${active ? 'text-cyan-400' : 'text-gray-600 group-hover:text-gray-400'} transition-colors`}>
-                                                        {(['ships_important', 'ships_civilian', 'ships_passenger'].includes(layer.id)) ? shipIcon : <Icon size={16} strokeWidth={1.5} />}
+                                                        {(layer.id.startsWith('ships_')) ? shipIcon : <Icon size={16} strokeWidth={1.5} />}
                                                     </div>
                                                     <div className="flex flex-col">
                                                         <span className={`text-sm font-medium ${active ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)]'} tracking-wide`}>{layer.name}</span>

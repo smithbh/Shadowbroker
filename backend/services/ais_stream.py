@@ -144,7 +144,7 @@ def _save_cache():
         with open(CACHE_FILE, 'w') as f:
             json.dump(data, f)
         logger.info(f"AIS cache saved: {len(data)} vessels")
-    except Exception as e:
+    except (IOError, OSError) as e:
         logger.error(f"Failed to save AIS cache: {e}")
 
 
@@ -165,7 +165,7 @@ def _load_cache():
                     _vessels[int(k)] = v
                     loaded += 1
         logger.info(f"AIS cache loaded: {loaded} vessels from disk")
-    except Exception as e:
+    except (IOError, OSError, json.JSONDecodeError, ValueError) as e:
         logger.error(f"Failed to load AIS cache: {e}")
 
 
@@ -326,7 +326,7 @@ def _ais_stream_loop():
                     _save_cache()
                     last_log_time = now
 
-        except Exception as e:
+        except (ConnectionError, TimeoutError, OSError, ValueError, KeyError) as e:
             logger.error(f"AIS proxy connection error: {e}")
             if _ws_running:
                 logger.info(f"Restarting AIS proxy in {backoff}s (exponential backoff)...")

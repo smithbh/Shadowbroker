@@ -72,7 +72,7 @@ def get_top_broadcastify_feeds():
         logger.info(f"Successfully scraped {len(feeds)} top feeds from Broadcastify.")
         return feeds
         
-    except Exception as e:
+    except (requests.RequestException, ConnectionError, TimeoutError, ValueError, KeyError) as e:
         logger.error(f"Broadcastify Scrape Exception: {e}")
         return []
 
@@ -92,7 +92,7 @@ def get_openmhz_systems():
             # Return list of systems
             return data.get('systems', []) if isinstance(data, dict) else []
         return []
-    except Exception as e:
+    except (requests.RequestException, ConnectionError, TimeoutError, ValueError, KeyError) as e:
         logger.error(f"OpenMHZ Systems Scrape Exception: {e}")
         return []
 
@@ -112,7 +112,7 @@ def get_recent_openmhz_calls(sys_name: str):
             data = res.json()
             return data.get('calls', []) if isinstance(data, dict) else []
         return []
-    except Exception as e:
+    except (requests.RequestException, ConnectionError, TimeoutError, ValueError, KeyError) as e:
         logger.error(f"OpenMHZ Calls Scrape Exception ({sys_name}): {e}")
         return []
 

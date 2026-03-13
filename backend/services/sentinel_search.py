@@ -4,6 +4,7 @@ Free, keyless search for metadata + thumbnails. Used in the right-click dossier.
 """
 
 import logging
+import requests
 from datetime import datetime, timedelta
 from cachetools import TTLCache
 
@@ -48,7 +49,7 @@ def search_sentinel2_scene(lat: float, lng: float) -> dict:
             item = planetary_computer.sign_item(item)
         except ImportError:
             pass  # planetary_computer not installed, try unsigned URLs
-        except Exception as e:
+        except (ConnectionError, TimeoutError, ValueError) as e:
             logger.warning(f"Sentinel-2 signing failed: {e}")
 
         # Get the rendered_preview (full-res PNG) and thumbnail separately
@@ -76,6 +77,6 @@ def search_sentinel2_scene(lat: float, lng: float) -> dict:
     except ImportError:
         logger.warning("pystac-client not installed — Sentinel-2 search unavailable")
         return {"found": False, "error": "pystac-client not installed"}
-    except Exception as e:
+    except (requests.RequestException, ConnectionError, TimeoutError, ValueError) as e:
         logger.error(f"Sentinel-2 search failed for ({lat}, {lng}): {e}")
         return {"found": False, "error": str(e)}

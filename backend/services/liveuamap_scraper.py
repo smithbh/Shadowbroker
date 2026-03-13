@@ -23,7 +23,7 @@ def fetch_liveuamap():
     
     with sync_playwright() as p:
         # Launching with a real user agent to bypass Turnstile
-        browser = p.chromium.launch(headless=False, args=["--disable-blink-features=AutomationControlled"])
+        browser = p.chromium.launch(headless=True, args=["--disable-blink-features=AutomationControlled"])
         context = browser.new_context(
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             viewport={"width": 1920, "height": 1080},
@@ -40,7 +40,7 @@ def fetch_liveuamap():
                 # Wait for the map canvas or markers script to load, max 10s wait
                 try:
                     page.wait_for_timeout(5000)
-                except:
+                except (TimeoutError, OSError):  # non-critical: page load delay
                     pass
                 
                 html = page.content()
@@ -56,8 +56,8 @@ def fetch_liveuamap():
                             # process below
                             html = f"var ovens={ovens_json};"
                             m = re.search(r"var\s+ovens=(.*?);", html, re.DOTALL)
-                    except:
-                        pass
+                    except (ValueError, KeyError, OSError) as e:  # non-critical: JS eval fallback
+                        logger.debug(f"Could not evaluate ovens JS variable for {region['name']}: {e}")
                 
                 if m:
                     json_str = m.group(1).strip()
@@ -81,7 +81,7 @@ def fetch_liveuamap():
                                     "link": marker.get("link", region["url"]),
                                     "region": region["name"]
                                 })
-                    except Exception as e:
+                    except (json.JSONDecodeError, ValueError, KeyError) as e:
                         logger.error(f"Error parsing JSON for {region['name']}: {e}")
                         
             except Exception as e:
