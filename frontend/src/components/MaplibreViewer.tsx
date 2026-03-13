@@ -1764,9 +1764,22 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
                     </Source>
                 )}
 
-                {/* KiwiSDR Receivers — radio tower icons everywhere */}
+                {/* KiwiSDR Receivers — radio tower icons with pulse rings */}
                 {kiwisdrGeoJSON && (
                     <Source id="kiwisdr" type="geojson" data={kiwisdrGeoJSON as any} cluster={true} clusterRadius={50} clusterMaxZoom={14}>
+                        {/* Pulse ring behind clusters */}
+                        <Layer
+                            id="kiwisdr-cluster-pulse"
+                            type="circle"
+                            filter={['has', 'point_count']}
+                            paint={{
+                                'circle-radius': ['step', ['get', 'point_count'], 20, 10, 26, 50, 32, 200, 40],
+                                'circle-color': 'rgba(245, 158, 11, 0.08)',
+                                'circle-stroke-width': 1.5,
+                                'circle-stroke-color': 'rgba(245, 158, 11, 0.35)',
+                                'circle-blur': 0.4,
+                            }}
+                        />
                         {/* Clusters — tower icon with count */}
                         <Layer
                             id="kiwisdr-clusters"
@@ -1786,6 +1799,19 @@ const MaplibreViewer = ({ data, activeLayers, onEntityClick, flyToLocation, sele
                                 'text-color': '#f59e0b',
                                 'text-halo-color': '#000000',
                                 'text-halo-width': 1.5,
+                            }}
+                        />
+                        {/* Pulse ring behind individual towers */}
+                        <Layer
+                            id="kiwisdr-pulse"
+                            type="circle"
+                            filter={['!', ['has', 'point_count']]}
+                            paint={{
+                                'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 6, 8, 10, 14, 14],
+                                'circle-color': 'rgba(245, 158, 11, 0.06)',
+                                'circle-stroke-width': 1,
+                                'circle-stroke-color': 'rgba(245, 158, 11, 0.3)',
+                                'circle-blur': 0.5,
                             }}
                         />
                         {/* Individual tower icons */}
