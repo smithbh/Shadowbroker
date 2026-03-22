@@ -9,19 +9,29 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt \
-    && playwright install --with-deps chromium
+# Install UV for Python dependency management
+ADD https://astral.sh/uv/install.sh /uv-installer.sh
+RUN sh /uv-installer.sh && rm /uv-installer.sh
+ENV PATH="/root/.local/bin/:$PATH"
+# Set environment variable for UV to install dependencies in the system Python environment
+# By default UV creates a new venv and installs dependencies there
+ENV UV_PROJECT_ENVIRONMENT=/usr/local
+
+# Copy pyproject.toml from root for dependency management
+COPY pyproject.toml .
+# Copy lock file for reproducible builds
+COPY uv.lock .
+# Install Python dependencies using UV (this will use the lock file for reproducibility)
+RUN uv sync --frozen
+RUN uv run playwright install --with-deps chromium
 
 # Install Node.js dependencies (ws module for AIS WebSocket proxy)
 # Copy manifests first so this layer is cached unless deps change
-COPY package*.json ./
+COPY backend/package*.json ./
 RUN npm ci --omit=dev
 
 # Copy source code
-COPY . .
-
+COPY backend/ .
 # Create a non-root user for security
 # Grant write access to /app so the auto-updater can extract files
 RUN adduser --system --uid 1001 backenduser \
