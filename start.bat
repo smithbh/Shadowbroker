@@ -45,7 +45,7 @@ echo [*] Setting up backend...
 cd backend
 if not exist "venv\" (
     echo [*] Creating Python virtual environment...
-    python -m venv venv
+    uv venv
     if %errorlevel% neq 0 (
         echo [!] ERROR: Failed to create virtual environment.
         pause
@@ -54,7 +54,7 @@ if not exist "venv\" (
 )
 call venv\Scripts\activate.bat
 echo [*] Installing Python dependencies (this may take a minute)...
-pip install -q -r requirements.txt
+uv sync --frozen
 if %errorlevel% neq 0 (
     echo.
     echo [!] ERROR: pip install failed. See errors above.

@@ -36,6 +36,17 @@ if [ "$PY_MINOR" -ge 13 ] 2>/dev/null; then
     echo ""
 fi
 
+# Setup UV (Python package manager)
+if ! command -v uv &> /dev/null; then
+    echo "[*] UV not found. Installing UV (Python package manager)..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    if [ $? -ne 0 ]; then
+        echo "[!] ERROR: Failed to install UV."
+        exit 1
+    fi
+    export PATH="$HOME/.local/bin:$PATH"
+    echo "[*] UV installed successfully."
+
 # Get the directory where this script lives
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
@@ -44,7 +55,7 @@ echo "[*] Setting up backend..."
 cd "$SCRIPT_DIR/backend"
 if [ ! -d "venv" ]; then
     echo "[*] Creating Python virtual environment..."
-    $PYTHON_CMD -m venv venv
+    uv venv
     if [ $? -ne 0 ]; then
         echo "[!] ERROR: Failed to create virtual environment."
         exit 1
@@ -53,7 +64,7 @@ fi
 
 source venv/bin/activate
 echo "[*] Installing Python dependencies (this may take a minute)..."
-pip install -q -r requirements.txt
+uv sync --frozen
 if [ $? -ne 0 ]; then
     echo ""
     echo "[!] ERROR: pip install failed. See errors above."
