@@ -16,6 +16,24 @@ services:
     volumes:
       - backend_data:/app/data
     restart: unless-stopped
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./backend
+          target: /app
+          ignore:
+            - __pycache__/
+            - "*.pyc"
+            - "*.pyc"
+            - node_modules/
+        - action: rebuild
+          path: pyproject.toml
+        - action: rebuild
+          path: uv.lock
+        - action: rebuild
+          path: backend/package.json
+        - action: rebuild
+          path: backend/package-lock.json
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/live-data/fast"]
       interval: 30s
