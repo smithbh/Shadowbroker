@@ -6,7 +6,7 @@ on:
     tags: ["v*.*.*"]
   pull_request:
     branches: ["main"]
-
+  
 env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
@@ -172,6 +172,7 @@ jobs:
         uses: docker/build-push-action@v5.0.0
         with:
           context: .
+          file: ./backend/Dockerfile
           platforms: ${{ matrix.platform }}
           push: ${{ github.event_name != 'pull_request' }}
           labels: ${{ steps.meta.outputs.labels }}
