@@ -49,10 +49,12 @@ export default function NetworkStats() {
   }, []);
 
   const nodeColor = stats.syncOutcome === 'ok' ? 'text-green-400'
+    : stats.syncOutcome === 'running' ? 'text-amber-400'
     : stats.nodeEnabled ? 'text-amber-400' : 'text-gray-600';
   const nodeLabel = stats.syncOutcome === 'ok' ? 'CONNECTED'
     : stats.syncOutcome === 'running' ? 'SYNCING'
-    : stats.nodeEnabled ? 'SYNCING' : 'OFFLINE';
+    : stats.syncOutcome === 'error' || stats.syncOutcome === 'fork' ? 'RETRYING'
+    : stats.nodeEnabled ? 'WAITING' : 'OFFLINE';
 
   return (
     <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 mt-5 text-sm font-mono text-gray-500">

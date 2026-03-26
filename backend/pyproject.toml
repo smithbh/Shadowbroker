@@ -21,6 +21,7 @@ dependencies = [
     "reverse-geocoder==1.5.1",
     "sgp4==2.23",
     "orjson>=3.10.0",
+    "paho-mqtt>=1.6.0",
     "slowapi==0.1.9",
     "uvicorn==0.34.0",
     "yfinance==0.2.54",
