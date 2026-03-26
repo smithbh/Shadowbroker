@@ -487,6 +487,10 @@ def _ais_stream_loop():
     proxy_script = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ais_proxy.js")
     backoff = 1  # Exponential backoff starting at 1 second
 
+    if not API_KEY:
+        logger.info("AIS_API_KEY not set — ship tracking disabled. Set AIS_API_KEY to enable.")
+        return
+
     while _ws_running:
         try:
             logger.info("Starting Node.js AIS Stream Proxy...")
