@@ -55,7 +55,7 @@ export default function NetworkStats() {
     : stats.nodeEnabled ? 'SYNCING' : 'OFFLINE';
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 mt-5 text-[10px] font-mono text-gray-500">
+    <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 mt-5 text-sm font-mono text-gray-500">
       <span>NODE <span className={nodeColor}>{nodeLabel}</span></span>
       <span className="text-gray-700">|</span>
       <span>MESH <span className={stats.meshtastic > 0 ? 'text-green-400' : 'text-gray-600'}>{stats.meshtastic.toLocaleString()}</span></span>

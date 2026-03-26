@@ -700,7 +700,7 @@ function RepBadge({ rep }: { rep: number }) {
             ? 'text-red-400'
             : 'text-gray-600';
   return (
-    <span className={`text-[9px] font-mono font-bold ${color} shrink-0`}>
+    <span className={`text-[13px] font-mono font-bold ${color} shrink-0`}>
       {rep >= 0 ? '+' : ''}
       {rep}
     </span>
@@ -3902,17 +3902,17 @@ const MeshChat = React.memo(function MeshChat({
           className="flex justify-between items-center p-4 cursor-pointer hover:bg-[var(--bg-secondary)]/50 transition-colors border-b border-[var(--border-primary)]/50 shrink-0 select-none"
         >
           <div className="flex items-center gap-2">
-            <span className="text-cyan-800/50 font-mono text-[9px] select-none">──</span>
+            <span className="text-cyan-800/50 font-mono text-[13px] select-none">──</span>
             <span className="text-[12px] text-cyan-400/90 font-mono tracking-widest" style={{ textShadow: '0 0 8px rgba(34,211,238,0.3)' }}>
               MESH CHAT
             </span>
-            <span className="text-cyan-800/50 font-mono text-[9px] select-none overflow-hidden whitespace-nowrap flex-1">──────────────────────────────</span>
+            <span className="text-cyan-800/50 font-mono text-[13px] select-none overflow-hidden whitespace-nowrap flex-1">──────────────────────────────</span>
           </div>
           <div className="flex items-center gap-2">
             {totalDmNotify > 0 && (
               <span className="flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-[blink_1s_step-end_infinite]" />
-                <span className="text-[9px] font-mono text-cyan-400">{totalDmNotify}</span>
+                <span className="text-[13px] font-mono text-cyan-400">{totalDmNotify}</span>
               </span>
             )}
             {expanded ? (
@@ -3944,7 +3944,7 @@ const MeshChat = React.memo(function MeshChat({
                     setActiveTab(tab.key);
                     if (tab.key === 'dms') setDmView('contacts');
                   }}
-                  className={`flex-1 flex items-center justify-center gap-1 py-1.5 text-[10px] font-mono tracking-wider transition-colors ${
+                  className={`flex-1 flex items-center justify-center gap-1 py-1.5 text-sm font-mono tracking-wider transition-colors ${
                     activeTab === tab.key
                       ? 'text-cyan-300 bg-cyan-950/50 font-bold border-b border-cyan-500/50'
                       : 'text-[var(--text-muted)] hover:text-cyan-600 border-b border-cyan-900/20'
@@ -3970,28 +3970,28 @@ const MeshChat = React.memo(function MeshChat({
             </div>
 
             {privacyProfile === 'high' && !wormholeEnabled && (
-              <div className="px-3 py-2 text-[10px] font-mono text-red-400/90 border-b border-red-900/30 bg-red-950/20 leading-[1.65] shrink-0">
+              <div className="px-3 py-2 text-sm font-mono text-red-400/90 border-b border-red-900/30 bg-red-950/20 leading-[1.65] shrink-0">
                 High Privacy is ON but Wormhole is OFF. Private messaging is blocked until
                 Wormhole is enabled.
               </div>
             )}
 
             {activeTab !== 'meshtastic' && wormholeEnabled && !wormholeReadyState && (
-              <div className="px-3 py-2 text-[10px] font-mono text-red-400/90 border-b border-red-900/30 bg-red-950/20 leading-[1.65] shrink-0">
+              <div className="px-3 py-2 text-sm font-mono text-red-400/90 border-b border-red-900/30 bg-red-950/20 leading-[1.65] shrink-0">
                 Wormhole secure mode is enabled but the local agent is not ready. Dead Drop is
                 blocked until Wormhole is running.
               </div>
             )}
 
             {activeTab !== 'meshtastic' && wormholeEnabled && wormholeReadyState && (
-              <div className="px-3 py-2 text-[10px] font-mono text-yellow-400/80 border-b border-yellow-900/20 bg-yellow-950/10 leading-[1.65] shrink-0">
+              <div className="px-3 py-2 text-sm font-mono text-yellow-400/80 border-b border-yellow-900/20 bg-yellow-950/10 leading-[1.65] shrink-0">
                 Wormhole secure mode is active. Experimental private-lane operations are routed
                 through the local agent and current secure transport paths.
               </div>
             )}
 
             {activeTab !== 'meshtastic' && wormholeEnabled && wormholeReadyState && !wormholeRnsReady && (
-              <div className="px-3 py-2 text-[10px] font-mono text-amber-300/90 border-b border-amber-900/30 bg-amber-950/20 leading-[1.65] shrink-0">
+              <div className="px-3 py-2 text-sm font-mono text-amber-300/90 border-b border-amber-900/30 bg-amber-950/20 leading-[1.65] shrink-0">
                 EXPERIMENTAL ENCRYPTION. Wormhole is up, gate chat is available, and Reticulum is
                 still warming on the strongest lane. Direct private DM posture remains separate in
                 this testnet build.
@@ -3999,7 +3999,7 @@ const MeshChat = React.memo(function MeshChat({
             )}
 
             {anonymousModeEnabled && !anonymousModeReady && (
-              <div className="px-3 py-2 text-[10px] font-mono text-red-400/90 border-b border-red-900/30 bg-red-950/20 leading-[1.65] shrink-0">
+              <div className="px-3 py-2 text-sm font-mono text-red-400/90 border-b border-red-900/30 bg-red-950/20 leading-[1.65] shrink-0">
                 Anonymous mode is active, but hidden transport is not ready. Dead Drop is blocked
                 until Wormhole is running over Tor, I2P, or Mixnet.
               </div>
@@ -4007,7 +4007,7 @@ const MeshChat = React.memo(function MeshChat({
 
             {/* No identity warning */}
             {shouldShowIdentityWarning && (
-              <div className="px-3 py-2 text-[10px] font-mono text-yellow-500/80 border-b border-yellow-900/20 bg-yellow-950/10 leading-[1.65] shrink-0">
+              <div className="px-3 py-2 text-sm font-mono text-yellow-500/80 border-b border-yellow-900/20 bg-yellow-950/10 leading-[1.65] shrink-0">
                 <Lock size={9} className="inline mr-1" />
                 Run <span className="text-cyan-400">connect</span> in MeshTerminal first, or open
                 <button
@@ -4030,10 +4030,10 @@ const MeshChat = React.memo(function MeshChat({
                     : 'border-amber-900/30 bg-amber-950/10 text-amber-200'
                 }`}
               >
-                <div className="text-[9px] font-mono tracking-[0.18em] mb-1">
+                <div className="text-[13px] font-mono tracking-[0.18em] mb-1">
                   {privateLaneHint.title}
                 </div>
-                <div className="text-[10px] font-mono">{privateLaneHint.detail}</div>
+                <div className="text-sm font-mono">{privateLaneHint.detail}</div>
               </div>
             )}
 
@@ -4045,13 +4045,13 @@ const MeshChat = React.memo(function MeshChat({
                     <div className="inline-flex items-center justify-center w-11 h-11 border border-cyan-700/40 bg-black/30 text-cyan-300 mb-3">
                       {activeTab === 'infonet' ? <Shield size={17} /> : <Lock size={17} />}
                     </div>
-                    <div className="text-[10px] font-mono tracking-[0.24em] text-cyan-300 mb-2">
+                    <div className="text-sm font-mono tracking-[0.24em] text-cyan-300 mb-2">
                       {dashboardRestrictedTitle}
                     </div>
-                    <div className="text-[10px] font-mono text-[var(--text-secondary)] leading-[1.75]">
+                    <div className="text-sm font-mono text-[var(--text-secondary)] leading-[1.75]">
                       {dashboardRestrictedDetail}
                     </div>
-                    <div className="mt-3 text-[9px] font-mono text-cyan-300/70 leading-[1.7]">
+                    <div className="mt-3 text-[13px] font-mono text-cyan-300/70 leading-[1.7]">
                       Use the terminal to enter Wormhole, join private gates, and work secure contact
                       flows until the dashboard client lands.
                     </div>
@@ -4067,13 +4067,13 @@ const MeshChat = React.memo(function MeshChat({
                         <div className="inline-flex items-center justify-center w-10 h-10 border border-cyan-700/40 bg-black/30 text-cyan-300 mb-3">
                           <Shield size={16} />
                         </div>
-                        <div className="text-[10px] font-mono tracking-[0.24em] text-cyan-300 mb-2">
+                        <div className="text-sm font-mono tracking-[0.24em] text-cyan-300 mb-2">
                           PRIVATE INFONET LOCKED
                         </div>
-                        <div className="text-[10px] font-mono text-[var(--text-secondary)] leading-[1.7]">
+                        <div className="text-sm font-mono text-[var(--text-secondary)] leading-[1.7]">
                           Experimental private gate chat lives behind Wormhole now.
                         </div>
-                        <div className="mt-2 text-[9px] font-mono text-cyan-300/70">
+                        <div className="mt-2 text-[13px] font-mono text-cyan-300/70">
                           Use the unlock prompt below for the full private-lane brief. Dead Drop
                           remains the strongest current message lane.
                         </div>
@@ -4085,7 +4085,7 @@ const MeshChat = React.memo(function MeshChat({
                     <select
                       value={selectedGate}
                       onChange={(e) => setSelectedGate(e.target.value)}
-                      className="flex-1 bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-[10px] font-mono text-cyan-300 px-2 py-1 outline-none focus:border-cyan-700/50"
+                      className="flex-1 bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-sm font-mono text-cyan-300 px-2 py-1 outline-none focus:border-cyan-700/50"
                     >
                       <option value="">All Gates</option>
                       {gates.map((g) => (
@@ -4109,19 +4109,19 @@ const MeshChat = React.memo(function MeshChat({
 
                   {privateInfonetReady && !wormholeRnsReady && (
                     <div className="px-3 py-2 border-b border-amber-900/20 bg-amber-950/10 shrink-0">
-                      <div className="text-[8px] font-mono tracking-[0.28em] text-amber-300/90">
+                      <div className="text-[12px] font-mono tracking-[0.28em] text-amber-300/90">
                         EXPERIMENTAL ENCRYPTION
                       </div>
-                      <div className="mt-1 text-[10px] font-mono text-amber-100/80 leading-[1.65]">
+                      <div className="mt-1 text-sm font-mono text-amber-100/80 leading-[1.65]">
                         Gate chat is live on the private Wormhole lane while Reticulum finishes
                         warming. Strongest private posture and direct private DM readiness stay
                         separate.
                       </div>
-                      <div className="mt-1 text-[9px] font-mono text-amber-300/70 leading-[1.6]">
+                      <div className="mt-1 text-[13px] font-mono text-amber-300/70 leading-[1.6]">
                         Gate messages are still synced on the shared private-lane Infonet surface
                         in this build. Use Dead Drop for the strongest content privacy.
                       </div>
-                      <div className="mt-1 text-[9px] font-mono text-amber-300/75">
+                      <div className="mt-1 text-[13px] font-mono text-amber-300/75">
                         RNS peers {wormholeRnsPeers.active}/{wormholeRnsPeers.configured}
                         {wormholeRnsDirectReady
                           ? ' • direct private DM path ready'
@@ -4132,14 +4132,14 @@ const MeshChat = React.memo(function MeshChat({
 
                   {selectedGate && wormholeEnabled && wormholeReadyState && (
                     <div className="flex items-center gap-1.5 px-3 py-1.5 border-b border-[var(--border-primary)]/20 shrink-0 bg-cyan-950/10">
-                      <div className="text-[8px] font-mono tracking-[0.28em] text-cyan-400/80 whitespace-nowrap">
+                      <div className="text-[12px] font-mono tracking-[0.28em] text-cyan-400/80 whitespace-nowrap">
                         GATE FACE
                       </div>
                       <select
                         value={selectedGateActivePersonaId || '__anon__'}
                         onChange={(e) => void handleSelectGatePersona(e.target.value)}
                         disabled={gatePersonaBusy || anonymousPublicBlocked}
-                        className="flex-1 bg-[var(--bg-secondary)]/40 border border-[var(--border-primary)] text-[9px] font-mono text-cyan-300 px-2 py-1 outline-none focus:border-cyan-700/50 disabled:opacity-60"
+                        className="flex-1 bg-[var(--bg-secondary)]/40 border border-[var(--border-primary)] text-[13px] font-mono text-cyan-300 px-2 py-1 outline-none focus:border-cyan-700/50 disabled:opacity-60"
                       >
                         <option value="__anon__">ANON SESSION</option>
                         {selectedGatePersonaList.map((persona) => (
@@ -4151,7 +4151,7 @@ const MeshChat = React.memo(function MeshChat({
                       <button
                         onClick={() => openGatePersonaPrompt()}
                         disabled={gatePersonaBusy || anonymousPublicBlocked}
-                        className="px-2 py-1 text-[8px] font-mono tracking-[0.2em] border border-cyan-700/40 text-cyan-300 hover:bg-cyan-950/40 disabled:opacity-60 transition-colors"
+                        className="px-2 py-1 text-[12px] font-mono tracking-[0.2em] border border-cyan-700/40 text-cyan-300 hover:bg-cyan-950/40 disabled:opacity-60 transition-colors"
                         title="Create a gate-local face"
                       >
                         NEW FACE
@@ -4163,7 +4163,7 @@ const MeshChat = React.memo(function MeshChat({
                           anonymousPublicBlocked ||
                           !selectedGateActivePersonaId
                         }
-                        className="px-2 py-1 text-[8px] font-mono tracking-[0.2em] border border-red-700/40 text-red-300 hover:bg-red-950/40 disabled:opacity-60 transition-colors"
+                        className="px-2 py-1 text-[12px] font-mono tracking-[0.2em] border border-red-700/40 text-red-300 hover:bg-red-950/40 disabled:opacity-60 transition-colors"
                         title="Retire the active gate persona"
                       >
                         RETIRE
@@ -4172,7 +4172,7 @@ const MeshChat = React.memo(function MeshChat({
                   )}
 
                   {selectedGate && wormholeEnabled && wormholeReadyState && (
-                    <div className="px-3 py-1.5 border-b border-[var(--border-primary)]/20 shrink-0 bg-[var(--bg-secondary)]/20 text-[8px] font-mono text-[var(--text-muted)] leading-relaxed">
+                    <div className="px-3 py-1.5 border-b border-[var(--border-primary)]/20 shrink-0 bg-[var(--bg-secondary)]/20 text-[12px] font-mono text-[var(--text-muted)] leading-relaxed">
                       <div className="text-cyan-300/80 mb-1">
                         {selectedGateActivePersona
                           ? `Active face: ${selectedGateActivePersona.label || selectedGateActivePersona.persona_id || selectedGateActivePersona.node_id}`
@@ -4188,7 +4188,7 @@ const MeshChat = React.memo(function MeshChat({
 
                   {selectedGate && wormholeEnabled && wormholeReadyState && selectedGateKeyStatus && (
                     <div className="px-3 py-2 border-b border-cyan-900/20 bg-cyan-950/5 shrink-0">
-                      <div className="flex items-center gap-2 text-[8px] font-mono tracking-[0.24em] text-cyan-300/90">
+                      <div className="flex items-center gap-2 text-[12px] font-mono tracking-[0.24em] text-cyan-300/90">
                         <span>GATE KEY</span>
                         <span className="text-cyan-500/60">/</span>
                         <span>EPOCH {selectedGateKeyStatus.current_epoch || 0}</span>
@@ -4200,20 +4200,20 @@ const MeshChat = React.memo(function MeshChat({
                         <button
                           onClick={() => void handleRotateGateKey()}
                           disabled={gateKeyBusy}
-                          className="ml-auto px-2 py-1 text-[8px] font-mono tracking-[0.2em] border border-cyan-700/40 text-cyan-300 hover:bg-cyan-950/40 disabled:opacity-60 transition-colors"
+                          className="ml-auto px-2 py-1 text-[12px] font-mono tracking-[0.2em] border border-cyan-700/40 text-cyan-300 hover:bg-cyan-950/40 disabled:opacity-60 transition-colors"
                           title="Rotate the current gate content key"
                         >
                           {gateKeyBusy ? 'ROTATING' : 'ROTATE KEY'}
                         </button>
                       </div>
-                      <div className="mt-1 text-[9px] font-mono text-cyan-100/80 leading-[1.65]">
+                      <div className="mt-1 text-[13px] font-mono text-cyan-100/80 leading-[1.65]">
                         {selectedGateKeyStatus.has_local_access
                           ? `Access live via ${selectedGateKeyStatus.identity_scope || 'member'} identity ${String(selectedGateKeyStatus.sender_ref || selectedGateKeyStatus.identity_node_id || '').slice(0, 16)}`
                           : selectedGateKeyStatus.identity_scope === 'anonymous'
                           ? 'Anonymous gate session is active, but this install has not synced gate access yet. Refresh or reopen the gate if it does not clear.'
                           : 'No local gate key access yet. Enter the gate through Wormhole to unwrap the current epoch.'}
                       </div>
-                      <div className="mt-1 text-[8px] font-mono text-cyan-300/65 leading-[1.65]">
+                      <div className="mt-1 text-[12px] font-mono text-cyan-300/65 leading-[1.65]">
                         {selectedGateKeyStatus.key_commitment
                           ? `KEY ${selectedGateKeyStatus.key_commitment.slice(0, 12)}`
                           : 'KEY PENDING'}
@@ -4225,7 +4225,7 @@ const MeshChat = React.memo(function MeshChat({
                           : ''}
                       </div>
                       {nativeAuditSummary && (
-                        <div className="mt-2 border border-cyan-900/30 bg-cyan-950/20 px-2 py-1.5 text-[8px] font-mono text-cyan-200/75 leading-[1.7]">
+                        <div className="mt-2 border border-cyan-900/30 bg-cyan-950/20 px-2 py-1.5 text-[12px] font-mono text-cyan-200/75 leading-[1.7]">
                           <div className="flex items-center gap-2 text-cyan-300/85 tracking-[0.18em]">
                             <span>NATIVE AUDIT</span>
                             <span className="text-cyan-500/60">/</span>
@@ -4262,7 +4262,7 @@ const MeshChat = React.memo(function MeshChat({
                         </div>
                       )}
                       {selectedGateKeyStatus.rekey_recommended_reason && (
-                        <div className="mt-1 text-[8px] font-mono text-amber-300/75 leading-[1.6]">
+                        <div className="mt-1 text-[12px] font-mono text-amber-300/75 leading-[1.6]">
                           Rekey recommendation: {selectedGateKeyStatus.rekey_recommended_reason.replace(/_/g, ' ')}
                         </div>
                       )}
@@ -4272,7 +4272,7 @@ const MeshChat = React.memo(function MeshChat({
                           <button
                             onClick={() => void handleUnlockEncryptedGate()}
                             disabled={gatePersonaBusy}
-                            className="px-2 py-1 text-[8px] font-mono tracking-[0.2em] border border-cyan-700/40 text-cyan-300 hover:bg-cyan-950/40 disabled:opacity-60 transition-colors"
+                            className="px-2 py-1 text-[12px] font-mono tracking-[0.2em] border border-cyan-700/40 text-cyan-300 hover:bg-cyan-950/40 disabled:opacity-60 transition-colors"
                           >
                             {gatePersonaBusy
                               ? 'UNLOCKING'
@@ -4280,7 +4280,7 @@ const MeshChat = React.memo(function MeshChat({
                                 ? 'USE SAVED FACE'
                                 : 'CREATE GATE FACE'}
                           </button>
-                          <span className="text-[8px] font-mono text-cyan-300/55">
+                          <span className="text-[12px] font-mono text-cyan-300/55">
                             {selectedGatePersonaList.length > 0
                               ? 'Switch to a saved face if this install still cannot unlock the room anonymously.'
                               : 'Create a gate-local face only if anonymous unlock still fails on this install.'}
@@ -4292,17 +4292,17 @@ const MeshChat = React.memo(function MeshChat({
 
                   {selectedGateMeta && (
                     <div className="px-3 py-2 border-b border-cyan-900/20 bg-cyan-950/10 shrink-0">
-                      <div className="flex items-center gap-2 text-[8px] font-mono tracking-[0.24em] text-cyan-300/90">
+                      <div className="flex items-center gap-2 text-[12px] font-mono tracking-[0.24em] text-cyan-300/90">
                         <span>{selectedGateMeta.fixed ? 'FIXED GATE' : 'PRIVATE GATE'}</span>
                         <span className="text-cyan-500/60">/</span>
                         <span>{selectedGateMeta.display_name || selectedGateMeta.gate_id}</span>
                       </div>
                       {selectedGateMeta.description && (
-                        <div className="mt-1 text-[10px] font-mono text-cyan-100/80 leading-[1.65]">
+                        <div className="mt-1 text-sm font-mono text-cyan-100/80 leading-[1.65]">
                           {selectedGateMeta.description}
                         </div>
                       )}
-                      <div className="mt-1 text-[8px] font-mono text-cyan-300/65">
+                      <div className="mt-1 text-[12px] font-mono text-cyan-300/65">
                         {selectedGateMeta.rules?.min_overall_rep
                           ? `ENTRY FLOOR ${selectedGateMeta.rules.min_overall_rep} REP`
                           : 'ENTRY FLOOR OPEN'}
@@ -4322,7 +4322,7 @@ const MeshChat = React.memo(function MeshChat({
                         className="overflow-hidden border-b border-[var(--border-primary)]/30 shrink-0"
                       >
                         <div className="px-3 py-2 space-y-1.5">
-                          <div className="text-[8px] font-mono text-[var(--text-muted)] leading-relaxed mb-1">
+                          <div className="text-[12px] font-mono text-[var(--text-muted)] leading-relaxed mb-1">
                             Gates are rep-gated communities. Only nodes meeting the minimum
                             reputation can post.
                           </div>
@@ -4333,17 +4333,17 @@ const MeshChat = React.memo(function MeshChat({
                               setGateError('');
                             }}
                             placeholder="gate-id (alphanumeric + hyphens, max 32)"
-                            className="w-full bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-[10px] font-mono text-cyan-300 px-2 py-1 outline-none placeholder:text-[var(--text-muted)]"
+                            className="w-full bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-sm font-mono text-cyan-300 px-2 py-1 outline-none placeholder:text-[var(--text-muted)]"
                           />
                           <input
                             value={newGateName}
                             onChange={(e) => setNewGateName(e.target.value)}
                             placeholder="Display Name (optional)"
-                            className="w-full bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-[10px] font-mono text-cyan-300 px-2 py-1 outline-none placeholder:text-[var(--text-muted)]"
+                            className="w-full bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-sm font-mono text-cyan-300 px-2 py-1 outline-none placeholder:text-[var(--text-muted)]"
                           />
                           <div className="flex items-center gap-2">
                             <label
-                              className="text-[9px] font-mono text-[var(--text-muted)]"
+                              className="text-[13px] font-mono text-[var(--text-muted)]"
                               title="Minimum overall reputation score needed to post in this gate. 0 = open to all."
                             >
                               MIN REP:
@@ -4353,21 +4353,21 @@ const MeshChat = React.memo(function MeshChat({
                               min={0}
                               value={newGateMinRep}
                               onChange={(e) => setNewGateMinRep(parseInt(e.target.value) || 0)}
-                              className="w-16 bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-[10px] font-mono text-cyan-300 px-2 py-1 outline-none"
+                              className="w-16 bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-sm font-mono text-cyan-300 px-2 py-1 outline-none"
                             />
-                            <span className="text-[8px] text-[var(--text-muted)] font-mono">
+                            <span className="text-[12px] text-[var(--text-muted)] font-mono">
                               {newGateMinRep === 0 ? 'open' : 'gated'}
                             </span>
                             <button
                               onClick={handleCreateGate}
                               disabled={!newGateId.trim() || !hasId}
-                              className="ml-auto text-[9px] font-mono px-2 py-1 bg-cyan-900/20 text-cyan-400 hover:bg-cyan-800/30 disabled:opacity-30 transition-colors"
+                              className="ml-auto text-[13px] font-mono px-2 py-1 bg-cyan-900/20 text-cyan-400 hover:bg-cyan-800/30 disabled:opacity-30 transition-colors"
                             >
                               CREATE
                             </button>
                           </div>
                           {gateError && (
-                            <div className="text-[9px] font-mono text-red-400 mt-0.5">
+                            <div className="text-[13px] font-mono text-red-400 mt-0.5">
                               {gateError}
                             </div>
                           )}
@@ -4380,18 +4380,18 @@ const MeshChat = React.memo(function MeshChat({
                   <div className="flex-1 overflow-y-auto styled-scrollbar px-3 py-1.5 border-l-2 border-cyan-800/25">
                     {filteredInfoMessages.length === 0 && (
                       <div className="py-4 space-y-3">
-                        <div className="text-[10px] font-mono text-[var(--text-muted)] text-center leading-[1.65]">
+                        <div className="text-sm font-mono text-[var(--text-muted)] text-center leading-[1.65]">
                           {selectedGate ? 'No messages in this gate yet' : 'Select a gate or browse all'}
                         </div>
                         {selectedGateMeta && (
                           <div className="border border-cyan-900/30 bg-cyan-950/10 px-3 py-3 max-w-xl mx-auto">
-                            <div className="text-[8px] font-mono tracking-[0.28em] text-cyan-300/85">
+                            <div className="text-[12px] font-mono tracking-[0.28em] text-cyan-300/85">
                               SYSTEM WELCOME
                             </div>
-                            <div className="mt-2 text-[10px] font-mono text-cyan-100/80 leading-[1.7]">
+                            <div className="mt-2 text-sm font-mono text-cyan-100/80 leading-[1.7]">
                               {selectedGateMeta.welcome || selectedGateMeta.description || 'Private gate is live. Say something worth keeping.'}
                             </div>
-                            <div className="mt-2 text-[9px] font-mono text-cyan-300/65 leading-[1.7]">
+                            <div className="mt-2 text-[13px] font-mono text-cyan-300/65 leading-[1.7]">
                               Start with a source, a thesis, a clean question, or a useful observation.
                             </div>
                           </div>
@@ -4401,16 +4401,16 @@ const MeshChat = React.memo(function MeshChat({
                     {filteredInfoMessages.map((m, i) => (
                       m.system_seed ? (
                         <div key={m.event_id} className="border border-cyan-900/30 bg-cyan-950/10 px-3 py-3 max-w-xl">
-                          <div className="text-[8px] font-mono tracking-[0.28em] text-cyan-300/85">
+                          <div className="text-[12px] font-mono tracking-[0.28em] text-cyan-300/85">
                             {m.fixed_gate ? 'FIXED GATE NOTICE' : 'GATE NOTICE'}
                           </div>
-                          <div className="mt-2 text-[10px] font-mono text-cyan-100/80 leading-[1.7]">
+                          <div className="mt-2 text-sm font-mono text-cyan-100/80 leading-[1.7]">
                             {m.message}
                           </div>
                         </div>
                       ) : (
                       <div key={m.event_id} className="group py-0.5 leading-[1.65]">
-                        <div className="flex gap-1.5 text-[10px] font-mono">
+                        <div className="flex gap-1.5 text-sm font-mono">
                           <RepBadge rep={m.node_id ? (reps[m.node_id] ?? 0) : 0} />
                           {m.node_id ? (
                             <button
@@ -4428,7 +4428,7 @@ const MeshChat = React.memo(function MeshChat({
                           ) : null}
                           {isEncryptedGateEnvelope(m) && (
                             <span
-                              className={`text-[8px] font-mono px-1 border ${
+                              className={`text-[12px] font-mono px-1 border ${
                                 gateEnvelopeState(m) === 'decrypted'
                                   ? 'text-cyan-300 border-cyan-700/60'
                                   : 'text-amber-300 border-amber-700/60'
@@ -4439,7 +4439,7 @@ const MeshChat = React.memo(function MeshChat({
                           )}
                           {infoVerification[m.event_id] && (
                             <span
-                              className={`text-[8px] font-mono px-1 border ${
+                              className={`text-[12px] font-mono px-1 border ${
                                 infoVerification[m.event_id] === 'verified'
                                   ? 'text-green-400 border-green-700/60'
                                   : infoVerification[m.event_id] === 'failed'
@@ -4463,12 +4463,12 @@ const MeshChat = React.memo(function MeshChat({
                           >
                             {gateEnvelopeDisplayText(m)}
                           </span>
-                          <span className="text-[var(--text-muted)] shrink-0 text-[9px]">
+                          <span className="text-[var(--text-muted)] shrink-0 text-[13px]">
                             {timeAgo(m.timestamp)}
                           </span>
                         </div>
                         {isEncryptedGateEnvelope(m) && (
-                          <div className="ml-6 mt-0.5 text-[8px] font-mono text-cyan-500/60 tracking-[0.14em]">
+                          <div className="ml-6 mt-0.5 text-[12px] font-mono text-cyan-500/60 tracking-[0.14em]">
                             EPOCH {m.epoch ?? 0}
                             {m.sender_ref ? ` / ${m.sender_ref}` : ''}
                           </div>
@@ -4477,7 +4477,7 @@ const MeshChat = React.memo(function MeshChat({
                           <div className="flex items-center gap-0.5 ml-6">
                             <button
                               onClick={() => handleReplyToGateMessage(m)}
-                              className={`px-1.5 py-0.5 text-[8px] font-mono tracking-[0.14em] transition-colors ${
+                              className={`px-1.5 py-0.5 text-[12px] font-mono tracking-[0.14em] transition-colors ${
                                 gateReplyContext?.eventId === m.event_id
                                   ? 'text-amber-200 border border-amber-500/30 bg-amber-500/12'
                                   : 'text-cyan-600/70 border border-cyan-700/20 hover:text-amber-200 hover:border-amber-500/30 hover:bg-amber-500/10'
@@ -4496,7 +4496,7 @@ const MeshChat = React.memo(function MeshChat({
                               <ArrowUp size={9} />
                             </button>
                             <span
-                              className={`text-[8px] font-mono min-w-[14px] text-center ${
+                              className={`text-[12px] font-mono min-w-[14px] text-center ${
                                 (reps[m.node_id] ?? 0) > 0
                                   ? 'text-cyan-500'
                                   : (reps[m.node_id] ?? 0) < 0
@@ -4536,7 +4536,7 @@ const MeshChat = React.memo(function MeshChat({
                       value={meshRegion}
                       onChange={(e) => setMeshRegion(e.target.value)}
                       title="Meshtastic MQTT root"
-                      className="bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-[10px] font-mono text-cyan-300 px-2 py-1 outline-none focus:border-cyan-700/50"
+                      className="bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-sm font-mono text-cyan-300 px-2 py-1 outline-none focus:border-cyan-700/50"
                       style={{ width: '132px' }}
                     >
                       {meshRoots.map((r) => (
@@ -4548,7 +4548,7 @@ const MeshChat = React.memo(function MeshChat({
                     <select
                       value={meshChannel}
                       onChange={(e) => setMeshChannel(e.target.value)}
-                      className="flex-1 bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-[10px] font-mono text-green-400 px-2 py-1 outline-none focus:border-cyan-700/50"
+                      className="flex-1 bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-sm font-mono text-green-400 px-2 py-1 outline-none focus:border-cyan-700/50"
                     >
                       {meshChannels.map((ch) => (
                         <option key={ch} value={ch}>
@@ -4561,7 +4561,7 @@ const MeshChat = React.memo(function MeshChat({
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => setMeshView('channel')}
-                        className={`px-2 py-0.5 text-[9px] font-mono tracking-wider border transition-colors ${
+                        className={`px-2 py-0.5 text-[13px] font-mono tracking-wider border transition-colors ${
                           meshView === 'channel'
                             ? 'border-green-500/40 text-green-300 bg-green-950/30'
                             : 'border-[var(--border-primary)]/40 text-[var(--text-muted)] hover:text-green-300'
@@ -4571,7 +4571,7 @@ const MeshChat = React.memo(function MeshChat({
                       </button>
                       <button
                         onClick={() => setMeshView('inbox')}
-                        className={`px-2 py-0.5 text-[9px] font-mono tracking-wider border transition-colors ${
+                        className={`px-2 py-0.5 text-[13px] font-mono tracking-wider border transition-colors ${
                           meshView === 'inbox'
                             ? 'border-amber-500/40 text-amber-300 bg-amber-950/20'
                             : 'border-[var(--border-primary)]/40 text-[var(--text-muted)] hover:text-amber-300'
@@ -4580,31 +4580,31 @@ const MeshChat = React.memo(function MeshChat({
                         INBOX
                       </button>
                     </div>
-                    <div className="text-[8px] font-mono text-[var(--text-muted)] truncate">
+                    <div className="text-[12px] font-mono text-[var(--text-muted)] truncate">
                       {publicMeshAddress ? `ADDR ${publicMeshAddress.toUpperCase()}` : 'NO PUBLIC MESH ADDRESS'}
                     </div>
                   </div>
                   <div className="flex-1 overflow-y-auto styled-scrollbar px-3 py-1.5 border-l-2 border-cyan-800/25">
                     {meshView === 'channel' && filteredMeshMessages.length === 0 && (
-                      <div className="text-[10px] font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
+                      <div className="text-sm font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
                         No messages from {meshRegion} / {meshChannel}
                       </div>
                     )}
                     {meshView === 'inbox' && (
                       <>
                         {!publicMeshAddress && (
-                          <div className="text-[10px] font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
+                          <div className="text-sm font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
                             Create or load a public mesh identity to see direct Meshtastic traffic.
                           </div>
                         )}
                         {publicMeshAddress && meshInboxMessages.length === 0 && (
-                          <div className="text-[10px] font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
+                          <div className="text-sm font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
                             No public direct messages addressed to {publicMeshAddress.toUpperCase()} yet.
                           </div>
                         )}
                         {meshInboxMessages.map((m, i) => (
                           <div key={`${m.timestamp}-${i}`} className="py-0.5 leading-[1.65]">
-                            <div className="flex items-start gap-1.5 text-[10px] font-mono">
+                            <div className="flex items-start gap-1.5 text-sm font-mono">
                               <button
                                 onClick={(e) => handleSenderClick(m.from, e, 'meshtastic')}
                                 className="text-amber-300 shrink-0 hover:text-amber-200 hover:underline cursor-pointer"
@@ -4612,14 +4612,14 @@ const MeshChat = React.memo(function MeshChat({
                                 {displayPublicMeshSender(m.from)}
                               </button>
                               <div className="flex-1 min-w-0">
-                                <div className="text-[8px] text-amber-200/70 mb-0.5">
+                                <div className="text-[12px] text-amber-200/70 mb-0.5">
                                   TO {publicMeshAddress.toUpperCase()}
                                 </div>
                                 <div className="break-words whitespace-pre-wrap text-amber-100/90">
                                   {m.text}
                                 </div>
                               </div>
-                              <span className="text-[var(--text-muted)] shrink-0 text-[9px]">
+                              <span className="text-[var(--text-muted)] shrink-0 text-[13px]">
                                 {timeAgo(
                                   typeof m.timestamp === 'number'
                                     ? m.timestamp
@@ -4634,7 +4634,7 @@ const MeshChat = React.memo(function MeshChat({
                     {meshView === 'channel' &&
                       filteredMeshMessages.map((m, i) => (
                         <div key={`${m.timestamp}-${i}`} className="py-0.5 leading-[1.65]">
-                          <div className="flex gap-1.5 text-[10px] font-mono">
+                          <div className="flex gap-1.5 text-sm font-mono">
                             <button
                               onClick={(e) => handleSenderClick(m.from, e, 'meshtastic')}
                               className="text-green-400 shrink-0 hover:text-green-300 hover:underline cursor-pointer"
@@ -4646,7 +4646,7 @@ const MeshChat = React.memo(function MeshChat({
                             >
                               {m.text}
                             </span>
-                            <span className="text-[var(--text-muted)] shrink-0 text-[9px]">
+                            <span className="text-[var(--text-muted)] shrink-0 text-[13px]">
                               {timeAgo(
                                 typeof m.timestamp === 'number'
                                   ? m.timestamp
@@ -4674,11 +4674,11 @@ const MeshChat = React.memo(function MeshChat({
                             setSelectedContact('');
                             setDmMessages([]);
                           }}
-                          className="text-[9px] font-mono text-[var(--text-muted)] hover:text-cyan-400 transition-colors"
+                          className="text-[13px] font-mono text-[var(--text-muted)] hover:text-cyan-400 transition-colors"
                         >
                           &lt; BACK
                         </button>
-                        <span className="text-[10px] font-mono text-cyan-400 ml-2 truncate">
+                        <span className="text-sm font-mono text-cyan-400 ml-2 truncate">
                           {selectedContact.slice(0, 16)}
                         </span>
                         {(() => {
@@ -4686,42 +4686,42 @@ const MeshChat = React.memo(function MeshChat({
                           if (!c) return null;
                           if (c.remotePrekeyMismatch) {
                             return (
-                              <span className="ml-2 text-[8px] font-mono px-1.5 py-0.5 border border-orange-500/40 text-orange-300 bg-orange-950/20">
+                              <span className="ml-2 text-[12px] font-mono px-1.5 py-0.5 border border-orange-500/40 text-orange-300 bg-orange-950/20">
                                 PREKEY CHANGED
                               </span>
                             );
                           }
                           if (c.verify_mismatch) {
                             return (
-                              <span className="ml-2 text-[8px] font-mono px-1.5 py-0.5 border border-red-500/40 text-red-400 bg-red-950/20">
+                              <span className="ml-2 text-[12px] font-mono px-1.5 py-0.5 border border-red-500/40 text-red-400 bg-red-950/20">
                                 KEY MISMATCH
                               </span>
                             );
                           }
                           if (c.verified) {
                             return (
-                              <span className="ml-2 text-[8px] font-mono px-1.5 py-0.5 border border-green-500/40 text-green-400 bg-green-950/20">
+                              <span className="ml-2 text-[12px] font-mono px-1.5 py-0.5 border border-green-500/40 text-green-400 bg-green-950/20">
                                 DUAL VERIFIED
                               </span>
                             );
                           }
                           if (c.verify_registry && !c.verify_inband) {
                             return (
-                              <span className="ml-2 text-[8px] font-mono px-1.5 py-0.5 border border-yellow-500/30 text-yellow-300 bg-yellow-950/10">
+                              <span className="ml-2 text-[12px] font-mono px-1.5 py-0.5 border border-yellow-500/30 text-yellow-300 bg-yellow-950/10">
                                 REGISTRY ONLY
                               </span>
                             );
                           }
                           if (c.verify_inband && !c.verify_registry) {
                             return (
-                              <span className="ml-2 text-[8px] font-mono px-1.5 py-0.5 border border-yellow-500/30 text-yellow-300 bg-yellow-950/10">
+                              <span className="ml-2 text-[12px] font-mono px-1.5 py-0.5 border border-yellow-500/30 text-yellow-300 bg-yellow-950/10">
                                 INBAND ONLY
                               </span>
                             );
                           }
                           if (isFirstContactTrustOnly(c)) {
                             return (
-                              <span className="ml-2 text-[8px] font-mono px-1.5 py-0.5 border border-amber-500/30 text-amber-300 bg-amber-950/10">
+                              <span className="ml-2 text-[12px] font-mono px-1.5 py-0.5 border border-amber-500/30 text-amber-300 bg-amber-950/10">
                                 TOFU ONLY
                               </span>
                             );
@@ -4733,7 +4733,7 @@ const MeshChat = React.memo(function MeshChat({
                           if (!c) return null;
                           if (c.witness_count && c.witness_count > 0) {
                             return (
-                              <span className="ml-2 text-[8px] font-mono px-1.5 py-0.5 border border-cyan-500/30 text-cyan-300 bg-cyan-950/10">
+                              <span className="ml-2 text-[12px] font-mono px-1.5 py-0.5 border border-cyan-500/30 text-cyan-300 bg-cyan-950/10">
                                 WITNESSED {c.witness_count}
                               </span>
                             );
@@ -4745,7 +4745,7 @@ const MeshChat = React.memo(function MeshChat({
                           if (!c) return null;
                           if (c.vouch_count && c.vouch_count > 0) {
                             return (
-                              <span className="ml-2 text-[8px] font-mono px-1.5 py-0.5 border border-purple-500/30 text-purple-300 bg-purple-950/10">
+                              <span className="ml-2 text-[12px] font-mono px-1.5 py-0.5 border border-purple-500/30 text-purple-300 bg-purple-950/10">
                                 VOUCHES {c.vouch_count}
                               </span>
                             );
@@ -4754,27 +4754,27 @@ const MeshChat = React.memo(function MeshChat({
                         })()}
                         <button
                           onClick={() => setShowSas((prev) => !prev)}
-                          className="ml-auto text-[8px] font-mono px-2 py-0.5 border border-cyan-800/40 text-cyan-400/90 hover:text-cyan-300 hover:border-cyan-600/60 transition-colors"
+                          className="ml-auto text-[12px] font-mono px-2 py-0.5 border border-cyan-800/40 text-cyan-400/90 hover:text-cyan-300 hover:border-cyan-600/60 transition-colors"
                         >
                           {showSas ? 'HIDE SAS' : dmTrustPrimaryAction}
                         </button>
                         <button
                           onClick={() => handleVouch(selectedContact)}
-                          className="ml-2 text-[8px] font-mono px-2 py-0.5 border border-purple-800/40 text-purple-400/90 hover:text-purple-300 hover:border-purple-600/60 transition-colors"
+                          className="ml-2 text-[12px] font-mono px-2 py-0.5 border border-purple-800/40 text-purple-400/90 hover:text-purple-300 hover:border-purple-600/60 transition-colors"
                         >
                           VOUCH
                         </button>
                         <button
                           onClick={() => void handleRefreshSelectedContact()}
                           disabled={dmMaintenanceBusy}
-                          className="ml-2 text-[8px] font-mono px-2 py-0.5 border border-amber-800/40 text-amber-300/90 hover:text-amber-200 hover:border-amber-600/60 transition-colors disabled:opacity-40"
+                          className="ml-2 text-[12px] font-mono px-2 py-0.5 border border-amber-800/40 text-amber-300/90 hover:text-amber-200 hover:border-amber-600/60 transition-colors disabled:opacity-40"
                         >
                           REFRESH
                         </button>
                         <button
                           onClick={() => void handleResetSelectedContact()}
                           disabled={dmMaintenanceBusy}
-                          className="ml-2 text-[8px] font-mono px-2 py-0.5 border border-red-800/40 text-red-300/90 hover:text-red-200 hover:border-red-600/60 transition-colors disabled:opacity-40"
+                          className="ml-2 text-[12px] font-mono px-2 py-0.5 border border-red-800/40 text-red-300/90 hover:text-red-200 hover:border-red-600/60 transition-colors disabled:opacity-40"
                         >
                           RESET
                         </button>
@@ -4783,7 +4783,7 @@ const MeshChat = React.memo(function MeshChat({
                       <>
                         <button
                           onClick={() => setDmView('contacts')}
-                          className={`text-[9px] font-mono px-2 py-0.5 transition-colors ${
+                          className={`text-[13px] font-mono px-2 py-0.5 transition-colors ${
                             dmView === 'contacts'
                               ? 'text-cyan-400 bg-cyan-950/30'
                               : 'text-[var(--text-muted)] hover:text-gray-400'
@@ -4793,7 +4793,7 @@ const MeshChat = React.memo(function MeshChat({
                         </button>
                         <button
                           onClick={() => setDmView('inbox')}
-                          className={`text-[9px] font-mono px-2 py-0.5 transition-colors flex items-center gap-1 ${
+                          className={`text-[13px] font-mono px-2 py-0.5 transition-colors flex items-center gap-1 ${
                             dmView === 'inbox'
                               ? 'text-cyan-400 bg-cyan-950/30'
                               : 'text-[var(--text-muted)] hover:text-gray-400'
@@ -4806,7 +4806,7 @@ const MeshChat = React.memo(function MeshChat({
                         </button>
                         <button
                           onClick={() => setDmView('muted')}
-                          className={`text-[9px] font-mono px-2 py-0.5 transition-colors flex items-center gap-1 ${
+                          className={`text-[13px] font-mono px-2 py-0.5 transition-colors flex items-center gap-1 ${
                             dmView === 'muted'
                               ? 'text-cyan-400 bg-cyan-950/30'
                               : 'text-[var(--text-muted)] hover:text-gray-400'
@@ -4815,7 +4815,7 @@ const MeshChat = React.memo(function MeshChat({
                           <EyeOff size={8} />
                           MUTED
                           {mutedArray.length > 0 && (
-                            <span className="text-[7px] text-[var(--text-muted)]">
+                            <span className="text-[11px] text-[var(--text-muted)]">
                               ({mutedArray.length})
                             </span>
                           )}
@@ -4832,10 +4832,10 @@ const MeshChat = React.memo(function MeshChat({
                     )}
                   </div>
                   {dmView === 'chat' && showSas && sasPhrase && (
-                    <div className="px-3 pb-1 text-[9px] font-mono text-cyan-400/80 border-b border-[var(--border-primary)]/20">
+                    <div className="px-3 pb-1 text-[13px] font-mono text-cyan-400/80 border-b border-[var(--border-primary)]/20">
                       SAS: <span className="text-cyan-300">{sasPhrase}</span>
                       {selectedContactInfo && isFirstContactTrustOnly(selectedContactInfo) && (
-                        <div className="mt-1 text-[8px] font-mono text-amber-300/90 leading-[1.65]">
+                        <div className="mt-1 text-[12px] font-mono text-amber-300/90 leading-[1.65]">
                           First contact is still TOFU-only. Compare this phrase out of band before
                           treating the sender as verified.
                         </div>
@@ -4846,11 +4846,11 @@ const MeshChat = React.memo(function MeshChat({
                   {activeTab === 'dms' && !secureDmBlocked && (
                     <div className="px-3 py-1.5 border-b border-[var(--border-primary)]/20 shrink-0 flex items-center gap-2">
                       <span
-                        className={`text-[8px] font-mono px-1.5 py-0.5 border ${dmTransportStatus.className}`}
+                        className={`text-[12px] font-mono px-1.5 py-0.5 border ${dmTransportStatus.className}`}
                       >
                         {dmTransportStatus.label}
                       </span>
-                      <span className="text-[8px] font-mono text-[var(--text-muted)]">
+                      <span className="text-[12px] font-mono text-[var(--text-muted)]">
                         {dmTransportMode === 'reticulum'
                           ? 'Direct private delivery active.'
                           : dmTransportMode === 'hidden'
@@ -4866,10 +4866,10 @@ const MeshChat = React.memo(function MeshChat({
 
                   {activeTab === 'dms' && unresolvedSenderSealCount > 0 && (
                     <div className="px-3 py-2 border-b border-red-900/30 bg-red-950/18 text-red-300 leading-[1.65] shrink-0">
-                      <div className="text-[9px] font-mono tracking-[0.18em] mb-1">
+                      <div className="text-[13px] font-mono tracking-[0.18em] mb-1">
                         UNRESOLVED SEALED SENDERS
                       </div>
-                      <div className="text-[10px] font-mono">
+                      <div className="text-sm font-mono">
                         {unresolvedSenderSealCount} sealed-sender message
                         {unresolvedSenderSealCount === 1 ? '' : 's'} could not be mapped to a
                         trusted contact or verified sender key. Keep Wormhole reachable and refresh
@@ -4888,12 +4888,12 @@ const MeshChat = React.memo(function MeshChat({
                     >
                       <div className="flex items-start gap-2">
                         <div className="flex-1 min-w-0">
-                          <div className="text-[9px] font-mono tracking-[0.18em] mb-1">
+                          <div className="text-[13px] font-mono tracking-[0.18em] mb-1">
                             {dmTrustHint.title}
                           </div>
-                          <div className="text-[10px] font-mono">{dmTrustHint.detail}</div>
+                          <div className="text-sm font-mono">{dmTrustHint.detail}</div>
                           {selectedContactInfo.remotePrekeyMismatch && (
-                            <div className="mt-2 text-[9px] font-mono text-red-200/85">
+                            <div className="mt-2 text-[13px] font-mono text-red-200/85">
                               pinned {shortTrustFingerprint(selectedContactInfo.remotePrekeyFingerprint)} • observed{' '}
                               {shortTrustFingerprint(selectedContactInfo.remotePrekeyObservedFingerprint)}
                             </div>
@@ -4901,7 +4901,7 @@ const MeshChat = React.memo(function MeshChat({
                           {!selectedContactInfo.remotePrekeyMismatch &&
                             isFirstContactTrustOnly(selectedContactInfo) &&
                             selectedContactInfo.remotePrekeyFingerprint && (
-                            <div className="mt-2 text-[9px] font-mono text-amber-200/85">
+                            <div className="mt-2 text-[13px] font-mono text-amber-200/85">
                               first-sight pin {shortTrustFingerprint(selectedContactInfo.remotePrekeyFingerprint)} •
                               verify before sensitive use
                             </div>
@@ -4910,7 +4910,7 @@ const MeshChat = React.memo(function MeshChat({
                         <div className="flex items-center gap-1.5 shrink-0">
                           <button
                             onClick={() => setShowSas(true)}
-                            className="text-[8px] font-mono px-2 py-0.5 border border-cyan-800/40 text-cyan-300 hover:text-cyan-200 hover:border-cyan-600/60 transition-colors"
+                            className="text-[12px] font-mono px-2 py-0.5 border border-cyan-800/40 text-cyan-300 hover:text-cyan-200 hover:border-cyan-600/60 transition-colors"
                           >
                             {dmTrustPrimaryAction}
                           </button>
@@ -4918,7 +4918,7 @@ const MeshChat = React.memo(function MeshChat({
                             <button
                               onClick={() => void handleTrustSelectedRemotePrekey()}
                               disabled={dmMaintenanceBusy}
-                              className="text-[8px] font-mono px-2 py-0.5 border border-orange-700/40 text-orange-300 hover:text-orange-200 hover:border-orange-500/60 transition-colors disabled:opacity-40"
+                              className="text-[12px] font-mono px-2 py-0.5 border border-orange-700/40 text-orange-300 hover:text-orange-200 hover:border-orange-500/60 transition-colors disabled:opacity-40"
                             >
                               TRUST NEW KEY
                             </button>
@@ -4938,7 +4938,7 @@ const MeshChat = React.memo(function MeshChat({
                         className="overflow-hidden border-b border-[var(--border-primary)]/30 shrink-0"
                       >
                         <div className="px-3 py-2 space-y-1.5">
-                          <div className="text-[9px] font-mono text-[var(--text-muted)] leading-[1.65]">
+                          <div className="text-[13px] font-mono text-[var(--text-muted)] leading-[1.65]">
                             Enter an Agent ID to request Dead Drop access. They must accept before
                             you can exchange messages.
                           </div>
@@ -4947,7 +4947,7 @@ const MeshChat = React.memo(function MeshChat({
                               value={addContactId}
                               onChange={(e) => setAddContactId(e.target.value)}
                               placeholder="!sb_a3f2c891..."
-                              className="flex-1 bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-[10px] font-mono text-cyan-300 px-2 py-1 outline-none placeholder:text-[var(--text-muted)]"
+                              className="flex-1 bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] text-sm font-mono text-cyan-300 px-2 py-1 outline-none placeholder:text-[var(--text-muted)]"
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
                                   handleAddContact().catch(() =>
@@ -4963,13 +4963,13 @@ const MeshChat = React.memo(function MeshChat({
                                 );
                               }}
                               disabled={!addContactId.trim() || !hasId}
-                              className="text-[9px] font-mono px-2 py-1 bg-cyan-900/20 text-cyan-400 hover:bg-cyan-800/30 disabled:opacity-30 transition-colors"
+                              className="text-[13px] font-mono px-2 py-1 bg-cyan-900/20 text-cyan-400 hover:bg-cyan-800/30 disabled:opacity-30 transition-colors"
                             >
                               REQUEST
                             </button>
                           </div>
                           {pendingSent.includes(addContactId.trim()) && (
-                            <div className="text-[9px] font-mono text-yellow-500/70">
+                            <div className="text-[13px] font-mono text-yellow-500/70">
                               Request already sent
                             </div>
                           )}
@@ -4986,13 +4986,13 @@ const MeshChat = React.memo(function MeshChat({
                           <div className="inline-flex items-center justify-center w-10 h-10 border border-cyan-700/40 bg-black/30 text-cyan-300 mb-3">
                             <Lock size={16} />
                           </div>
-                          <div className="text-[10px] font-mono tracking-[0.24em] text-cyan-300 mb-2">
+                          <div className="text-sm font-mono tracking-[0.24em] text-cyan-300 mb-2">
                             DEAD DROP LOCKED
                           </div>
-                          <div className="text-[10px] font-mono text-[var(--text-secondary)] leading-[1.7]">
+                          <div className="text-sm font-mono text-[var(--text-secondary)] leading-[1.7]">
                             Need Wormhole activated.
                           </div>
-                          <div className="mt-2 text-[9px] font-mono text-cyan-300/70">
+                          <div className="mt-2 text-[13px] font-mono text-cyan-300/70">
                             Contacts, inbox, and private messages unlock once the private lane is up.
                           </div>
                         </div>
@@ -5003,7 +5003,7 @@ const MeshChat = React.memo(function MeshChat({
                     {!secureDmBlocked && dmView === 'contacts' && (
                       <>
                         {contactList.length === 0 && (
-                          <div className="text-[10px] font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
+                          <div className="text-sm font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
                             No contacts yet. Use <span className="text-cyan-500/70">+</span> to
                             request access.
                           </div>
@@ -5015,16 +5015,16 @@ const MeshChat = React.memo(function MeshChat({
                             onClick={() => openChat(id)}
                           >
                             <Lock size={10} className="text-[var(--text-muted)] shrink-0" />
-                            <span className="text-[10px] font-mono text-cyan-300 truncate">
+                            <span className="text-sm font-mono text-cyan-300 truncate">
                               {c.alias || id.slice(0, 16)}
                             </span>
                             {c.remotePrekeyMismatch && (
-                              <span className="text-[7px] font-mono px-1.5 py-0.5 border border-orange-500/40 text-orange-300 bg-orange-950/20">
+                              <span className="text-[11px] font-mono px-1.5 py-0.5 border border-orange-500/40 text-orange-300 bg-orange-950/20">
                                 REVERIFY
                               </span>
                             )}
                             {!c.remotePrekeyMismatch && c.verify_mismatch && (
-                              <span className="text-[7px] font-mono px-1.5 py-0.5 border border-red-500/40 text-red-300 bg-red-950/20">
+                              <span className="text-[11px] font-mono px-1.5 py-0.5 border border-red-500/40 text-red-300 bg-red-950/20">
                                 MISMATCH
                               </span>
                             )}
@@ -5042,17 +5042,17 @@ const MeshChat = React.memo(function MeshChat({
                         ))}
                         {pendingSent.length > 0 && (
                           <>
-                            <div className="text-[9px] font-mono text-[var(--text-muted)] mt-2 mb-1">
+                            <div className="text-[13px] font-mono text-[var(--text-muted)] mt-2 mb-1">
                               PENDING SENT
                             </div>
                             {pendingSent.map((id) => (
                               <div
                                 key={id}
-                                className="flex items-center gap-2 py-1 text-[10px] font-mono text-[var(--text-muted)]"
+                                className="flex items-center gap-2 py-1 text-sm font-mono text-[var(--text-muted)]"
                               >
                                 <span className="w-1.5 h-1.5 rounded-full bg-yellow-600/50" />
                                 <span className="truncate">{id.slice(0, 16)}</span>
-                                <span className="ml-auto text-[8px] text-[var(--text-muted)]">
+                                <span className="ml-auto text-[12px] text-[var(--text-muted)]">
                                   awaiting
                                 </span>
                               </div>
@@ -5066,7 +5066,7 @@ const MeshChat = React.memo(function MeshChat({
                     {!secureDmBlocked && dmView === 'inbox' && (
                       <>
                         {accessRequests.length === 0 && (
-                          <div className="text-[10px] font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
+                          <div className="text-sm font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
                             No incoming requests
                           </div>
                         )}
@@ -5080,38 +5080,38 @@ const MeshChat = React.memo(function MeshChat({
                             >
                               <div className="flex items-center gap-1.5">
                                 <UserPlus size={10} className="text-cyan-500 shrink-0" />
-                                <span className="text-[10px] font-mono text-cyan-300 truncate">
+                                <span className="text-sm font-mono text-cyan-300 truncate">
                                   {req.sender_id.slice(0, 16)}
                                 </span>
                                 {recoveryState === 'verified' && (
-                                  <span className="text-[8px] font-mono px-1.5 py-0.5 border border-green-500/30 text-green-400 bg-green-950/20">
+                                  <span className="text-[12px] font-mono px-1.5 py-0.5 border border-green-500/30 text-green-400 bg-green-950/20">
                                     VERIFIED
                                   </span>
                                 )}
                                 {recoveryState === 'pending' && (
-                                  <span className="text-[8px] font-mono px-1.5 py-0.5 border border-yellow-500/30 text-yellow-300 bg-yellow-950/20">
+                                  <span className="text-[12px] font-mono px-1.5 py-0.5 border border-yellow-500/30 text-yellow-300 bg-yellow-950/20">
                                     RECOVERY PENDING
                                   </span>
                                 )}
                                 {recoveryState === 'failed' && (
-                                  <span className="text-[8px] font-mono px-1.5 py-0.5 border border-red-500/30 text-red-300 bg-red-950/20">
+                                  <span className="text-[12px] font-mono px-1.5 py-0.5 border border-red-500/30 text-red-300 bg-red-950/20">
                                     RECOVERY FAILED
                                   </span>
                                 )}
-                                <span className="text-[8px] font-mono text-[var(--text-muted)] ml-auto shrink-0">
+                                <span className="text-[12px] font-mono text-[var(--text-muted)] ml-auto shrink-0">
                                   {timeAgo(req.timestamp)}
                                 </span>
                               </div>
-                              <div className="text-[9px] font-mono text-[var(--text-muted)] mt-0.5 leading-[1.65]">
+                              <div className="text-[13px] font-mono text-[var(--text-muted)] mt-0.5 leading-[1.65]">
                                 Requesting Dead Drop access
                               </div>
                               {req.geo_hint && (
-                                <div className="text-[8px] font-mono text-[var(--text-muted)] mt-0.5">
+                                <div className="text-[12px] font-mono text-[var(--text-muted)] mt-0.5">
                                   Geo hint (not proof): {req.geo_hint}
                                 </div>
                               )}
                               {!requestActionsAllowed && (
-                                <div className="text-[8px] font-mono text-yellow-300 mt-0.5 leading-[1.65]">
+                                <div className="text-[12px] font-mono text-yellow-300 mt-0.5 leading-[1.65]">
                                   Sender authority is not verified yet. Actions stay disabled until
                                   local recovery succeeds.
                                 </div>
@@ -5120,7 +5120,7 @@ const MeshChat = React.memo(function MeshChat({
                                 <button
                                   onClick={() => handleAcceptRequest(req.sender_id)}
                                   disabled={!requestActionsAllowed}
-                                  className={`flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 transition-colors ${
+                                  className={`flex items-center gap-1 text-[13px] font-mono px-2 py-0.5 transition-colors ${
                                     requestActionsAllowed
                                       ? 'bg-cyan-900/20 text-cyan-400 hover:bg-cyan-800/30'
                                       : 'bg-cyan-950/10 text-cyan-700 cursor-not-allowed opacity-50'
@@ -5131,7 +5131,7 @@ const MeshChat = React.memo(function MeshChat({
                                 <button
                                   onClick={() => handleDenyRequest(req.sender_id)}
                                   disabled={!requestActionsAllowed}
-                                  className={`flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 transition-colors ${
+                                  className={`flex items-center gap-1 text-[13px] font-mono px-2 py-0.5 transition-colors ${
                                     requestActionsAllowed
                                       ? 'bg-gray-900/30 text-gray-400 hover:bg-gray-800/40'
                                       : 'bg-gray-950/20 text-gray-600 cursor-not-allowed opacity-50'
@@ -5142,7 +5142,7 @@ const MeshChat = React.memo(function MeshChat({
                                 <button
                                   onClick={() => handleBlockDM(req.sender_id)}
                                   disabled={!requestActionsAllowed}
-                                  className={`flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 ml-auto transition-colors ${
+                                  className={`flex items-center gap-1 text-[13px] font-mono px-2 py-0.5 ml-auto transition-colors ${
                                     requestActionsAllowed
                                       ? 'text-[var(--text-muted)] hover:text-red-400 hover:bg-red-900/20'
                                       : 'text-[var(--text-muted)] opacity-50 cursor-not-allowed'
@@ -5161,7 +5161,7 @@ const MeshChat = React.memo(function MeshChat({
                     {!secureDmBlocked && dmView === 'muted' && (
                       <>
                         {mutedArray.length === 0 && (
-                          <div className="text-[10px] font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
+                          <div className="text-sm font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
                             No muted users
                           </div>
                         )}
@@ -5171,12 +5171,12 @@ const MeshChat = React.memo(function MeshChat({
                             className="flex items-center gap-2 py-1.5 border-b border-[var(--border-primary)]/30 last:border-0 px-1 -mx-1"
                           >
                             <EyeOff size={10} className="text-[var(--text-muted)] shrink-0" />
-                            <span className="text-[10px] font-mono text-[var(--text-secondary)] truncate flex-1">
+                            <span className="text-sm font-mono text-[var(--text-secondary)] truncate flex-1">
                               {uid.slice(0, 20)}
                             </span>
                             <button
                               onClick={() => handleUnmute(uid)}
-                              className="flex items-center gap-1 text-[8px] font-mono px-2 py-0.5 bg-cyan-900/20 text-cyan-500 hover:bg-cyan-800/30 transition-colors"
+                              className="flex items-center gap-1 text-[12px] font-mono px-2 py-0.5 bg-cyan-900/20 text-cyan-500 hover:bg-cyan-800/30 transition-colors"
                             >
                               <Eye size={8} /> UNMUTE
                             </button>
@@ -5189,14 +5189,14 @@ const MeshChat = React.memo(function MeshChat({
                     {!secureDmBlocked && dmView === 'chat' && (
                       <>
                         {dmMessages.length === 0 && (
-                          <div className="text-[10px] font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
+                          <div className="text-sm font-mono text-[var(--text-muted)] text-center py-4 leading-[1.65]">
                             <Lock size={11} className="inline mr-1 mb-0.5" />
                             E2E encrypted dead drop — no messages yet
                           </div>
                         )}
                         {dmMessages.map((m) => (
                           <div key={m.msg_id} className="py-0.5 leading-[1.65]">
-                            <div className="flex gap-1.5 text-[10px] font-mono">
+                            <div className="flex gap-1.5 text-sm font-mono">
                               <span
                                 className={`shrink-0 ${
                                   m.sender_id === identity?.nodeId
@@ -5209,25 +5209,25 @@ const MeshChat = React.memo(function MeshChat({
                                   : m.sender_id.slice(0, 12)}
                               </span>
                               {m.sender_id !== identity?.nodeId && m.seal_verified === true && (
-                                <span className="text-[8px] font-mono px-1.5 py-0.5 border border-green-500/30 text-green-400 bg-green-950/20">
+                                <span className="text-[12px] font-mono px-1.5 py-0.5 border border-green-500/30 text-green-400 bg-green-950/20">
                                   VERIFIED
                                 </span>
                               )}
                               {m.sender_id !== identity?.nodeId && m.seal_resolution_failed && (
-                                <span className="text-[8px] font-mono px-1.5 py-0.5 border border-red-500/30 text-red-300 bg-red-950/20">
+                                <span className="text-[12px] font-mono px-1.5 py-0.5 border border-red-500/30 text-red-300 bg-red-950/20">
                                   SEAL UNRESOLVED
                                 </span>
                               )}
                               {m.sender_id !== identity?.nodeId &&
                                 !m.seal_resolution_failed &&
                                 m.seal_verified === false && (
-                                <span className="text-[8px] font-mono px-1.5 py-0.5 border border-red-500/30 text-red-400 bg-red-950/20">
+                                <span className="text-[12px] font-mono px-1.5 py-0.5 border border-red-500/30 text-red-400 bg-red-950/20">
                                   UNVERIFIED
                                 </span>
                               )}
                               {m.transport && (
                                 <span
-                                  className={`text-[8px] font-mono px-1.5 py-0.5 border ${
+                                  className={`text-[12px] font-mono px-1.5 py-0.5 border ${
                                     m.transport === 'reticulum'
                                       ? 'border-green-500/30 text-green-400 bg-green-950/20'
                                       : 'border-yellow-500/30 text-yellow-400 bg-yellow-950/20'
@@ -5239,7 +5239,7 @@ const MeshChat = React.memo(function MeshChat({
                               <span className="text-[var(--text-secondary)] break-words whitespace-pre-wrap flex-1">
                                 {m.plaintext || '[encrypted]'}
                               </span>
-                              <span className="text-[var(--text-muted)] shrink-0 text-[9px]">
+                              <span className="text-[var(--text-muted)] shrink-0 text-[13px]">
                                 {timeAgo(m.timestamp)}
                               </span>
                             </div>
@@ -5256,16 +5256,16 @@ const MeshChat = React.memo(function MeshChat({
             {/* INPUT BAR */}
             {dashboardRestrictedTab ? (
               <div className="mx-2 mb-2 mt-1 border border-cyan-800/40 bg-black/30 shrink-0 relative">
-                <span className="absolute -top-[7px] left-3 bg-[var(--bg-primary)] px-1 text-[7px] font-mono text-cyan-700/60 tracking-[0.15em] select-none">
+                <span className="absolute -top-[7px] left-3 bg-[var(--bg-primary)] px-1 text-[11px] font-mono text-cyan-700/60 tracking-[0.15em] select-none">
                   ACCESS
                 </span>
                 <div className="px-3 py-3 flex flex-col gap-2">
-                  <div className="text-[8px] font-mono tracking-widest text-[var(--text-muted)] uppercase">
+                  <div className="text-[12px] font-mono tracking-widest text-[var(--text-muted)] uppercase">
                     {activeTab === 'infonet'
                       ? '→ PRIVATE INFONET / TERMINAL ONLY'
                       : '→ DEAD DROP / TERMINAL ONLY'}
                   </div>
-                  <div className="text-[9px] font-mono text-[var(--text-secondary)] leading-[1.65]">
+                  <div className="text-[13px] font-mono text-[var(--text-secondary)] leading-[1.65]">
                     {activeTab === 'infonet'
                       ? 'Private gate posting and reading are restricted to the terminal for now. Dashboard support is coming soon.'
                       : 'Secure messages are restricted to the terminal for now. Dashboard inbox, requests, and compose are coming soon.'}
@@ -5274,11 +5274,11 @@ const MeshChat = React.memo(function MeshChat({
                     onClick={openTerminal}
                     className="mt-1 w-full flex items-center justify-between gap-2 px-3 py-2 border border-cyan-700/40 bg-cyan-950/15 text-cyan-300 hover:bg-cyan-950/25 hover:border-cyan-500/50 transition-colors"
                   >
-                    <span className="inline-flex items-center gap-2 text-[10px] font-mono tracking-[0.2em]">
+                    <span className="inline-flex items-center gap-2 text-sm font-mono tracking-[0.2em]">
                       <Terminal size={11} />
                       OPEN TERMINAL
                     </span>
-                    <span className="text-[8px] font-mono text-cyan-300/70">
+                    <span className="text-[12px] font-mono text-cyan-300/70">
                       COMING TO DASHBOARD SOON
                     </span>
                   </button>
@@ -5286,12 +5286,12 @@ const MeshChat = React.memo(function MeshChat({
               </div>
             ) : (
             <div className="mx-2 mb-2 mt-1 border border-cyan-800/40 bg-black/30 shrink-0 relative">
-              <span className="absolute -top-[7px] left-3 bg-[var(--bg-primary)] px-1 text-[7px] font-mono text-cyan-700/60 tracking-[0.15em] select-none">INPUT</span>
+              <span className="absolute -top-[7px] left-3 bg-[var(--bg-primary)] px-1 text-[11px] font-mono text-cyan-700/60 tracking-[0.15em] select-none">INPUT</span>
               {/* Destination indicator / error */}
               <div className="flex items-center gap-1 px-3 pt-2.5 pb-0">
                 {sendError ? (
                   <>
-                    <span className="text-[7px] font-mono tracking-widest text-red-400/80 uppercase animate-pulse">
+                    <span className="text-[11px] font-mono tracking-widest text-red-400/80 uppercase animate-pulse">
                       ✕ {sendError}
                     </span>
                     {activeTab === 'meshtastic' && (
@@ -5302,14 +5302,14 @@ const MeshChat = React.memo(function MeshChat({
                             text: 'Public mesh send needs a working public identity. Create or reset it here.',
                           })
                         }
-                        className="ml-auto px-1.5 py-0.5 text-[7px] font-mono tracking-[0.16em] border border-red-700/40 text-red-300 hover:bg-red-950/20 transition-colors"
+                        className="ml-auto px-1.5 py-0.5 text-[11px] font-mono tracking-[0.16em] border border-red-700/40 text-red-300 hover:bg-red-950/20 transition-colors"
                       >
                         FIX
                       </button>
                     )}
                   </>
                 ) : (
-                  <span className="text-[7px] font-mono tracking-widest text-[var(--text-muted)] uppercase">
+                  <span className="text-[11px] font-mono tracking-widest text-[var(--text-muted)] uppercase">
                     {activeTab === 'infonet'
                       ? privateInfonetReady
                         ? `→ INFONET${selectedGate ? ` / ${selectedGate}` : ''}${privateInfonetTransportReady ? '' : ' / EXPERIMENTAL ENCRYPTION'}`
@@ -5330,7 +5330,7 @@ const MeshChat = React.memo(function MeshChat({
               </div>
               {activeTab === 'meshtastic' && !hasPublicLaneIdentity && !sendError && (
                 <div
-                  className={`px-3 pt-1 text-[8px] font-mono leading-[1.5] ${
+                  className={`px-3 pt-1 text-[12px] font-mono leading-[1.5] ${
                     meshQuickStatus?.type === 'err'
                       ? 'text-red-300/80'
                       : meshQuickStatus?.type === 'ok'
@@ -5350,11 +5350,11 @@ const MeshChat = React.memo(function MeshChat({
                     onClick={() => setInfonetUnlockOpen(true)}
                     className="w-full flex items-center justify-between gap-2 px-3 py-2 border border-cyan-700/40 bg-cyan-950/15 text-cyan-300 hover:bg-cyan-950/25 hover:border-cyan-500/50 transition-colors"
                   >
-                    <span className="inline-flex items-center gap-2 text-[10px] font-mono tracking-[0.2em]">
+                    <span className="inline-flex items-center gap-2 text-sm font-mono tracking-[0.2em]">
                       <Shield size={11} />
                       UNLOCK INFONET
                     </span>
-                    <span className="text-[8px] font-mono text-cyan-300/70">
+                    <span className="text-[12px] font-mono text-cyan-300/70">
                       OPEN PRIVATE LANE BRIEF
                     </span>
                   </button>
@@ -5363,11 +5363,11 @@ const MeshChat = React.memo(function MeshChat({
                     onClick={() => setDeadDropUnlockOpen(true)}
                     className="w-full flex items-center justify-between gap-2 px-3 py-2 border border-cyan-700/40 bg-cyan-950/15 text-cyan-300 hover:bg-cyan-950/25 hover:border-cyan-500/50 transition-colors"
                   >
-                    <span className="inline-flex items-center gap-2 text-[10px] font-mono tracking-[0.2em]">
+                    <span className="inline-flex items-center gap-2 text-sm font-mono tracking-[0.2em]">
                       <Lock size={11} />
                       UNLOCK DEAD DROP
                     </span>
-                    <span className="text-[8px] font-mono text-cyan-300/70">
+                    <span className="text-[12px] font-mono text-cyan-300/70">
                       NEED WORMHOLE
                     </span>
                   </button>
@@ -5383,7 +5383,7 @@ const MeshChat = React.memo(function MeshChat({
                     disabled={identityWizardBusy}
                     className="w-full flex items-center justify-between gap-2 px-3 py-2 border border-green-700/40 bg-green-950/15 text-green-300 hover:bg-green-950/25 hover:border-green-500/50 transition-colors"
                   >
-                    <span className="inline-flex items-center gap-2 text-[10px] font-mono tracking-[0.2em]">
+                    <span className="inline-flex items-center gap-2 text-sm font-mono tracking-[0.2em]">
                       <Radio size={11} />
                       {identityWizardBusy
                         ? 'GETTING MESH KEY'
@@ -5391,7 +5391,7 @@ const MeshChat = React.memo(function MeshChat({
                           ? 'TURN OFF WORMHOLE FOR MESH'
                           : 'GET MESH KEY'}
                     </span>
-                    <span className="text-[8px] font-mono text-green-300/70">
+                    <span className="text-[12px] font-mono text-green-300/70">
                       {identityWizardBusy
                         ? 'WORKING...'
                         : publicMeshBlockedByWormhole
@@ -5404,11 +5404,11 @@ const MeshChat = React.memo(function MeshChat({
                     onClick={() => setMeshDirectTarget('')}
                     className="w-full flex items-center justify-between gap-2 px-3 py-2 border border-amber-700/40 bg-amber-950/10 text-amber-200 hover:bg-amber-950/20 hover:border-amber-500/50 transition-colors"
                   >
-                    <span className="inline-flex items-center gap-2 text-[10px] font-mono tracking-[0.2em]">
+                    <span className="inline-flex items-center gap-2 text-sm font-mono tracking-[0.2em]">
                       <Send size={11} />
                       DIRECT TO {meshDirectTarget.toUpperCase()}
                     </span>
-                    <span className="text-[8px] font-mono text-amber-200/70">RETURN TO CHANNEL</span>
+                    <span className="text-[12px] font-mono text-amber-200/70">RETURN TO CHANNEL</span>
                   </button>
                 ) : activeTab === 'infonet' &&
                   privateInfonetReady &&
@@ -5418,11 +5418,11 @@ const MeshChat = React.memo(function MeshChat({
                     onClick={() => void handleUnlockEncryptedGate()}
                     className="w-full flex items-center justify-between gap-2 px-3 py-2 border border-amber-700/40 bg-amber-950/10 text-amber-200 hover:bg-amber-950/20 hover:border-amber-500/50 transition-colors"
                   >
-                    <span className="inline-flex items-center gap-2 text-[10px] font-mono tracking-[0.2em]">
+                    <span className="inline-flex items-center gap-2 text-sm font-mono tracking-[0.2em]">
                       <Lock size={11} />
                       UNLOCK ENCRYPTED GATE
                     </span>
-                    <span className="text-[8px] font-mono text-amber-200/70">
+                    <span className="text-[12px] font-mono text-amber-200/70">
                       {selectedGatePersonaList.length > 0 ? 'USE GATE FACE' : 'CREATE GATE FACE'}
                     </span>
                   </button>
@@ -5433,7 +5433,7 @@ const MeshChat = React.memo(function MeshChat({
                     </span>
                     <div className="relative flex-1">
                       {activeTab === 'infonet' && gateReplyContext && (
-                        <div className="mb-2 flex items-center justify-between gap-2 rounded border border-amber-500/20 bg-amber-500/8 px-2 py-1 text-[8px] font-mono tracking-[0.14em] text-amber-100">
+                        <div className="mb-2 flex items-center justify-between gap-2 rounded border border-amber-500/20 bg-amber-500/8 px-2 py-1 text-[12px] font-mono tracking-[0.14em] text-amber-100">
                           <span>
                             REPLYING TO {gateReplyContext.nodeId.slice(0, 12)} / {gateReplyContext.eventId.slice(0, 8)}
                           </span>
@@ -5516,10 +5516,10 @@ const MeshChat = React.memo(function MeshChat({
           <div className="w-full max-w-md border border-fuchsia-800/50 bg-[var(--bg-primary)] shadow-[0_0_34px_rgba(236,72,153,0.12)]">
             <div className="flex items-center justify-between px-4 py-3 border-b border-fuchsia-800/40">
               <div>
-                <div className="text-[10px] font-mono tracking-[0.24em] text-fuchsia-300">
+                <div className="text-sm font-mono tracking-[0.24em] text-fuchsia-300">
                   GATE FACE
                 </div>
-                <div className="text-[9px] font-mono text-[var(--text-muted)] mt-1">
+                <div className="text-[13px] font-mono text-[var(--text-muted)] mt-1">
                   {gatePersonaPromptTitle
                     ? `Entering ${String(gatePersonaPromptTitle).toUpperCase()}`
                     : 'Choose how you enter this gate'}
@@ -5535,14 +5535,14 @@ const MeshChat = React.memo(function MeshChat({
             </div>
 
             <div className="px-4 py-4 space-y-3">
-              <div className="border border-fuchsia-800/25 bg-fuchsia-950/10 px-3 py-3 text-[10px] font-mono text-fuchsia-100/85 leading-[1.7]">
+              <div className="border border-fuchsia-800/25 bg-fuchsia-950/10 px-3 py-3 text-sm font-mono text-fuchsia-100/85 leading-[1.7]">
                 Stay anonymous in this gate or create a gate-only face. Face names stay inside
                 this gate and cannot be changed in this build.
               </div>
 
               {gatePersonaPromptPersonaList.length > 0 && (
                 <div className="border border-cyan-800/25 bg-cyan-950/10 px-3 py-3">
-                  <div className="text-[8px] font-mono tracking-[0.18em] text-cyan-300 mb-2">
+                  <div className="text-[12px] font-mono tracking-[0.18em] text-cyan-300 mb-2">
                     SAVED FACES
                   </div>
                   <div className="space-y-2">
@@ -5551,12 +5551,12 @@ const MeshChat = React.memo(function MeshChat({
                         key={persona.persona_id || persona.node_id}
                         onClick={() => void useSavedGatePersona(String(persona.persona_id || ''))}
                         disabled={gatePersonaBusy}
-                        className="w-full flex items-center justify-between gap-2 px-3 py-2 border border-cyan-700/35 bg-black/20 text-left text-[10px] font-mono text-cyan-200 hover:bg-cyan-950/20 hover:border-cyan-500/50 disabled:opacity-50 transition-colors"
+                        className="w-full flex items-center justify-between gap-2 px-3 py-2 border border-cyan-700/35 bg-black/20 text-left text-sm font-mono text-cyan-200 hover:bg-cyan-950/20 hover:border-cyan-500/50 disabled:opacity-50 transition-colors"
                       >
                         <span>
                           {persona.label || persona.persona_id || String(persona.node_id || '').slice(0, 12)}
                         </span>
-                        <span className="text-[8px] tracking-[0.16em] text-cyan-300/70">
+                        <span className="text-[12px] tracking-[0.16em] text-cyan-300/70">
                           USE FACE
                         </span>
                       </button>
@@ -5566,7 +5566,7 @@ const MeshChat = React.memo(function MeshChat({
               )}
 
               <div className="border border-fuchsia-800/25 bg-black/20 px-3 py-3 space-y-2">
-                <div className="text-[8px] font-mono tracking-[0.18em] text-fuchsia-300">
+                <div className="text-[12px] font-mono tracking-[0.18em] text-fuchsia-300">
                   CREATE NEW FACE
                 </div>
                 <input
@@ -5576,23 +5576,23 @@ const MeshChat = React.memo(function MeshChat({
                     setGatePersonaPromptError('');
                   }}
                   placeholder="gate name / handle"
-                  className="w-full bg-black/30 border border-fuchsia-700/35 text-[10px] font-mono text-fuchsia-100 px-3 py-2 outline-none placeholder:text-fuchsia-200/35 focus:border-fuchsia-500/55"
+                  className="w-full bg-black/30 border border-fuchsia-700/35 text-sm font-mono text-fuchsia-100 px-3 py-2 outline-none placeholder:text-fuchsia-200/35 focus:border-fuchsia-500/55"
                 />
-                <div className="text-[8px] font-mono text-fuchsia-200/55 leading-[1.5]">
+                <div className="text-[12px] font-mono text-fuchsia-200/55 leading-[1.5]">
                   Example: `signalfox`, `source-a`, `ops-lantern`
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => void submitGatePersonaPrompt()}
                     disabled={gatePersonaBusy || gatePersonaDraftLabel.trim().length < 2}
-                    className="px-3 py-1.5 border border-fuchsia-600/40 bg-fuchsia-950/20 text-[10px] font-mono tracking-[0.18em] text-fuchsia-200 hover:bg-fuchsia-950/30 hover:border-fuchsia-400/50 disabled:opacity-50 transition-colors"
+                    className="px-3 py-1.5 border border-fuchsia-600/40 bg-fuchsia-950/20 text-sm font-mono tracking-[0.18em] text-fuchsia-200 hover:bg-fuchsia-950/30 hover:border-fuchsia-400/50 disabled:opacity-50 transition-colors"
                   >
                     {gatePersonaBusy ? 'CREATING' : 'CREATE FACE'}
                   </button>
                   <button
                     onClick={remainAnonymousInGate}
                     disabled={gatePersonaBusy}
-                    className="px-3 py-1.5 border border-amber-700/35 bg-amber-950/10 text-[10px] font-mono tracking-[0.18em] text-amber-200 hover:bg-amber-950/20 hover:border-amber-500/50 disabled:opacity-50 transition-colors"
+                    className="px-3 py-1.5 border border-amber-700/35 bg-amber-950/10 text-sm font-mono tracking-[0.18em] text-amber-200 hover:bg-amber-950/20 hover:border-amber-500/50 disabled:opacity-50 transition-colors"
                   >
                     REMAIN ANONYMOUS
                   </button>
@@ -5600,7 +5600,7 @@ const MeshChat = React.memo(function MeshChat({
               </div>
 
               {gatePersonaPromptError && (
-                <div className="border border-red-700/35 bg-red-950/10 px-3 py-2 text-[10px] font-mono text-red-300">
+                <div className="border border-red-700/35 bg-red-950/10 px-3 py-2 text-sm font-mono text-red-300">
                   {gatePersonaPromptError}
                 </div>
               )}
@@ -5614,8 +5614,8 @@ const MeshChat = React.memo(function MeshChat({
           <div className="w-full max-w-md border border-cyan-800/50 bg-[var(--bg-primary)] shadow-[0_0_30px_rgba(0,255,255,0.08)]">
             <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border-primary)]/40">
                 <div>
-                <div className="text-[10px] font-mono tracking-[0.24em] text-cyan-400">KEY SETUP</div>
-                <div className="text-[9px] font-mono text-[var(--text-muted)] mt-1">
+                <div className="text-sm font-mono tracking-[0.24em] text-cyan-400">KEY SETUP</div>
+                <div className="text-[13px] font-mono text-[var(--text-muted)] mt-1">
                   Get a public mesh key or enter Wormhole.
                 </div>
               </div>
@@ -5629,7 +5629,7 @@ const MeshChat = React.memo(function MeshChat({
             </div>
 
             <div className="px-3 py-3 space-y-2.5">
-              <div className="grid grid-cols-2 gap-2 text-[8px] font-mono">
+              <div className="grid grid-cols-2 gap-2 text-[12px] font-mono">
                 <div className="border border-amber-500/20 bg-amber-950/10 px-2.5 py-2 text-amber-200/85 leading-[1.5]">
                   <div className="text-amber-300 tracking-[0.18em] mb-1">PUBLIC MESH</div>
                   Public lane. One tap gets you a posting key.
@@ -5641,10 +5641,10 @@ const MeshChat = React.memo(function MeshChat({
               </div>
 
               <div className="border border-[var(--border-primary)]/40 bg-black/20 px-3 py-2">
-                <div className="text-[9px] font-mono tracking-[0.18em] text-cyan-300 mb-1">
+                <div className="text-[13px] font-mono tracking-[0.18em] text-cyan-300 mb-1">
                   CURRENT STATE
                 </div>
-                <div className="grid grid-cols-1 gap-1 text-[9px] font-mono text-[var(--text-secondary)] leading-[1.5]">
+                <div className="grid grid-cols-1 gap-1 text-[13px] font-mono text-[var(--text-secondary)] leading-[1.5]">
                   <div>Public mesh key: {hasPublicLaneIdentity ? 'active' : 'not issued'}</div>
                   <div>Public mesh address: {hasPublicLaneIdentity && publicMeshAddress ? publicMeshAddress.toUpperCase() : 'not ready'}</div>
                   <div>Wormhole lane: {wormholeEnabled && wormholeReadyState ? 'active' : wormholeEnabled ? 'starting' : 'off'}</div>
@@ -5662,14 +5662,14 @@ const MeshChat = React.memo(function MeshChat({
                     void handleCreatePublicIdentity();
                   }}
                   disabled={identityWizardBusy}
-                  className="w-full text-left px-3 py-2 border border-green-500/30 bg-green-950/10 hover:bg-green-950/20 text-[10px] font-mono text-green-300 disabled:opacity-50"
+                  className="w-full text-left px-3 py-2 border border-green-500/30 bg-green-950/10 hover:bg-green-950/20 text-sm font-mono text-green-300 disabled:opacity-50"
                 >
                   {hasPublicLaneIdentity
                     ? 'MESH KEY ACTIVE'
                     : publicMeshBlockedByWormhole
                       ? 'TURN OFF WORMHOLE FOR MESH'
                       : 'GET MESH KEY'}
-                  <div className="mt-1 text-[9px] text-green-200/70 normal-case tracking-normal leading-[1.45]">
+                  <div className="mt-1 text-[13px] text-green-200/70 normal-case tracking-normal leading-[1.45]">
                     {hasPublicLaneIdentity
                       ? 'Your public mesh key is already live for posting.'
                       : publicMeshBlockedByWormhole
@@ -5681,10 +5681,10 @@ const MeshChat = React.memo(function MeshChat({
                 <button
                   onClick={() => void handleBootstrapPrivateIdentity()}
                   disabled={identityWizardBusy}
-                  className="w-full text-left px-3 py-2 border border-cyan-500/30 bg-cyan-950/10 hover:bg-cyan-950/20 text-[10px] font-mono text-cyan-300 disabled:opacity-50"
+                  className="w-full text-left px-3 py-2 border border-cyan-500/30 bg-cyan-950/10 hover:bg-cyan-950/20 text-sm font-mono text-cyan-300 disabled:opacity-50"
                 >
                   {wormholeEnabled && wormholeReadyState ? 'ENTER INFONET' : 'GET WORMHOLE KEY'}
-                  <div className="mt-1 text-[9px] text-cyan-200/70 normal-case tracking-normal leading-[1.45]">
+                  <div className="mt-1 text-[13px] text-cyan-200/70 normal-case tracking-normal leading-[1.45]">
                     {wormholeEnabled && wormholeReadyState
                       ? 'Wormhole is already live. Jump straight into gates and the private inbox.'
                       : 'Use this for gates, experimental obfuscation, and the private inbox.'}
@@ -5695,7 +5695,7 @@ const MeshChat = React.memo(function MeshChat({
                   <button
                     onClick={() => void handleResetPublicIdentity()}
                     disabled={identityWizardBusy}
-                    className="flex-1 text-left px-3 py-2 border border-red-500/30 bg-red-950/10 hover:bg-red-950/20 text-[10px] font-mono text-red-300 disabled:opacity-50"
+                    className="flex-1 text-left px-3 py-2 border border-red-500/30 bg-red-950/10 hover:bg-red-950/20 text-sm font-mono text-red-300 disabled:opacity-50"
                   >
                     RESET PUBLIC IDENTITY
                   </button>
@@ -5703,7 +5703,7 @@ const MeshChat = React.memo(function MeshChat({
                     <button
                       onClick={() => void handleLeaveWormholeForPublicMesh()}
                       disabled={identityWizardBusy}
-                      className="px-3 py-2 border border-green-500/30 bg-green-950/10 text-[10px] font-mono text-green-300 hover:bg-green-950/20 disabled:opacity-50"
+                      className="px-3 py-2 border border-green-500/30 bg-green-950/10 text-sm font-mono text-green-300 hover:bg-green-950/20 disabled:opacity-50"
                     >
                       TURN OFF WORMHOLE
                     </button>
@@ -5714,7 +5714,7 @@ const MeshChat = React.memo(function MeshChat({
                         setIdentityWizardOpen(false);
                         onSettingsClick();
                       }}
-                      className="px-3 py-2 border border-[var(--border-primary)] text-[10px] font-mono text-[var(--text-secondary)] hover:text-cyan-300 hover:border-cyan-500/40"
+                      className="px-3 py-2 border border-[var(--border-primary)] text-sm font-mono text-[var(--text-secondary)] hover:text-cyan-300 hover:border-cyan-500/40"
                     >
                       OPEN SETTINGS
                     </button>
@@ -5724,7 +5724,7 @@ const MeshChat = React.memo(function MeshChat({
 
               {identityWizardStatus && (
                 <div
-                  className={`px-3 py-2 border text-[10px] font-mono leading-[1.65] ${
+                  className={`px-3 py-2 border text-sm font-mono leading-[1.65] ${
                     identityWizardStatus.type === 'ok'
                       ? 'border-green-500/30 bg-green-950/10 text-green-300'
                       : 'border-red-500/30 bg-red-950/10 text-red-300'
@@ -5734,7 +5734,7 @@ const MeshChat = React.memo(function MeshChat({
                 </div>
               )}
 
-              <div className="text-[8px] font-mono text-[var(--text-muted)] leading-[1.5]">
+              <div className="text-[12px] font-mono text-[var(--text-muted)] leading-[1.5]">
                 Testnet note: mesh is public, gates use experimental encryption, and Dead Drop is the strongest current lane.
               </div>
             </div>
@@ -5747,10 +5747,10 @@ const MeshChat = React.memo(function MeshChat({
           <div className="w-full max-w-xl border border-cyan-800/50 bg-[var(--bg-primary)] shadow-[0_0_34px_rgba(0,255,255,0.1)]">
             <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-primary)]/40">
               <div>
-                <div className="text-[10px] font-mono tracking-[0.24em] text-cyan-400">
+                <div className="text-sm font-mono tracking-[0.24em] text-cyan-400">
                   PRIVATE INFONET LOCKED
                 </div>
-                <div className="text-[9px] font-mono text-[var(--text-muted)] mt-1">
+                <div className="text-[13px] font-mono text-[var(--text-muted)] mt-1">
                   INFONET is the private Wormhole lane. Public perimeter traffic stays under MESH.
                 </div>
               </div>
@@ -5764,7 +5764,7 @@ const MeshChat = React.memo(function MeshChat({
             </div>
 
             <div className="px-4 py-4 space-y-4">
-              <div className="border border-cyan-800/30 bg-cyan-950/10 px-3 py-3 text-[10px] font-mono text-[var(--text-secondary)] leading-[1.8] space-y-2">
+              <div className="border border-cyan-800/30 bg-cyan-950/10 px-3 py-3 text-sm font-mono text-[var(--text-secondary)] leading-[1.8] space-y-2">
                 <div>
                   INFONET is the private lane now. Public perimeter traffic lives under the
                   <span className="text-green-300"> MESH </span>
@@ -5777,8 +5777,8 @@ const MeshChat = React.memo(function MeshChat({
                 </div>
               </div>
 
-              <div className="border border-amber-500/20 bg-amber-950/10 px-3 py-3 text-[10px] font-mono text-amber-100/85 leading-[1.75]">
-                <div className="text-[9px] tracking-[0.18em] text-amber-300 mb-1">TRUST MODES</div>
+              <div className="border border-amber-500/20 bg-amber-950/10 px-3 py-3 text-sm font-mono text-amber-100/85 leading-[1.75]">
+                <div className="text-[13px] tracking-[0.18em] text-amber-300 mb-1">TRUST MODES</div>
                 <div><span className="text-orange-300">PUBLIC / DEGRADED</span> — public mesh and perimeter feeds.</div>
                 <div><span className="text-yellow-300">EXPERIMENTAL ENCRYPTION</span> — Wormhole lane active, strongest transport posture still warming.</div>
                 <div><span className="text-green-300">PRIVATE / STRONG</span> — Wormhole and Reticulum are both ready.</div>
@@ -5790,7 +5790,7 @@ const MeshChat = React.memo(function MeshChat({
                     setInfonetUnlockOpen(false);
                     onSettingsClick?.();
                   }}
-                  className="px-3 py-1.5 border border-cyan-500/40 bg-cyan-950/20 text-[10px] font-mono text-cyan-300 hover:bg-cyan-950/35 transition-colors"
+                  className="px-3 py-1.5 border border-cyan-500/40 bg-cyan-950/20 text-sm font-mono text-cyan-300 hover:bg-cyan-950/35 transition-colors"
                 >
                   OPEN WORMHOLE
                 </button>
@@ -5799,7 +5799,7 @@ const MeshChat = React.memo(function MeshChat({
                     setInfonetUnlockOpen(false);
                     openTerminal();
                   }}
-                  className="px-3 py-1.5 border border-green-500/40 bg-green-950/20 text-[10px] font-mono text-green-300 hover:bg-green-950/35 transition-colors inline-flex items-center gap-1.5"
+                  className="px-3 py-1.5 border border-green-500/40 bg-green-950/20 text-sm font-mono text-green-300 hover:bg-green-950/35 transition-colors inline-flex items-center gap-1.5"
                 >
                   <Terminal size={11} />
                   TERMINAL
@@ -5809,7 +5809,7 @@ const MeshChat = React.memo(function MeshChat({
                     setInfonetUnlockOpen(false);
                     setActiveTab('meshtastic');
                   }}
-                  className="px-3 py-1.5 border border-amber-500/40 bg-amber-950/20 text-[10px] font-mono text-amber-300 hover:bg-amber-950/35 transition-colors"
+                  className="px-3 py-1.5 border border-amber-500/40 bg-amber-950/20 text-sm font-mono text-amber-300 hover:bg-amber-950/35 transition-colors"
                 >
                   GO TO MESH
                 </button>
@@ -5824,10 +5824,10 @@ const MeshChat = React.memo(function MeshChat({
           <div className="w-full max-w-lg border border-cyan-800/50 bg-[var(--bg-primary)] shadow-[0_0_34px_rgba(0,255,255,0.1)]">
             <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-primary)]/40">
               <div>
-                <div className="text-[10px] font-mono tracking-[0.24em] text-cyan-400">
+                <div className="text-sm font-mono tracking-[0.24em] text-cyan-400">
                   DEAD DROP LOCKED
                 </div>
-                <div className="text-[9px] font-mono text-[var(--text-muted)] mt-1">
+                <div className="text-[13px] font-mono text-[var(--text-muted)] mt-1">
                   Dead Drop is the private inbox lane. Public mesh does not substitute for it.
                 </div>
               </div>
@@ -5841,7 +5841,7 @@ const MeshChat = React.memo(function MeshChat({
             </div>
 
             <div className="px-4 py-4 space-y-4">
-              <div className="border border-cyan-800/30 bg-cyan-950/10 px-3 py-3 text-[10px] font-mono text-[var(--text-secondary)] leading-[1.8] space-y-2">
+              <div className="border border-cyan-800/30 bg-cyan-950/10 px-3 py-3 text-sm font-mono text-[var(--text-secondary)] leading-[1.8] space-y-2">
                 <div>Need Wormhole activated.</div>
                 <div>
                   Dead Drop handles private contacts, inbox requests, and message exchange on the
@@ -5859,7 +5859,7 @@ const MeshChat = React.memo(function MeshChat({
                     setDeadDropUnlockOpen(false);
                     onSettingsClick?.();
                   }}
-                  className="px-3 py-1.5 border border-cyan-500/40 bg-cyan-950/20 text-[10px] font-mono text-cyan-300 hover:bg-cyan-950/35 transition-colors"
+                  className="px-3 py-1.5 border border-cyan-500/40 bg-cyan-950/20 text-sm font-mono text-cyan-300 hover:bg-cyan-950/35 transition-colors"
                 >
                   OPEN WORMHOLE
                 </button>
@@ -5868,7 +5868,7 @@ const MeshChat = React.memo(function MeshChat({
                     setDeadDropUnlockOpen(false);
                     openTerminal();
                   }}
-                  className="px-3 py-1.5 border border-green-500/40 bg-green-950/20 text-[10px] font-mono text-green-300 hover:bg-green-950/35 transition-colors inline-flex items-center gap-1.5"
+                  className="px-3 py-1.5 border border-green-500/40 bg-green-950/20 text-sm font-mono text-green-300 hover:bg-green-950/35 transition-colors inline-flex items-center gap-1.5"
                 >
                   <Terminal size={11} />
                   TERMINAL
@@ -5878,7 +5878,7 @@ const MeshChat = React.memo(function MeshChat({
                     setDeadDropUnlockOpen(false);
                     setActiveTab('meshtastic');
                   }}
-                  className="px-3 py-1.5 border border-amber-500/40 bg-amber-950/20 text-[10px] font-mono text-amber-300 hover:bg-amber-950/35 transition-colors"
+                  className="px-3 py-1.5 border border-amber-500/40 bg-amber-950/20 text-sm font-mono text-amber-300 hover:bg-amber-950/35 transition-colors"
                 >
                   GO TO MESH
                 </button>
@@ -5896,24 +5896,24 @@ const MeshChat = React.memo(function MeshChat({
           style={{ left: senderPopup.x, top: senderPopup.y }}
         >
           <div className="px-3 py-1 border-b border-[var(--border-primary)]/50">
-            <span className="text-[9px] font-mono text-cyan-400 tracking-wider">
+            <span className="text-[13px] font-mono text-cyan-400 tracking-wider">
               {senderPopup.userId.slice(0, 16)}
             </span>
           </div>
 
           {senderPopup.tab === 'infonet' && (
             <div className="px-3 py-2 border-b border-[var(--border-primary)]/50">
-              <div className="text-[8px] font-mono text-[var(--text-muted)] tracking-[0.18em]">
+              <div className="text-[12px] font-mono text-[var(--text-muted)] tracking-[0.18em]">
                 PUBLIC KEY
               </div>
               <div
-                className="mt-1 text-[8px] font-mono text-green-300/90 break-all leading-[1.55]"
+                className="mt-1 text-[12px] font-mono text-green-300/90 break-all leading-[1.55]"
                 title={senderPopup.publicKey || 'not advertised on this event'}
               >
                 {senderPopup.publicKey || 'not advertised on this event'}
               </div>
               {senderPopup.publicKeyAlgo ? (
-                <div className="mt-1 text-[8px] font-mono text-cyan-500/80">
+                <div className="mt-1 text-[12px] font-mono text-cyan-500/80">
                   {senderPopup.publicKeyAlgo}
                 </div>
               ) : null}
@@ -5924,14 +5924,14 @@ const MeshChat = React.memo(function MeshChat({
           {mutedUsers.has(senderPopup.userId) ? (
             <button
               onClick={() => handleUnmute(senderPopup.userId)}
-              className="w-full flex items-center gap-2 px-3 py-1.5 text-[9px] font-mono text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]/50 transition-colors"
+              className="w-full flex items-center gap-2 px-3 py-1.5 text-[13px] font-mono text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]/50 transition-colors"
             >
               <Eye size={10} /> UNMUTE
             </button>
           ) : (
             <button
               onClick={() => setMuteConfirm(senderPopup.userId)}
-              className="w-full flex items-center gap-2 px-3 py-1.5 text-[9px] font-mono text-red-400/80 hover:bg-red-900/10 transition-colors"
+              className="w-full flex items-center gap-2 px-3 py-1.5 text-[13px] font-mono text-red-400/80 hover:bg-red-900/10 transition-colors"
             >
               <EyeOff size={10} /> MUTE
             </button>
@@ -5942,13 +5942,13 @@ const MeshChat = React.memo(function MeshChat({
             <>
               <button
                 onClick={() => handleReplyToMeshAddress(senderPopup.userId)}
-                className="w-full flex items-center gap-2 px-3 py-1.5 text-[9px] font-mono text-green-300 hover:bg-green-950/20 transition-colors"
+                className="w-full flex items-center gap-2 px-3 py-1.5 text-[13px] font-mono text-green-300 hover:bg-green-950/20 transition-colors"
               >
                 <Send size={10} /> REPLY
               </button>
               <button
                 onClick={() => handleLocateUser(senderPopup.userId)}
-                className="w-full flex items-center gap-2 px-3 py-1.5 text-[9px] font-mono text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]/50 transition-colors"
+                className="w-full flex items-center gap-2 px-3 py-1.5 text-[13px] font-mono text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]/50 transition-colors"
               >
                 <MapPin size={10} /> LOCATE
               </button>
@@ -5965,7 +5965,7 @@ const MeshChat = React.memo(function MeshChat({
                     openChat(senderPopup.userId);
                     setSenderPopup(null);
                   }}
-                  className="w-full flex items-center gap-2 px-3 py-1.5 text-[9px] font-mono text-green-300 hover:bg-green-950/20 transition-colors"
+                  className="w-full flex items-center gap-2 px-3 py-1.5 text-[13px] font-mono text-green-300 hover:bg-green-950/20 transition-colors"
                 >
                   <Send size={10} /> OPEN DM
                 </button>
@@ -5975,7 +5975,7 @@ const MeshChat = React.memo(function MeshChat({
                     handleRequestAccess(senderPopup.userId);
                     setSenderPopup(null);
                   }}
-                  className="w-full flex items-center gap-2 px-3 py-1.5 text-[9px] font-mono text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]/50 transition-colors"
+                  className="w-full flex items-center gap-2 px-3 py-1.5 text-[13px] font-mono text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]/50 transition-colors"
                 >
                   <UserPlus size={10} /> REQUEST CONTACT
                 </button>
@@ -5986,12 +5986,12 @@ const MeshChat = React.memo(function MeshChat({
                     void handleBlockDM(senderPopup.userId);
                     setSenderPopup(null);
                   }}
-                  className="w-full flex items-center gap-2 px-3 py-1.5 text-[9px] font-mono text-red-400/80 hover:bg-red-900/10 transition-colors"
+                  className="w-full flex items-center gap-2 px-3 py-1.5 text-[13px] font-mono text-red-400/80 hover:bg-red-900/10 transition-colors"
                 >
                   <Ban size={10} /> BLOCK
                 </button>
               ) : (
-                <div className="px-3 py-1.5 text-[8px] font-mono text-red-300/70 tracking-[0.18em]">
+                <div className="px-3 py-1.5 text-[12px] font-mono text-red-300/70 tracking-[0.18em]">
                   CONTACT BLOCKED
                 </div>
               )}
@@ -6004,10 +6004,10 @@ const MeshChat = React.memo(function MeshChat({
       {muteConfirm && (
         <div className="fixed inset-0 z-[600] flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="bg-[var(--bg-primary)] border border-[var(--border-primary)] p-4 max-w-[260px] w-full">
-            <div className="text-[10px] font-mono text-[var(--text-secondary)] mb-1">
+            <div className="text-sm font-mono text-[var(--text-secondary)] mb-1">
               CONFIRM MUTE
             </div>
-            <div className="text-[9px] font-mono text-[var(--text-muted)] mb-3 leading-[1.65]">
+            <div className="text-[13px] font-mono text-[var(--text-muted)] mb-3 leading-[1.65]">
               Mute <span className="text-cyan-400">{muteConfirm.slice(0, 16)}</span>? Their messages
               will be hidden. You can unmute from Dead Drop &gt; MUTED.
             </div>
@@ -6017,13 +6017,13 @@ const MeshChat = React.memo(function MeshChat({
                   setMuteConfirm(null);
                   setSenderPopup(null);
                 }}
-                className="text-[9px] font-mono px-3 py-1 bg-[var(--bg-secondary)]/50 text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] transition-colors"
+                className="text-[13px] font-mono px-3 py-1 bg-[var(--bg-secondary)]/50 text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] transition-colors"
               >
                 CANCEL
               </button>
               <button
                 onClick={() => handleMute(muteConfirm)}
-                className="text-[9px] font-mono px-3 py-1 bg-red-900/30 text-red-400 hover:bg-red-800/40 transition-colors"
+                className="text-[13px] font-mono px-3 py-1 bg-red-900/30 text-red-400 hover:bg-red-800/40 transition-colors"
               >
                 MUTE
               </button>

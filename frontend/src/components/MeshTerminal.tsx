@@ -4709,7 +4709,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
           className={`group flex w-full items-center justify-between gap-3 text-[12px] leading-[1.8] whitespace-pre-wrap break-all border border-fuchsia-500/15 bg-fuchsia-500/[0.03] pr-3 text-left font-mono transition-all hover:border-fuchsia-400/35 hover:bg-fuchsia-500/[0.08] ${lineColor(line.type)} ${lineChrome}`}
         >
           <span className="min-w-0 flex-1">{content}</span>
-          <span className="shrink-0 border border-fuchsia-500/25 px-2 py-0.5 text-[9px] tracking-[0.18em] text-fuchsia-200 transition-colors group-hover:border-fuchsia-400/45 group-hover:text-fuchsia-100">
+          <span className="shrink-0 border border-fuchsia-500/25 px-2 py-0.5 text-[13px] tracking-[0.18em] text-fuchsia-200 transition-colors group-hover:border-fuchsia-400/45 group-hover:text-fuchsia-100">
             {line.actionLabel || 'OPEN'}
           </span>
         </button>
@@ -4748,9 +4748,9 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                 onClick={() => runQuickCommand(String(command))}
                 className={`${cardBase} ${tone}`}
               >
-                <div className="text-[10px] tracking-[0.24em]">{title}</div>
+                <div className="text-sm tracking-[0.24em]">{title}</div>
                 <div className="mt-2 text-[11px] leading-6 text-slate-400">{desc}</div>
-                <div className="mt-3 text-[8px] tracking-[0.16em] text-slate-500">
+                <div className="mt-3 text-[12px] tracking-[0.16em] text-slate-500">
                   {String(command)}
                 </div>
               </button>
@@ -4769,7 +4769,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
               ['PRIVATE DM INBOX', 'Check the experimental private dead drop', () => openSurface('inbox'), 'border-fuchsia-500/25 text-fuchsia-300'],
             ].map(([title, desc, action, tone]) => (
               <button key={title as string} type="button" onClick={action as () => void} className={`${cardBase} ${tone}`}>
-                <div className="text-[10px] tracking-[0.24em]">{title as string}</div>
+                <div className="text-sm tracking-[0.24em]">{title as string}</div>
                 <div className="mt-2 text-[11px] leading-6 text-slate-400">{desc as string}</div>
               </button>
             ))}
@@ -4793,8 +4793,8 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                 className={`${cardBase} border-fuchsia-500/25 text-fuchsia-300 hover:border-fuchsia-400/45 hover:bg-fuchsia-500/10`}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <div className="text-[10px] tracking-[0.24em]">{title}</div>
-                  <div className="text-[8px] tracking-[0.16em] text-amber-200">{command}</div>
+                  <div className="text-sm tracking-[0.24em]">{title}</div>
+                  <div className="text-[12px] tracking-[0.16em] text-amber-200">{command}</div>
                 </div>
                 <div className="mt-2 text-[11px] leading-6 text-slate-400">{desc}</div>
               </button>
@@ -4806,22 +4806,22 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
           <div className="space-y-3">
             <div className="grid gap-3 md:grid-cols-2">
               <div className="border border-emerald-500/20 bg-black/45 px-4 py-3 font-mono">
-                <div className="text-[10px] tracking-[0.24em] text-emerald-300">PUBLIC MESH LANE</div>
+                <div className="text-sm tracking-[0.24em] text-emerald-300">PUBLIC MESH LANE</div>
                 <div className="mt-2 text-[11px] leading-6 text-slate-300">
                   {publicAgentReady
                     ? `Public Agent active as ${nodeIdentity?.nodeId || 'unknown'}`
                     : 'No public Agent yet. Type connect to create one for mesh posting.'}
                 </div>
-                <div className="mt-2 text-[10px] leading-5 text-emerald-200/75">
+                <div className="mt-2 text-sm leading-5 text-emerald-200/75">
                   Meshtastic traffic is public / observable. Wormhole is not required here.
                 </div>
               </div>
               <div className="border border-cyan-500/20 bg-black/45 px-4 py-3 font-mono">
-                <div className="text-[10px] tracking-[0.24em] text-cyan-300">WORMHOLE OBFUSCATED LANE</div>
+                <div className="text-sm tracking-[0.24em] text-cyan-300">WORMHOLE OBFUSCATED LANE</div>
                 <div className="mt-2 text-[11px] leading-6 text-slate-300">
                   {privateLaneLabel}
                 </div>
-                <div className="mt-2 text-[10px] leading-5 text-cyan-200/75">
+                <div className="mt-2 text-sm leading-5 text-cyan-200/75">
                   {privateLaneDetail}
                 </div>
               </div>
@@ -4843,12 +4843,12 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                   onClick={action}
                   className={`${cardBase} border-emerald-500/25 text-emerald-300`}
                 >
-                  <div className="text-[10px] tracking-[0.24em]">{title}</div>
+                  <div className="text-sm tracking-[0.24em]">{title}</div>
                   <div className="mt-2 text-[11px] leading-6 text-slate-400">{desc}</div>
                 </button>
               ))}
             </div>
-            <div className="text-[10px] tracking-[0.26em] text-emerald-300">MESH ROOT CARDS</div>
+            <div className="text-sm tracking-[0.26em] text-emerald-300">MESH ROOT CARDS</div>
             {surfaceMeshLoading ? (
               <div className="border border-emerald-500/20 bg-black/45 px-4 py-5 text-[11px] font-mono text-slate-400">
                 Loading mesh channels...
@@ -4869,7 +4869,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                     >
                       <div className="flex items-center justify-between">
                         <div className="text-[11px] tracking-[0.22em] text-emerald-200">{region}</div>
-                        <div className="text-[10px] text-emerald-300">{count}</div>
+                        <div className="text-sm text-emerald-300">{count}</div>
                       </div>
                       <div className="mt-3 flex flex-wrap gap-2">
                         <button
@@ -4878,14 +4878,14 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                             setMeshRegion(region);
                             runQuickCommand(`mesh listen 12`);
                           }}
-                          className="border border-emerald-500/20 bg-emerald-500/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-emerald-300 hover:bg-emerald-500/14"
+                          className="border border-emerald-500/20 bg-emerald-500/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-emerald-300 hover:bg-emerald-500/14"
                         >
                           LISTEN
                         </button>
                         <button
                           type="button"
                           onClick={() => setMeshRegion(region)}
-                          className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
+                          className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
                         >
                           SELECT
                         </button>
@@ -4911,12 +4911,12 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                   onClick={action as () => void}
                   className={`${cardBase} border-amber-400/25 text-amber-200`}
                 >
-                  <div className="text-[10px] tracking-[0.24em]">{title as string}</div>
+                  <div className="text-sm tracking-[0.24em]">{title as string}</div>
                   <div className="mt-2 text-[11px] leading-6 text-slate-400">{desc as string}</div>
                 </button>
               ))}
             </div>
-            <div className="text-[10px] tracking-[0.26em] text-amber-200">LIVE MARKET CARDS</div>
+            <div className="text-sm tracking-[0.26em] text-amber-200">LIVE MARKET CARDS</div>
             {surfaceMarketsLoading ? (
               <div className="border border-amber-400/20 bg-black/45 px-4 py-5 text-[11px] font-mono text-slate-400">
                 Loading market cards...
@@ -4940,39 +4940,39 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="text-[11px] leading-6 text-amber-100">{title}</div>
-                        <div className="border border-amber-400/20 bg-amber-400/8 px-2 py-1 text-[9px] text-amber-200">
+                        <div className="border border-amber-400/20 bg-amber-400/8 px-2 py-1 text-[13px] text-amber-200">
                           {pctValue}
                         </div>
                       </div>
-                      <div className="mt-2 text-[9px] tracking-[0.16em] text-slate-500">{category}</div>
+                      <div className="mt-2 text-[13px] tracking-[0.16em] text-slate-500">{category}</div>
                       <div className="mt-4 flex flex-wrap gap-2">
                         <button
                           type="button"
                           onClick={() =>
                             setExpandedMarketIndex((prev) => (prev === idx ? null : idx))
                           }
-                          className="border border-amber-400/20 bg-amber-400/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-amber-200 hover:bg-amber-400/14"
+                          className="border border-amber-400/20 bg-amber-400/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-amber-200 hover:bg-amber-400/14"
                         >
                           {expanded ? 'HIDE' : 'OPEN'}
                         </button>
                         <button
                           type="button"
                           onClick={() => runQuickCommand(`markets ${title}`)}
-                          className="border border-amber-400/20 bg-amber-400/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-amber-200 hover:bg-amber-400/14"
+                          className="border border-amber-400/20 bg-amber-400/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-amber-200 hover:bg-amber-400/14"
                         >
                           BOARD
                         </button>
                         <button
                           type="button"
                           onClick={() => runQuickCommand(`oracle ${nodeIdentity?.nodeId || ''}`.trim())}
-                          className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
+                          className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
                         >
                           PROFILE
                         </button>
                       </div>
                       {expanded && (
-                        <div className="mt-4 border border-amber-400/15 bg-black/35 px-3 py-3 text-[10px] leading-6 text-slate-300">
-                          <div className="text-[9px] tracking-[0.18em] text-amber-200">MARKET DETAIL</div>
+                        <div className="mt-4 border border-amber-400/15 bg-black/35 px-3 py-3 text-sm leading-6 text-slate-300">
+                          <div className="text-[13px] tracking-[0.18em] text-amber-200">MARKET DETAIL</div>
                           <div className="mt-2">Question: {title}</div>
                           <div>Category: {category}</div>
                           <div>Consensus: {pctValue}</div>
@@ -5004,12 +5004,12 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                   onClick={action as () => void}
                   className={`${cardBase} border-cyan-500/25 text-cyan-300`}
                 >
-                  <div className="text-[10px] tracking-[0.24em]">{title as string}</div>
+                  <div className="text-sm tracking-[0.24em]">{title as string}</div>
                   <div className="mt-2 text-[11px] leading-6 text-slate-400">{desc as string}</div>
                 </button>
               ))}
             </div>
-            <div className="text-[10px] tracking-[0.26em] text-cyan-300">EXPERIMENTAL PRIVATE DM INBOX</div>
+            <div className="text-sm tracking-[0.26em] text-cyan-300">EXPERIMENTAL PRIVATE DM INBOX</div>
             {surfaceInboxLoading ? (
               <div className="border border-cyan-500/20 bg-black/45 px-4 py-5 text-[11px] font-mono text-slate-400">
                 Checking inbox...
@@ -5027,7 +5027,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                   >
                     <div className="flex items-center justify-between gap-3">
                       <div className="text-[11px] tracking-[0.18em] text-cyan-200">{message.sender}</div>
-                      <div className="text-[9px] text-slate-500">{message.age}</div>
+                      <div className="text-[13px] text-slate-500">{message.age}</div>
                     </div>
                     <div className="mt-3 text-[11px] leading-6 text-slate-300">
                       {message.text}
@@ -5036,14 +5036,14 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                       <button
                         type="button"
                         onClick={() => runQuickCommand('inbox')}
-                        className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
+                        className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
                       >
                         OPEN
                       </button>
                       <button
                         type="button"
                         onClick={() => runQuickCommand(`dm ${message.sender}`)}
-                        className="border border-fuchsia-500/20 bg-fuchsia-500/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-fuchsia-300 hover:bg-fuchsia-500/14"
+                        className="border border-fuchsia-500/20 bg-fuchsia-500/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-fuchsia-300 hover:bg-fuchsia-500/14"
                       >
                         REPLY
                       </button>
@@ -5052,7 +5052,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                 ))}
               </div>
             )}
-            <div className="text-[10px] tracking-[0.26em] text-fuchsia-300">CONTACT CARDS</div>
+            <div className="text-sm tracking-[0.26em] text-fuchsia-300">CONTACT CARDS</div>
             {contactEntries.length === 0 ? (
               <div className="border border-fuchsia-500/20 bg-black/45 px-4 py-5 text-[11px] font-mono text-slate-400">
                 No saved contacts yet.
@@ -5068,25 +5068,25 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                       <div className="text-[11px] tracking-[0.18em] text-fuchsia-200">
                         {contact.alias || contactId}
                       </div>
-                      <div className="text-[9px] text-slate-500">
+                      <div className="text-[13px] text-slate-500">
                         {contact.blocked ? 'BLOCKED' : 'ACTIVE'}
                       </div>
                     </div>
                     {contact.alias && (
-                      <div className="mt-1 text-[9px] tracking-[0.14em] text-slate-500">{contactId}</div>
+                      <div className="mt-1 text-[13px] tracking-[0.14em] text-slate-500">{contactId}</div>
                     )}
                     <div className="mt-4 flex flex-wrap gap-2">
                       <button
                         type="button"
                         onClick={() => runQuickCommand(`dm ${contactId}`)}
-                        className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
+                        className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
                       >
                         MESSAGE
                       </button>
                       <button
                         type="button"
                         onClick={() => runQuickCommand(contact.blocked ? `dm unblock ${contactId}` : `dm block ${contactId}`)}
-                        className="border border-fuchsia-500/20 bg-fuchsia-500/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-fuchsia-300 hover:bg-fuchsia-500/14"
+                        className="border border-fuchsia-500/20 bg-fuchsia-500/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-fuchsia-300 hover:bg-fuchsia-500/14"
                       >
                         {contact.blocked ? 'UNBLOCK' : 'BLOCK'}
                       </button>
@@ -5101,13 +5101,13 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
         return (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <div className="text-[10px] tracking-[0.28em] text-fuchsia-300">
+              <div className="text-sm tracking-[0.28em] text-fuchsia-300">
                 GATES (EXPERIMENTAL ENCRYPTION)
               </div>
               <button
                 type="button"
                 onClick={() => runQuickCommand('gates')}
-                className="border border-fuchsia-500/25 bg-fuchsia-500/8 px-3 py-1.5 text-[9px] font-mono tracking-[0.22em] text-fuchsia-200 hover:bg-fuchsia-500/14"
+                className="border border-fuchsia-500/25 bg-fuchsia-500/8 px-3 py-1.5 text-[13px] font-mono tracking-[0.22em] text-fuchsia-200 hover:bg-fuchsia-500/14"
               >
                 OPEN GATE LOG
               </button>
@@ -5135,18 +5135,18 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                           <div className="text-[11px] tracking-[0.22em] text-fuchsia-200">
                             {(gate.display_name || gate.gate_id).toUpperCase()}
                           </div>
-                          <div className="mt-1 text-[9px] tracking-[0.16em] text-fuchsia-300/75">
+                          <div className="mt-1 text-[13px] tracking-[0.16em] text-fuchsia-300/75">
                             {gate.gate_id}
                           </div>
                         </div>
-                        <div className="text-[9px] text-slate-500">
+                        <div className="text-[13px] text-slate-500">
                           {typeof gate.message_count === 'number' ? `${gate.message_count} msgs` : 'catalog'}
                         </div>
                       </div>
                       <div className="mt-3 min-h-[40px] text-[11px] leading-6 text-slate-400">
                         {gate.description || 'Encrypted commons lane.'}
                       </div>
-                      <div className="mt-3 flex items-center justify-between text-[9px] tracking-[0.16em]">
+                      <div className="mt-3 flex items-center justify-between text-[13px] tracking-[0.16em]">
                         <span className="text-amber-200">{minRep ? `REQ ${minRep} REP` : 'OPEN'}</span>
                         <span className="text-cyan-300">{gate.fixed ? 'FIXED LAUNCH GATE' : 'GATE'}</span>
                       </div>
@@ -5154,14 +5154,14 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                         <button
                           type="button"
                           onClick={() => openGateCard(gate.gate_id)}
-                          className="border border-cyan-500/25 bg-cyan-500/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
+                          className="border border-cyan-500/25 bg-cyan-500/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
                         >
                           {expanded ? 'HIDE' : 'OPEN'}
                         </button>
                         <button
                           type="button"
                           onClick={() => runQuickCommand(`messages ${gate.gate_id}`)}
-                          className="border border-emerald-500/25 bg-emerald-500/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-emerald-300 hover:bg-emerald-500/14"
+                          className="border border-emerald-500/25 bg-emerald-500/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-emerald-300 hover:bg-emerald-500/14"
                         >
                           MESSAGES
                         </button>
@@ -5173,20 +5173,20 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                             setSurfacePanel('gates');
                             setTimeout(() => inputRef.current?.focus(), 40);
                           }}
-                          className="border border-amber-400/25 bg-amber-400/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-amber-200 hover:bg-amber-400/14"
+                          className="border border-amber-400/25 bg-amber-400/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-amber-200 hover:bg-amber-400/14"
                         >
                           POST
                         </button>
                         <button
                           type="button"
                           onClick={() => runQuickCommand(`gate mask ${gate.gate_id}`)}
-                          className="border border-fuchsia-500/25 bg-fuchsia-500/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-fuchsia-200 hover:bg-fuchsia-500/14"
+                          className="border border-fuchsia-500/25 bg-fuchsia-500/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-fuchsia-200 hover:bg-fuchsia-500/14"
                         >
                           UNLOCK
                         </button>
                       </div>
                       {expandedGateLoading === gate.gate_id && (
-                        <div className="mt-4 border border-fuchsia-500/15 bg-black/35 px-3 py-3 text-[10px] text-slate-400">
+                        <div className="mt-4 border border-fuchsia-500/15 bg-black/35 px-3 py-3 text-sm text-slate-400">
                           Loading gate detail...
                         </div>
                       )}
@@ -5194,12 +5194,12 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                         <div className="mt-4 space-y-3 border border-fuchsia-500/15 bg-black/40 px-4 py-4">
                           <div className="grid gap-3 md:grid-cols-2">
                             <div>
-                              <div className="text-[9px] tracking-[0.18em] text-fuchsia-300">WELCOME</div>
+                              <div className="text-[13px] tracking-[0.18em] text-fuchsia-300">WELCOME</div>
                               <div className="mt-2 text-[11px] leading-6 text-slate-400">
                                 {expandedGateDetail.welcome || expandedGateDetail.description || 'Encrypted commons lane.'}
                               </div>
                             </div>
-                            <div className="space-y-2 text-[10px]">
+                            <div className="space-y-2 text-sm">
                               <div className="flex items-center justify-between">
                                 <span className="text-slate-500">Creator</span>
                                 <span className="text-cyan-300">{expandedGateDetail.creator_node_id || 'unknown'}</span>
@@ -5228,7 +5228,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                           </div>
                           {expandedGateMessages.length > 0 && (
                             <div>
-                              <div className="text-[9px] tracking-[0.18em] text-fuchsia-300">THREAD SNAPSHOT</div>
+                              <div className="text-[13px] tracking-[0.18em] text-fuchsia-300">THREAD SNAPSHOT</div>
                               <div className="mt-3 grid gap-3">
                                 {expandedGateMessages.map((message, messageIndex) => (
                                   <div
@@ -5236,12 +5236,12 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                                     className="border border-cyan-500/15 bg-black/35 px-3 py-3 text-left transition-all hover:border-cyan-400/30 hover:bg-cyan-500/6"
                                   >
                                     <div className="flex items-center justify-between gap-3">
-                                      <div className="text-[10px] tracking-[0.16em] text-cyan-200">{message.nodeId}</div>
-                                      <div className="text-[9px] text-slate-500">{message.age}</div>
+                                      <div className="text-sm tracking-[0.16em] text-cyan-200">{message.nodeId}</div>
+                                      <div className="text-[13px] text-slate-500">{message.age}</div>
                                     </div>
                                     <div className="mt-2 text-[11px] leading-6 text-slate-300">{message.text}</div>
                                     {message.encrypted && (
-                                      <div className="mt-2 text-[9px] tracking-[0.16em] text-fuchsia-300">
+                                      <div className="mt-2 text-[13px] tracking-[0.16em] text-fuchsia-300">
                                         EXPERIMENTAL ENCRYPTION
                                       </div>
                                     )}
@@ -5249,7 +5249,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                                       <button
                                         type="button"
                                         onClick={() => runQuickCommand(`messages ${gate.gate_id}`)}
-                                        className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
+                                        className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
                                       >
                                         THREAD
                                       </button>
@@ -5260,21 +5260,21 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                                           setGateReplyTarget(message.nodeId);
                                           setTimeout(() => inputRef.current?.focus(), 40);
                                         }}
-                                        className="border border-amber-400/20 bg-amber-400/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-amber-200 hover:bg-amber-400/14"
+                                        className="border border-amber-400/20 bg-amber-400/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-amber-200 hover:bg-amber-400/14"
                                       >
                                         REPLY
                                       </button>
                                       <button
                                         type="button"
                                         onClick={() => runQuickCommand(`rep ${message.nodeId}`)}
-                                        className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[9px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
+                                        className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[13px] tracking-[0.18em] text-cyan-300 hover:bg-cyan-500/14"
                                       >
                                         REP
                                       </button>
                                       <button
                                         type="button"
                                         onClick={() => runQuickCommand(`vote ${message.nodeId} up ${gate.gate_id}`)}
-                                        className={`border px-3 py-1.5 text-[9px] tracking-[0.18em] transition-colors ${
+                                        className={`border px-3 py-1.5 text-[13px] tracking-[0.18em] transition-colors ${
                                           voteDirections[voteScopeKey(message.nodeId, gate.gate_id)] === 1
                                             ? 'border-emerald-400/35 bg-emerald-500/16 text-emerald-100'
                                             : 'border-emerald-500/20 bg-emerald-500/8 text-emerald-300 hover:bg-emerald-500/14'
@@ -5285,7 +5285,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                                       <button
                                         type="button"
                                         onClick={() => runQuickCommand(`vote ${message.nodeId} down ${gate.gate_id}`)}
-                                        className={`border px-3 py-1.5 text-[9px] tracking-[0.18em] transition-colors ${
+                                        className={`border px-3 py-1.5 text-[13px] tracking-[0.18em] transition-colors ${
                                           voteDirections[voteScopeKey(message.nodeId, gate.gate_id)] === -1
                                             ? 'border-rose-400/35 bg-rose-500/16 text-rose-100'
                                             : 'border-rose-500/20 bg-rose-500/8 text-rose-300 hover:bg-rose-500/14'
@@ -5395,7 +5395,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
             <div className="fixed inset-0 z-[310] bg-black/60 backdrop-blur-[2px]">
               <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-4">
                 <div className="pointer-events-auto w-full max-w-lg border border-cyan-500/25 bg-black/95 p-5 font-mono shadow-[0_0_42px_rgba(34,211,238,0.12)]">
-                  <div className="text-[10px] tracking-[0.28em] text-cyan-300">
+                  <div className="text-sm tracking-[0.28em] text-cyan-300">
                     {privateLanePromptMode === 'enter' ? 'ENTER WORMHOLE' : 'ACTIVATE WORMHOLE'}
                   </div>
                   <div className="mt-3 text-[13px] leading-7 text-slate-200">
@@ -5403,7 +5403,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                       ? 'Obfuscated lane detected. Enter Wormhole now to sync into the Infonet Commons and communicate through gates.'
                       : 'No obfuscated lane is active yet. Activate Wormhole now and enter the Infonet Commons?'}
                   </div>
-                  <div className="mt-4 border border-cyan-500/14 bg-cyan-950/10 px-4 py-3 text-[10px] leading-6 text-slate-300">
+                  <div className="mt-4 border border-cyan-500/14 bg-cyan-950/10 px-4 py-3 text-sm leading-6 text-slate-300">
                     <div className="text-cyan-300">What this does</div>
                     <div className="mt-2">Wormhole turns on the obfuscated lane for gates and the obfuscated commons.</div>
                     <div>If a Wormhole identity already exists, it is reused. If one does not exist yet, it is bootstrapped once.</div>
@@ -5412,7 +5412,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                   </div>
                   {privateLanePromptStatus && (
                     <div
-                      className={`mt-4 border px-3 py-2 text-[10px] leading-6 ${
+                      className={`mt-4 border px-3 py-2 text-sm leading-6 ${
                         privateLanePromptStatus.type === 'err'
                           ? 'border-rose-500/25 bg-rose-500/10 text-rose-200'
                           : privateLanePromptStatus.type === 'ok'
@@ -5428,7 +5428,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                       type="button"
                       onClick={confirmPrivateLanePrompt}
                       disabled={privateLanePromptBusy}
-                      className="border border-cyan-500/25 bg-cyan-500/10 px-4 py-2 text-[10px] tracking-[0.22em] text-cyan-100 transition-colors hover:bg-cyan-500/16 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="border border-cyan-500/25 bg-cyan-500/10 px-4 py-2 text-sm tracking-[0.22em] text-cyan-100 transition-colors hover:bg-cyan-500/16 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {privateLanePromptBusy
                         ? 'ENTERING...'
@@ -5440,7 +5440,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                       type="button"
                       onClick={dismissPrivateLanePrompt}
                       disabled={privateLanePromptBusy}
-                      className="border border-slate-500/20 bg-white/5 px-4 py-2 text-[10px] tracking-[0.22em] text-slate-300 transition-colors hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="border border-slate-500/20 bg-white/5 px-4 py-2 text-sm tracking-[0.22em] text-slate-300 transition-colors hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       STAY PUBLIC
                     </button>
@@ -5459,7 +5459,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                           onSettingsClick();
                         }}
                         disabled={privateLanePromptBusy}
-                        className="border border-slate-500/20 bg-white/5 px-4 py-2 text-[10px] tracking-[0.22em] text-slate-400 transition-colors hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="border border-slate-500/20 bg-white/5 px-4 py-2 text-sm tracking-[0.22em] text-slate-400 transition-colors hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         ADVANCED
                       </button>
@@ -5473,13 +5473,13 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
             <div className="fixed inset-0 z-[309] bg-black/55 backdrop-blur-[2px]">
               <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-4">
                 <div className="pointer-events-auto w-full max-w-md border border-fuchsia-500/25 bg-black/95 p-5 font-mono shadow-[0_0_40px_rgba(217,70,239,0.12)]">
-                  <div className="text-[10px] tracking-[0.28em] text-fuchsia-300">
+                  <div className="text-sm tracking-[0.28em] text-fuchsia-300">
                     ENTER INFONET COMMONS
                   </div>
                   <div className="mt-3 text-[12px] leading-6 text-slate-300">
                     Gates live behind Wormhole in this build. Enter now?
                   </div>
-                  <div className="mt-3 text-[10px] leading-5 text-slate-500">
+                  <div className="mt-3 text-sm leading-5 text-slate-500">
                     {wormholeSecureRequired
                       ? wormholeReadyState
                         ? 'Yes takes you straight into the gates.'
@@ -5490,14 +5490,14 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                     <button
                       type="button"
                       onClick={confirmGateAccess}
-                      className="border border-fuchsia-500/25 bg-fuchsia-500/10 px-4 py-2 text-[10px] tracking-[0.22em] text-fuchsia-200 transition-colors hover:bg-fuchsia-500/16"
+                      className="border border-fuchsia-500/25 bg-fuchsia-500/10 px-4 py-2 text-sm tracking-[0.22em] text-fuchsia-200 transition-colors hover:bg-fuchsia-500/16"
                     >
                       YES
                     </button>
                     <button
                       type="button"
                       onClick={denyGateAccess}
-                      className="border border-slate-500/20 bg-white/5 px-4 py-2 text-[10px] tracking-[0.22em] text-slate-300 transition-colors hover:bg-white/8"
+                      className="border border-slate-500/20 bg-white/5 px-4 py-2 text-sm tracking-[0.22em] text-slate-300 transition-colors hover:bg-white/8"
                     >
                       NO
                     </button>
@@ -5520,7 +5520,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
               className="fixed top-0 left-1/2 -translate-x-1/2 z-[305] flex items-center gap-2 rounded-b border border-cyan-800/30 border-t-0 bg-cyan-950/40 px-4 py-1.5 text-cyan-700 transition-colors hover:bg-cyan-950/60 hover:text-cyan-300 hover:border-cyan-500/40"
             >
               <Terminal size={11} className="text-cyan-400" />
-              <span className="text-[7px] font-mono font-bold tracking-[0.22em]">
+              <span className="text-[11px] font-mono font-bold tracking-[0.22em]">
                 TERMINAL
               </span>
             </motion.button>
@@ -5605,7 +5605,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                   </div>
 
                   <div className="text-center">
-                    <div className="text-[8px] tracking-[0.32em] text-slate-500">
+                    <div className="text-[12px] tracking-[0.32em] text-slate-500">
                       type clear to wipe output · gates require wormhole · mesh stays public
                     </div>
                   </div>
@@ -5617,22 +5617,22 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                         openSurface('inbox');
                         runQuickCommand('inbox');
                       }}
-                      className="border border-cyan-500/18 bg-cyan-500/8 px-2.5 py-1 text-[8px] tracking-[0.18em] text-cyan-300 transition-colors hover:bg-cyan-500/14"
+                      className="border border-cyan-500/18 bg-cyan-500/8 px-2.5 py-1 text-[12px] tracking-[0.18em] text-cyan-300 transition-colors hover:bg-cyan-500/14"
                     >
                       PRIVATE DM INBOX
                     </button>
                     {nodeIdentity && hasSovereignty() && (
-                      <span className="border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 text-[8px] tracking-[0.18em] text-cyan-300">
+                      <span className="border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 text-[12px] tracking-[0.18em] text-cyan-300">
                         {nodeIdentity.nodeId.slice(0, 14)}
                       </span>
                     )}
                     {terminalWriteLockReason && (
-                      <span className="border border-amber-400/25 bg-amber-400/10 px-2 py-1 text-[8px] tracking-[0.18em] text-amber-200">
+                      <span className="border border-amber-400/25 bg-amber-400/10 px-2 py-1 text-[12px] tracking-[0.18em] text-amber-200">
                         READ ONLY
                       </span>
                     )}
                     {busy && (
-                      <span className="border border-fuchsia-500/25 bg-fuchsia-500/10 px-2 py-1 text-[8px] tracking-[0.18em] text-fuchsia-200">
+                      <span className="border border-fuchsia-500/25 bg-fuchsia-500/10 px-2 py-1 text-[12px] tracking-[0.18em] text-fuchsia-200">
                         RUNNING
                       </span>
                     )}
@@ -5671,11 +5671,11 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                           <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-cyan-400/20" />
                           <div className="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-cyan-400/20" />
                         </div>
-                        <div className="text-[10px] tracking-[0.38em] text-cyan-300">INFONET</div>
+                        <div className="text-sm tracking-[0.38em] text-cyan-300">INFONET</div>
                         <div className="mt-2 text-[30px] font-semibold leading-none tracking-[0.32em] text-cyan-100">
                           THE INFONET COMMONS
                         </div>
-                        <div className="mt-2 text-[10px] tracking-[0.28em] text-fuchsia-300">
+                        <div className="mt-2 text-sm tracking-[0.28em] text-fuchsia-300">
                           OPSINT DECK · COMMONS NODE
                         </div>
                         <div className="mt-4 max-w-[760px] text-[11px] leading-6 text-slate-400">
@@ -5683,7 +5683,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                         </div>
                       </div>
 
-                      <div className="mt-5 grid w-full gap-2 text-[9px] font-mono md:grid-cols-4">
+                      <div className="mt-5 grid w-full gap-2 text-[13px] font-mono md:grid-cols-4">
                         <div className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-2 text-cyan-300">
                           INFONET · experimental encryption
                         </div>
@@ -5702,47 +5702,47 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                         <div className="border border-cyan-500/16 bg-black/40 px-4 py-3">
                           <div className="flex items-center justify-between gap-3">
                             <div>
-                              <div className="text-[9px] tracking-[0.24em] text-cyan-300">
+                              <div className="text-[13px] tracking-[0.24em] text-cyan-300">
                                 PARTICIPANT NODE
                               </div>
-                              <div className="mt-1 text-[10px] leading-5 text-slate-400">
+                              <div className="mt-1 text-sm leading-5 text-slate-400">
                                 Automatic bootstrap and sync now live on the backend lane. This node can keep a local chain even with Wormhole off.
                               </div>
                             </div>
-                            <div className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[9px] tracking-[0.22em] text-cyan-200">
+                            <div className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-1.5 text-[13px] tracking-[0.22em] text-cyan-200">
                               {nodeModeLabel}
                             </div>
                           </div>
 
-                          <div className="mt-3 grid gap-2 md:grid-cols-3 text-[9px] font-mono">
+                          <div className="mt-3 grid gap-2 md:grid-cols-3 text-[13px] font-mono">
                             <div className="border border-emerald-500/20 bg-emerald-500/8 px-3 py-2 text-emerald-200">
-                              <div className="text-[8px] tracking-[0.2em] text-emerald-300">CHAIN</div>
+                              <div className="text-[12px] tracking-[0.2em] text-emerald-300">CHAIN</div>
                               <div className="mt-1 text-[13px] text-emerald-100">
                                 {shortNodeHash(infonetNodeStatus?.head_hash, 18)}
                               </div>
-                              <div className="mt-1 text-[8px] text-emerald-200/70">
+                              <div className="mt-1 text-[12px] text-emerald-200/70">
                                 {Number(infonetNodeStatus?.total_events || 0)} events • {Number(infonetNodeStatus?.known_nodes || 0)} nodes
                               </div>
                             </div>
                             <div className="border border-cyan-500/20 bg-cyan-500/8 px-3 py-2 text-cyan-200">
-                              <div className="text-[8px] tracking-[0.2em] text-cyan-300">PEERS</div>
+                              <div className="text-[12px] tracking-[0.2em] text-cyan-300">PEERS</div>
                               <div className="mt-1 text-[13px] text-cyan-100">
                                 {Number(infonetNodeStatus?.bootstrap?.sync_peer_count || 0)} sync
                               </div>
-                              <div className="mt-1 text-[8px] text-cyan-200/70">
+                              <div className="mt-1 text-[12px] text-cyan-200/70">
                                 {Number(infonetNodeStatus?.bootstrap?.push_peer_count || 0)} push • {Number(infonetNodeStatus?.bootstrap?.bootstrap_peer_count || 0)} bootstrap
                               </div>
                             </div>
                             <div className="border border-fuchsia-500/20 bg-fuchsia-500/8 px-3 py-2 text-fuchsia-200">
-                              <div className="text-[8px] tracking-[0.2em] text-fuchsia-300">SYNC LOOP</div>
+                              <div className="text-[12px] tracking-[0.2em] text-fuchsia-300">SYNC LOOP</div>
                               <div className="mt-1 text-[13px] text-fuchsia-100">{nodeSyncLabel}</div>
-                              <div className="mt-1 text-[8px] text-fuchsia-200/70">
+                              <div className="mt-1 text-[12px] text-fuchsia-200/70">
                                 next {formatNodeTime(infonetNodeStatus?.sync_runtime?.next_sync_due_at)}
                               </div>
                             </div>
                           </div>
 
-                          <div className="mt-3 border border-cyan-500/12 bg-cyan-950/8 px-3 py-2 text-[9px] font-mono leading-[1.65] text-slate-300">
+                          <div className="mt-3 border border-cyan-500/12 bg-cyan-950/8 px-3 py-2 text-[13px] font-mono leading-[1.65] text-slate-300">
                             <div className="flex items-center justify-between gap-3">
                               <span className="text-cyan-300">Bootstrap</span>
                               <span className="text-right text-slate-400">{nodeBootstrapLabel}</span>
@@ -5759,8 +5759,8 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                           </div>
                         </div>
 
-                        <div className="border border-amber-400/16 bg-amber-400/6 px-4 py-3 text-[10px] leading-6 text-amber-100/85">
-                          <div className="text-[9px] font-mono tracking-[0.24em] text-amber-300">
+                        <div className="border border-amber-400/16 bg-amber-400/6 px-4 py-3 text-sm leading-6 text-amber-100/85">
+                          <div className="text-[13px] font-mono tracking-[0.24em] text-amber-300">
                             WORMHOLE OPTIONAL FOR NODE SYNC
                           </div>
                         <div className="mt-2">
@@ -5769,14 +5769,14 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                         <div className="mt-2 text-amber-200/75">
                           Turn Wormhole on for gates, obfuscated inbox, and the stronger obfuscated lane only.
                         </div>
-                        <div className="mt-3 border border-amber-400/16 bg-black/20 px-3 py-2 text-[9px] font-mono leading-[1.65] text-amber-100/80">
+                        <div className="mt-3 border border-amber-400/16 bg-black/20 px-3 py-2 text-[13px] font-mono leading-[1.65] text-amber-100/80">
                           obfuscated lane now: {privateLaneLabel}
                         </div>
                         <button
                           type="button"
                           onClick={() => void openPrivateLanePrompt()}
                           disabled={busy || privateLanePromptBusy}
-                          className="mt-3 inline-flex items-center border border-amber-300/20 bg-amber-400/10 px-3 py-2 text-[9px] font-mono tracking-[0.22em] text-amber-100 transition-colors hover:bg-amber-400/16 disabled:cursor-not-allowed disabled:opacity-50"
+                          className="mt-3 inline-flex items-center border border-amber-300/20 bg-amber-400/10 px-3 py-2 text-[13px] font-mono tracking-[0.22em] text-amber-100 transition-colors hover:bg-amber-400/16 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           {wormholeSecureRequired && wormholeReadyState
                             ? 'ENTER WORMHOLE'
@@ -5792,7 +5792,7 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                             type="button"
                             onClick={() => openSurface(item.panel)}
                             disabled={busy}
-                            className={`px-3 py-2 text-[10px] font-mono tracking-[0.26em] transition-all disabled:cursor-not-allowed disabled:opacity-50 ${chipTone(item.tone)}`}
+                            className={`px-3 py-2 text-sm font-mono tracking-[0.26em] transition-all disabled:cursor-not-allowed disabled:opacity-50 ${chipTone(item.tone)}`}
                           >
                             {item.label}
                           </button>
@@ -5811,19 +5811,19 @@ export default function MeshTerminal({ isOpen, launchToken = 0, onClose, onDmCou
                 </div>
 
                 <div className="border-t border-cyan-500/15 bg-[linear-gradient(180deg,rgba(7,11,15,0.98),rgba(5,8,12,0.98))] px-4 py-3">
-                  <div className="mb-2 flex items-center justify-between text-[9px] font-mono tracking-[0.22em]">
+                  <div className="mb-2 flex items-center justify-between text-[13px] font-mono tracking-[0.22em]">
                     <div className="flex items-center gap-3">
                       <span className="text-cyan-300">COMMAND LINE</span>
                       <span className="text-emerald-300">MESH / RADIO</span>
                       <span className="text-fuchsia-300">GATES / COMMONS</span>
                       <span className="text-amber-200">OPS / DOSSIER</span>
                       {activeGateComposeId && (
-                        <span className="border border-fuchsia-500/20 bg-fuchsia-500/8 px-2 py-1 text-[8px] tracking-[0.16em] text-fuchsia-200">
+                        <span className="border border-fuchsia-500/20 bg-fuchsia-500/8 px-2 py-1 text-[12px] tracking-[0.16em] text-fuchsia-200">
                           POSTING TO g/{activeGateComposeId}
                         </span>
                       )}
                       {gateReplyTarget && (
-                        <span className="border border-amber-400/20 bg-amber-400/8 px-2 py-1 text-[8px] tracking-[0.16em] text-amber-200">
+                        <span className="border border-amber-400/20 bg-amber-400/8 px-2 py-1 text-[12px] tracking-[0.16em] text-amber-200">
                           REPLY @{gateReplyTarget}
                         </span>
                       )}

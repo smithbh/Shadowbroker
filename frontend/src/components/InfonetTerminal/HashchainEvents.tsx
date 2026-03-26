@@ -34,17 +34,17 @@ export default function HashchainEvents() {
         {ROADMAP_ITEMS.map((item, i) => (
           <div key={i} className="group cursor-pointer">
             <div className="flex justify-between items-center mb-0.5">
-              <span className="text-[10px] text-green-400 uppercase tracking-widest border border-gray-800 px-1">
+              <span className="text-sm text-green-400 uppercase tracking-widest border border-gray-800 px-1">
                 {item.type}
               </span>
-              <span className="text-[10px] font-bold text-cyan-400">
+              <span className="text-sm font-bold text-cyan-400">
                 {item.status}
               </span>
             </div>
             <p className="text-xs text-gray-300 group-hover:text-white transition-colors mt-1">
               {item.title}
             </p>
-            <div className="text-[10px] text-gray-500 mt-1 leading-relaxed">
+            <div className="text-sm text-gray-500 mt-1 leading-relaxed">
               {item.detail}
             </div>
           </div>

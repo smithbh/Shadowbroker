@@ -1369,7 +1369,7 @@ export default function MessagesView({ onBack }: MessagesViewProps) {
           </button>
           <button
             onClick={() => void refreshMailbox()}
-            className="flex items-center text-cyan-400 hover:text-cyan-300 uppercase text-[10px] tracking-[0.2em] border border-cyan-900/50 px-3 py-1 bg-cyan-900/10 disabled:opacity-50"
+            className="flex items-center text-cyan-400 hover:text-cyan-300 uppercase text-sm tracking-[0.2em] border border-cyan-900/50 px-3 py-1 bg-cyan-900/10 disabled:opacity-50"
             disabled={!identity || syncing || !dmLaneReady}
           >
             <RefreshCcw size={13} className={`mr-2 ${syncing ? 'animate-spin' : ''}`} />
@@ -1474,7 +1474,7 @@ export default function MessagesView({ onBack }: MessagesViewProps) {
                     <div className="text-cyan-300 text-sm mb-1">{mail.subject}</div>
                     <div className="text-xs text-gray-500 line-clamp-2">{messagePreview(mail)}</div>
                     {!mail.read && (
-                      <div className="mt-2 text-[10px] tracking-[0.2em] uppercase text-cyan-400">
+                      <div className="mt-2 text-sm tracking-[0.2em] uppercase text-cyan-400">
                         unread
                       </div>
                     )}
@@ -1498,7 +1498,7 @@ export default function MessagesView({ onBack }: MessagesViewProps) {
                         {formatTimestamp(selectedMessage.timestamp)}
                       </div>
                     </div>
-                    <div className="text-[10px] tracking-[0.18em] uppercase text-gray-500">
+                    <div className="text-sm tracking-[0.18em] uppercase text-gray-500">
                       {selectedMessage.transport || 'local'}
                     </div>
                   </div>
@@ -1681,7 +1681,7 @@ export default function MessagesView({ onBack }: MessagesViewProps) {
                               setActiveTab('compose');
                             }}
                             disabled={!dmLaneReady}
-                            className="px-3 py-2 border border-cyan-500/30 text-cyan-300 text-[10px] tracking-[0.18em] uppercase disabled:opacity-50"
+                            className="px-3 py-2 border border-cyan-500/30 text-cyan-300 text-sm tracking-[0.18em] uppercase disabled:opacity-50"
                           >
                             Compose
                           </button>
@@ -1690,7 +1690,7 @@ export default function MessagesView({ onBack }: MessagesViewProps) {
                               blockContact(peerId);
                               setContacts(getContacts());
                             }}
-                            className="px-3 py-2 border border-amber-500/30 text-amber-300 text-[10px] tracking-[0.18em] uppercase"
+                            className="px-3 py-2 border border-amber-500/30 text-amber-300 text-sm tracking-[0.18em] uppercase"
                           >
                             Restrict
                           </button>
@@ -1699,7 +1699,7 @@ export default function MessagesView({ onBack }: MessagesViewProps) {
                               removeContact(peerId);
                               setContacts(getContacts());
                             }}
-                            className="px-3 py-2 border border-red-500/30 text-red-300 text-[10px] tracking-[0.18em] uppercase"
+                            className="px-3 py-2 border border-red-500/30 text-red-300 text-sm tracking-[0.18em] uppercase"
                           >
                             Remove
                           </button>
@@ -1764,7 +1764,7 @@ export default function MessagesView({ onBack }: MessagesViewProps) {
                           unblockContact(peerId);
                           setContacts(getContacts());
                         }}
-                        className="px-4 py-2 border border-cyan-500/40 bg-cyan-950/20 text-cyan-300 text-[10px] tracking-[0.18em] uppercase"
+                        className="px-4 py-2 border border-cyan-500/40 bg-cyan-950/20 text-cyan-300 text-sm tracking-[0.18em] uppercase"
                       >
                         Restore
                       </button>

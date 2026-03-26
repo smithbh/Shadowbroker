@@ -44,7 +44,7 @@ export default function InfonetTerminal({ isOpen, onClose, onOpenLiveGate }: Inf
             <div className="flex items-center justify-between px-4 py-2 border-b border-gray-800/60 bg-[#080808] shrink-0 select-none">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-cyan-500/60 shadow-[0_0_6px_rgba(6,182,212,0.4)]" />
-                <span className="text-[10px] tracking-[0.3em] text-gray-500 uppercase">
+                <span className="text-sm tracking-[0.3em] text-gray-500 uppercase">
                   Infonet Sovereign Shell v0.1.1
                 </span>
               </div>

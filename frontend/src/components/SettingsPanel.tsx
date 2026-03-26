@@ -829,7 +829,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                   <h2 className="text-sm font-bold tracking-[0.2em] text-[var(--text-primary)] font-mono">
                     SYSTEM CONFIG
                   </h2>
-                  <span className="text-[9px] text-[var(--text-muted)] font-mono tracking-widest">
+                  <span className="text-[13px] text-[var(--text-muted)] font-mono tracking-widest">
                     SETTINGS &amp; DATA SOURCES
                   </span>
                 </div>
@@ -848,15 +848,15 @@ const SettingsPanel = React.memo(function SettingsPanel({
                 <div className="flex items-center gap-2 min-w-0">
                   <Shield size={12} className="text-cyan-400" />
                   <div className="min-w-0">
-                    <div className="text-[9px] font-mono tracking-widest text-cyan-300">WORMHOLE FIRST-RUN</div>
-                    <div className="text-[8px] font-mono text-[var(--text-muted)] mt-0.5">
+                    <div className="text-[13px] font-mono tracking-widest text-cyan-300">WORMHOLE FIRST-RUN</div>
+                    <div className="text-[12px] font-mono text-[var(--text-muted)] mt-0.5">
                       Wormhole join below does not need operator tools. API/news tabs do.
                     </div>
                   </div>
                 </div>
                 <button
                   onClick={() => setShowOperatorTools(true)}
-                  className="px-2 py-1 border border-cyan-500/30 text-[8px] font-mono text-cyan-300/80 tracking-widest hover:text-cyan-200 hover:border-cyan-400/40"
+                  className="px-2 py-1 border border-cyan-500/30 text-[12px] font-mono text-cyan-300/80 tracking-widest hover:text-cyan-200 hover:border-cyan-400/40"
                 >
                   OPERATOR TOOLS
                 </button>
@@ -868,7 +868,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                     size={12}
                     className={adminSessionReady ? 'text-green-400' : 'text-yellow-500'}
                   />
-                  <span className="text-[9px] font-mono tracking-widest text-[var(--text-muted)] whitespace-nowrap">
+                  <span className="text-[13px] font-mono tracking-widest text-[var(--text-muted)] whitespace-nowrap">
                     OPERATOR TOOLS
                   </span>
                   <input
@@ -885,13 +885,13 @@ const SettingsPanel = React.memo(function SettingsPanel({
                         ? 'Operator tools unlocked. Enter key only to reseed or recover...'
                         : 'Enter operator key for protected settings tabs...'
                     }
-                    className="flex-1 bg-[var(--bg-primary)]/60 border border-[var(--border-primary)] px-2 py-1 text-[10px] font-mono text-[var(--text-secondary)] outline-none focus:border-cyan-700 placeholder:text-[var(--text-muted)]/50"
+                    className="flex-1 bg-[var(--bg-primary)]/60 border border-[var(--border-primary)] px-2 py-1 text-sm font-mono text-[var(--text-secondary)] outline-none focus:border-cyan-700 placeholder:text-[var(--text-muted)]/50"
                   />
                   {adminSessionReady ? (
                     <button
                       onClick={() => void lockAdminSession()}
                       disabled={adminSessionBusy}
-                      className="px-2 py-1 border border-red-500/30 text-[8px] font-mono text-red-300/80 tracking-widest hover:text-red-200 hover:border-red-400/40 disabled:opacity-50"
+                      className="px-2 py-1 border border-red-500/30 text-[12px] font-mono text-red-300/80 tracking-widest hover:text-red-200 hover:border-red-400/40 disabled:opacity-50"
                     >
                       LOCK
                     </button>
@@ -899,7 +899,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                     <button
                       onClick={() => void unlockAdminSession()}
                       disabled={adminSessionBusy || !adminKey.trim()}
-                      className="px-2 py-1 border border-cyan-500/30 text-[8px] font-mono text-cyan-300/80 tracking-widest hover:text-cyan-200 hover:border-cyan-400/40 disabled:opacity-50"
+                      className="px-2 py-1 border border-cyan-500/30 text-[12px] font-mono text-cyan-300/80 tracking-widest hover:text-cyan-200 hover:border-cyan-400/40 disabled:opacity-50"
                     >
                       UNLOCK
                     </button>
@@ -907,13 +907,13 @@ const SettingsPanel = React.memo(function SettingsPanel({
                   {activeTab === 'protocol' && (
                     <button
                       onClick={() => setShowOperatorTools(false)}
-                      className="px-2 py-1 border border-[var(--border-primary)] text-[8px] font-mono text-[var(--text-muted)] tracking-widest hover:text-cyan-300 hover:border-cyan-500/40"
+                      className="px-2 py-1 border border-[var(--border-primary)] text-[12px] font-mono text-[var(--text-muted)] tracking-widest hover:text-cyan-300 hover:border-cyan-500/40"
                     >
                       HIDE
                     </button>
                   )}
                   <span
-                    className={`text-[8px] font-mono tracking-widest ${
+                    className={`text-[12px] font-mono tracking-widest ${
                       adminSessionReady ? 'text-green-400/70' : 'text-yellow-400/70'
                     }`}
                   >
@@ -923,7 +923,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                 {adminSessionMsg && (
                   <div className="px-4 py-1.5 border-b border-[var(--border-primary)]/20 bg-[var(--bg-primary)]/20">
                     <span
-                      className={`text-[8px] font-mono tracking-widest ${
+                      className={`text-[12px] font-mono tracking-widest ${
                         adminSessionReady ? 'text-green-300/80' : 'text-yellow-300/80'
                       }`}
                     >
@@ -934,7 +934,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
               </>
             )}
             {adminSessionMsg === 'BACKEND ADMIN KEY NOT CONFIGURED' && activeTab !== 'protocol' && (
-              <div className="mx-4 mt-3 border border-yellow-500/25 bg-yellow-950/10 px-3 py-3 text-[10px] font-mono text-yellow-200/90 leading-relaxed">
+              <div className="mx-4 mt-3 border border-yellow-500/25 bg-yellow-950/10 px-3 py-3 text-sm font-mono text-yellow-200/90 leading-relaxed">
                 <div>
                   This is not an old market/API key problem. The backend admin secret itself is
                   not configured, so protected Settings tabs cannot load.
@@ -945,18 +945,18 @@ const SettingsPanel = React.memo(function SettingsPanel({
                       const el = document.querySelector<HTMLInputElement>('input[type="password"]');
                       el?.focus();
                     }}
-                    className="px-3 py-1.5 border border-yellow-400/40 bg-yellow-950/20 text-[9px] font-mono tracking-[0.18em] text-yellow-200 hover:bg-yellow-950/30"
+                    className="px-3 py-1.5 border border-yellow-400/40 bg-yellow-950/20 text-[13px] font-mono tracking-[0.18em] text-yellow-200 hover:bg-yellow-950/30"
                   >
                     PASTE ADMIN KEY
                   </button>
                   <button
                     onClick={() => setActiveTab('protocol')}
-                    className="px-3 py-1.5 border border-cyan-500/35 bg-cyan-950/18 text-[9px] font-mono tracking-[0.18em] text-cyan-200 hover:bg-cyan-950/28"
+                    className="px-3 py-1.5 border border-cyan-500/35 bg-cyan-950/18 text-[13px] font-mono tracking-[0.18em] text-cyan-200 hover:bg-cyan-950/28"
                   >
                     BACK TO WORMHOLE
                   </button>
                 </div>
-                <div className="mt-3 text-[9px] text-yellow-100/70">
+                <div className="mt-3 text-[13px] text-yellow-100/70">
                   Add <span className="text-cyan-300">ADMIN_KEY</span> to{' '}
                   <span className="text-cyan-300">backend/.env</span>, restart the backend, then
                   paste that same key above and unlock.
@@ -967,14 +967,14 @@ const SettingsPanel = React.memo(function SettingsPanel({
             <div className="flex border-b border-[var(--border-primary)]/60">
               <button
                 onClick={() => setActiveTab('api-keys')}
-                className={`flex-1 px-4 py-2.5 text-[10px] font-mono tracking-widest font-bold transition-colors flex items-center justify-center gap-1.5 ${activeTab === 'api-keys' ? 'text-cyan-400 border-b-2 border-cyan-500 bg-cyan-950/10' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
+                className={`flex-1 px-4 py-2.5 text-sm font-mono tracking-widest font-bold transition-colors flex items-center justify-center gap-1.5 ${activeTab === 'api-keys' ? 'text-cyan-400 border-b-2 border-cyan-500 bg-cyan-950/10' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
               >
                 <Key size={10} />
                 API KEYS
               </button>
               <button
                 onClick={() => setActiveTab('news-feeds')}
-                className={`flex-1 px-4 py-2.5 text-[10px] font-mono tracking-widest font-bold transition-colors flex items-center justify-center gap-1.5 ${activeTab === 'news-feeds' ? 'text-orange-400 border-b-2 border-orange-500 bg-orange-950/10' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
+                className={`flex-1 px-4 py-2.5 text-sm font-mono tracking-widest font-bold transition-colors flex items-center justify-center gap-1.5 ${activeTab === 'news-feeds' ? 'text-orange-400 border-b-2 border-orange-500 bg-orange-950/10' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
               >
                 <Rss size={10} />
                 NEWS FEEDS
@@ -984,14 +984,14 @@ const SettingsPanel = React.memo(function SettingsPanel({
               </button>
               <button
                 onClick={() => setActiveTab('sentinel')}
-                className={`flex-1 px-4 py-2.5 text-[10px] font-mono tracking-widest font-bold transition-colors flex items-center justify-center gap-1.5 ${activeTab === 'sentinel' ? 'text-purple-400 border-b-2 border-purple-500 bg-purple-950/10' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
+                className={`flex-1 px-4 py-2.5 text-sm font-mono tracking-widest font-bold transition-colors flex items-center justify-center gap-1.5 ${activeTab === 'sentinel' ? 'text-purple-400 border-b-2 border-purple-500 bg-purple-950/10' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
               >
                 <Satellite size={10} />
                 SENTINEL
               </button>
               <button
                 onClick={() => setActiveTab('protocol')}
-                className={`flex-1 px-4 py-2.5 text-[10px] font-mono tracking-widest font-bold transition-colors flex items-center justify-center gap-1.5 ${activeTab === 'protocol' ? 'text-green-400 border-b-2 border-green-500 bg-green-950/10' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
+                className={`flex-1 px-4 py-2.5 text-sm font-mono tracking-widest font-bold transition-colors flex items-center justify-center gap-1.5 ${activeTab === 'protocol' ? 'text-green-400 border-b-2 border-green-500 bg-green-950/10' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
               >
                 <Shield size={10} />
                 MESH
@@ -1005,16 +1005,16 @@ const SettingsPanel = React.memo(function SettingsPanel({
                 <div className="mx-4 mt-4 p-3 border border-cyan-900/30 bg-cyan-950/12">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <div className="text-[10px] text-cyan-300 font-mono tracking-[0.18em]">
+                      <div className="text-sm text-cyan-300 font-mono tracking-[0.18em]">
                         WORMHOLE KEY SETUP
                       </div>
-                      <div className="mt-2 text-[10px] text-[var(--text-secondary)] font-mono leading-relaxed">
+                      <div className="mt-2 text-sm text-[var(--text-secondary)] font-mono leading-relaxed">
                         One click enters Wormhole on the recommended path for gates and the obfuscated
                         inbox. Manual transport tuning stays hidden unless you ask for it.
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-[8px] text-[var(--text-muted)] font-mono tracking-[0.2em]">
+                      <div className="text-[12px] text-[var(--text-muted)] font-mono tracking-[0.2em]">
                         STATUS
                       </div>
                       <div className="mt-1 text-[11px] font-mono text-cyan-200">
@@ -1026,19 +1026,19 @@ const SettingsPanel = React.memo(function SettingsPanel({
                       </div>
                     </div>
                   </div>
-                  <div className="mt-3 grid gap-2 text-[9px] font-mono text-[var(--text-muted)] leading-relaxed">
+                  <div className="mt-3 grid gap-2 text-[13px] font-mono text-[var(--text-muted)] leading-relaxed">
                     <div>1. Press <span className="text-green-300">GET WORMHOLE KEY</span>.</div>
                     <div>2. We handle the recommended setup path in the background.</div>
                     <div>3. Wait for <span className="text-green-300">ACTIVE</span>.</div>
                     <div>4. We send you straight back into gates.</div>
                   </div>
                   {wormholeGuideNotice && (
-                    <div className="mt-3 border border-fuchsia-500/25 bg-fuchsia-950/12 px-3 py-2 text-[10px] font-mono text-fuchsia-200/90 leading-relaxed">
+                    <div className="mt-3 border border-fuchsia-500/25 bg-fuchsia-950/12 px-3 py-2 text-sm font-mono text-fuchsia-200/90 leading-relaxed">
                       {wormholeGuideNotice}
                     </div>
                   )}
                   {adminSessionMsg === 'BACKEND ADMIN KEY NOT CONFIGURED' && (
-                    <div className="mt-3 border border-cyan-500/20 bg-cyan-950/10 px-3 py-2 text-[10px] font-mono text-cyan-200/85 leading-relaxed">
+                    <div className="mt-3 border border-cyan-500/20 bg-cyan-950/10 px-3 py-2 text-sm font-mono text-cyan-200/85 leading-relaxed">
                       Operator key is only needed for protected Settings tabs. Wormhole join below now
                       works without it.
                     </div>
@@ -1047,27 +1047,27 @@ const SettingsPanel = React.memo(function SettingsPanel({
                     <button
                       onClick={quickStartWormhole}
                       disabled={wormholeSaving || wormholeQuickState === 'active'}
-                      className="px-3 py-1.5 border border-green-500/40 bg-green-950/20 text-[9px] font-mono tracking-[0.18em] text-green-300 hover:bg-green-950/30 disabled:opacity-40"
+                      className="px-3 py-1.5 border border-green-500/40 bg-green-950/20 text-[13px] font-mono tracking-[0.18em] text-green-300 hover:bg-green-950/30 disabled:opacity-40"
                     >
                       {wormholeQuickButtonLabel}
                     </button>
                     <button
                       onClick={() => setShowAdvancedWormhole((prev) => !prev)}
-                      className="px-3 py-1.5 border border-cyan-500/35 bg-cyan-950/18 text-[9px] font-mono tracking-[0.18em] text-cyan-200 hover:bg-cyan-950/28"
+                      className="px-3 py-1.5 border border-cyan-500/35 bg-cyan-950/18 text-[13px] font-mono tracking-[0.18em] text-cyan-200 hover:bg-cyan-950/28"
                     >
                       {showAdvancedWormhole ? 'HIDE MANUAL SETUP' : 'MANUAL SETUP'}
                     </button>
                   </div>
                   {wormholeMsg && (
                     <div
-                      className={`mt-3 px-3 py-2 text-[10px] font-mono leading-relaxed ${wormholeMsg.type === 'ok' ? 'text-green-300 bg-green-950/18 border border-green-900/30' : 'text-red-300 bg-red-950/18 border border-red-900/30'}`}
+                      className={`mt-3 px-3 py-2 text-sm font-mono leading-relaxed ${wormholeMsg.type === 'ok' ? 'text-green-300 bg-green-950/18 border border-green-900/30' : 'text-red-300 bg-red-950/18 border border-red-900/30'}`}
                     >
                       {wormholeMsg.text}
                     </div>
                   )}
                   {wormholeNodeId && (
                     <div className="mt-3 border border-cyan-500/20 bg-black/30 px-3 py-2">
-                      <div className="text-[9px] font-mono tracking-[0.18em] text-[var(--text-muted)] mb-1">
+                      <div className="text-[13px] font-mono tracking-[0.18em] text-[var(--text-muted)] mb-1">
                         YOUR WORMHOLE IDENTITY
                       </div>
                       <div className="flex items-center gap-2">
@@ -1082,7 +1082,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                               setTimeout(() => setWormholeKeyCopied(false), 2000);
                             } catch { /* clipboard not available */ }
                           }}
-                          className="shrink-0 px-2 py-1 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-950/30 transition-colors text-[9px] font-mono flex items-center gap-1"
+                          className="shrink-0 px-2 py-1 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-950/30 transition-colors text-[13px] font-mono flex items-center gap-1"
                           title="Copy identity to clipboard"
                         >
                           {wormholeKeyCopied ? <Check size={10} /> : <Copy size={10} />}
@@ -1100,7 +1100,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <Shield size={12} className="text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-[10px] text-[var(--text-secondary)] font-mono tracking-widest">
+                      <span className="text-sm text-[var(--text-secondary)] font-mono tracking-widest">
                         HIGH PRIVACY MODE (OPT-IN)
                       </span>
                     </div>
@@ -1109,19 +1109,19 @@ const SettingsPanel = React.memo(function SettingsPanel({
                         const next = privacyProfile !== 'high';
                         setHighPrivacy(next);
                       }}
-                      className={`px-2 py-1 border text-[9px] font-mono tracking-widest transition-colors ${privacyProfile === 'high' ? 'border-green-500/40 text-green-400 bg-green-950/20' : 'border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
+                      className={`px-2 py-1 border text-[13px] font-mono tracking-widest transition-colors ${privacyProfile === 'high' ? 'border-green-500/40 text-green-400 bg-green-950/20' : 'border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
                     >
                       {privacyProfile === 'high' ? 'ON' : 'OFF'}
                     </button>
                   </div>
-                  <p className="text-[10px] text-[var(--text-muted)] font-mono leading-relaxed mt-2">
+                  <p className="text-sm text-[var(--text-muted)] font-mono leading-relaxed mt-2">
                     Enables High Privacy profile: session-only identity, stronger jitter, sharded
                     transport (when available), and stricter sync behavior. High Privacy requires
                     the local agent for mesh traffic and refuses clearnet fallback for obfuscated
                     sends. This does not make you anonymous or fully hidden.
                   </p>
                   {privacyProfile === 'high' && (
-                    <div className="mt-2 p-2 border border-yellow-500/30 bg-yellow-950/10 text-[10px] text-yellow-200/90 font-mono leading-relaxed">
+                    <div className="mt-2 p-2 border border-yellow-500/30 bg-yellow-950/10 text-sm text-yellow-200/90 font-mono leading-relaxed">
                       Recommendation: use a reputable VPN or hidden transport. A VPN can help hide
                       your IP from the backend and peers, but it does not eliminate metadata,
                       endpoint compromise, or traffic analysis risks.
@@ -1134,7 +1134,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <Shield size={12} className="text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-[10px] text-[var(--text-secondary)] font-mono tracking-widest">
+                      <span className="text-sm text-[var(--text-secondary)] font-mono tracking-widest">
                         EPHEMERAL SESSION ID (RECOMMENDED)
                       </span>
                     </div>
@@ -1146,21 +1146,21 @@ const SettingsPanel = React.memo(function SettingsPanel({
 	                        migratePrivacySensitiveBrowserState();
 	                        if (next) clearSessionIdentity();
 	                      }}
-                      className={`px-2 py-1 border text-[9px] font-mono tracking-widest transition-colors ${sessionMode ? 'border-green-500/40 text-green-400 bg-green-950/20' : 'border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
+                      className={`px-2 py-1 border text-[13px] font-mono tracking-widest transition-colors ${sessionMode ? 'border-green-500/40 text-green-400 bg-green-950/20' : 'border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
                     >
                       {sessionMode ? 'ON' : 'OFF'}
                     </button>
                   </div>
-                  <p className="text-[10px] text-[var(--text-muted)] font-mono leading-relaxed mt-2">
+                  <p className="text-sm text-[var(--text-muted)] font-mono leading-relaxed mt-2">
                     When enabled, agent keys are stored in session storage and reset on browser
                     close. Your identity will not persist across restarts.
                   </p>
                   <div className="mt-3 flex items-center justify-between gap-3 border border-[var(--border-primary)] bg-black/20 px-3 py-2">
                     <div className="min-w-0">
-                      <div className="text-[10px] font-mono tracking-widest text-[var(--text-secondary)]">
+                      <div className="text-sm font-mono tracking-widest text-[var(--text-secondary)]">
                         WIPE LOCAL MESH TRACES
                       </div>
-                      <p className="mt-1 text-[10px] font-mono leading-relaxed text-[var(--text-muted)]">
+                      <p className="mt-1 text-sm font-mono leading-relaxed text-[var(--text-muted)]">
                         Clears browser-held mesh identities, DM ratchet state, cached contacts, and
                         privacy-sensitive browser storage. The local agent is not shut down.
                       </p>
@@ -1170,7 +1170,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                         void wipeLocalMeshTraces();
                       }}
                       disabled={browserWipeBusy}
-                      className={`shrink-0 px-2 py-1 border text-[9px] font-mono tracking-widest transition-colors ${
+                      className={`shrink-0 px-2 py-1 border text-[13px] font-mono tracking-widest transition-colors ${
                         browserWipeBusy
                           ? 'border-[var(--border-primary)] text-[var(--text-muted)] opacity-60 cursor-not-allowed'
                           : 'border-yellow-500/40 text-yellow-300 bg-yellow-950/20 hover:text-yellow-200'
@@ -1181,7 +1181,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                   </div>
                   {browserWipeMsg && (
                     <div
-                      className={`mt-2 text-[10px] font-mono leading-relaxed ${
+                      className={`mt-2 text-sm font-mono leading-relaxed ${
                         browserWipeMsg.type === 'ok' ? 'text-green-300' : 'text-red-300'
                       }`}
                     >
@@ -1195,25 +1195,25 @@ const SettingsPanel = React.memo(function SettingsPanel({
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <Shield size={12} className="text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-[10px] text-[var(--text-secondary)] font-mono tracking-widest">
+                      <span className="text-sm text-[var(--text-secondary)] font-mono tracking-widest">
                         LOCAL MESH AGENT (OPT-IN)
                       </span>
                     </div>
                     <button
                       onClick={toggleWormhole}
                       disabled={wormholeSaving}
-                      className={`px-2 py-1 border text-[9px] font-mono tracking-widest transition-colors ${wormholeEnabled ? 'border-green-500/40 text-green-400 bg-green-950/20' : 'border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'} ${wormholeSaving ? 'opacity-60 cursor-not-allowed' : ''}`}
+                      className={`px-2 py-1 border text-[13px] font-mono tracking-widest transition-colors ${wormholeEnabled ? 'border-green-500/40 text-green-400 bg-green-950/20' : 'border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'} ${wormholeSaving ? 'opacity-60 cursor-not-allowed' : ''}`}
                     >
                       {wormholeEnabled ? 'ON' : 'OFF'}
                     </button>
                   </div>
-                  <p className="text-[10px] text-[var(--text-muted)] font-mono leading-relaxed mt-2">
+                  <p className="text-sm text-[var(--text-muted)] font-mono leading-relaxed mt-2">
                     Runs a local mesh agent that handles traffic directly, removing the backend
                     as a central observer. Experimental — does not guarantee privacy or anonymity.
                   </p>
                   <div className="mt-2 grid grid-cols-1 gap-2">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[9px] font-mono text-[var(--text-muted)] tracking-widest">
+                      <span className="text-[13px] font-mono text-[var(--text-muted)] tracking-widest">
                         TRANSPORT
                       </span>
                       <select
@@ -1222,7 +1222,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                           setWormholeTransport(e.target.value);
                           setWormholeDirty(true);
                         }}
-                        className="bg-[var(--bg-primary)]/60 border border-[var(--border-primary)] px-2 py-1 text-[9px] font-mono text-[var(--text-secondary)]"
+                        className="bg-[var(--bg-primary)]/60 border border-[var(--border-primary)] px-2 py-1 text-[13px] font-mono text-[var(--text-secondary)]"
                       >
                         <option value="direct">DIRECT</option>
                         <option value="tor">TOR (SOCKS5)</option>
@@ -1242,7 +1242,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                             setWormholeDirty(true);
                           }}
                           placeholder="SOCKS5 proxy (e.g. 127.0.0.1:9050)"
-                          className="w-full bg-black/30 border border-[var(--border-primary)]/40 px-2 py-1 text-[10px] font-mono text-[var(--text-muted)] outline-none focus:border-cyan-500/50"
+                          className="w-full bg-black/30 border border-[var(--border-primary)]/40 px-2 py-1 text-sm font-mono text-[var(--text-muted)] outline-none focus:border-cyan-500/50"
                         />
                         <div className="flex flex-wrap gap-1">
                           <button
@@ -1251,7 +1251,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                               setWormholeSocksProxy('127.0.0.1:9050');
                               setWormholeDirty(true);
                             }}
-                            className="px-2 py-1 border border-purple-500/30 text-purple-300 text-[8px] font-mono tracking-widest hover:bg-purple-950/20"
+                            className="px-2 py-1 border border-purple-500/30 text-purple-300 text-[12px] font-mono tracking-widest hover:bg-purple-950/20"
                           >
                             TOR 9050
                           </button>
@@ -1261,7 +1261,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                               setWormholeSocksProxy('127.0.0.1:9150');
                               setWormholeDirty(true);
                             }}
-                            className="px-2 py-1 border border-purple-500/30 text-purple-300 text-[8px] font-mono tracking-widest hover:bg-purple-950/20"
+                            className="px-2 py-1 border border-purple-500/30 text-purple-300 text-[12px] font-mono tracking-widest hover:bg-purple-950/20"
                           >
                             TOR 9150
                           </button>
@@ -1271,7 +1271,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                               setWormholeSocksProxy('127.0.0.1:4447');
                               setWormholeDirty(true);
                             }}
-                            className="px-2 py-1 border border-blue-500/30 text-blue-300 text-[8px] font-mono tracking-widest hover:bg-blue-950/20"
+                            className="px-2 py-1 border border-blue-500/30 text-blue-300 text-[12px] font-mono tracking-widest hover:bg-blue-950/20"
                           >
                             I2P 4447
                           </button>
@@ -1281,13 +1281,13 @@ const SettingsPanel = React.memo(function SettingsPanel({
                               setWormholeSocksProxy('127.0.0.1:1080');
                               setWormholeDirty(true);
                             }}
-                            className="px-2 py-1 border border-cyan-500/30 text-cyan-300 text-[8px] font-mono tracking-widest hover:bg-cyan-950/20"
+                            className="px-2 py-1 border border-cyan-500/30 text-cyan-300 text-[12px] font-mono tracking-widest hover:bg-cyan-950/20"
                           >
                             MIXNET 1080
                           </button>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-[9px] font-mono text-[var(--text-muted)] tracking-widest">
+                          <span className="text-[13px] font-mono text-[var(--text-muted)] tracking-widest">
                             PROXY DNS
                           </span>
                           <button
@@ -1295,12 +1295,12 @@ const SettingsPanel = React.memo(function SettingsPanel({
                               setWormholeSocksDns((prev) => !prev);
                               setWormholeDirty(true);
                             }}
-                            className={`px-2 py-1 border text-[9px] font-mono tracking-widest transition-colors ${wormholeSocksDns ? 'border-green-500/40 text-green-400 bg-green-950/20' : 'border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
+                            className={`px-2 py-1 border text-[13px] font-mono tracking-widest transition-colors ${wormholeSocksDns ? 'border-green-500/40 text-green-400 bg-green-950/20' : 'border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
                           >
                             {wormholeSocksDns ? 'ON' : 'OFF'}
                           </button>
                         </div>
-                        <div className="text-[9px] font-mono text-[var(--text-muted)] leading-relaxed">
+                        <div className="text-[13px] font-mono text-[var(--text-muted)] leading-relaxed">
                           Hidden transport requires a local SOCKS5 proxy (Tor/I2P/Mixnet) already
                           running. Save applies the new transport immediately.
                         </div>
@@ -1308,10 +1308,10 @@ const SettingsPanel = React.memo(function SettingsPanel({
                     )}
                     <div className="flex items-center justify-between gap-2 border border-green-900/20 bg-black/20 px-2 py-2">
                       <div>
-                        <div className="text-[9px] font-mono text-[var(--text-secondary)] tracking-widest">
+                        <div className="text-[13px] font-mono text-[var(--text-secondary)] tracking-widest">
                           HIDDEN TRANSPORT MODE
                         </div>
-                        <div className="mt-1 text-[9px] font-mono text-[var(--text-muted)] leading-relaxed">
+                        <div className="mt-1 text-[13px] font-mono text-[var(--text-muted)] leading-relaxed">
                           Public mesh writes fail closed unless the local agent is active on
                           Tor/I2P/Mixnet. Direct transport is blocked while this is on.
                         </div>
@@ -1321,13 +1321,13 @@ const SettingsPanel = React.memo(function SettingsPanel({
                           setWormholeAnonymousMode((prev) => !prev);
                           setWormholeDirty(true);
                         }}
-                        className={`px-2 py-1 border text-[9px] font-mono tracking-widest transition-colors ${wormholeAnonymousMode ? 'border-green-500/40 text-green-400 bg-green-950/20' : 'border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
+                        className={`px-2 py-1 border text-[13px] font-mono tracking-widest transition-colors ${wormholeAnonymousMode ? 'border-green-500/40 text-green-400 bg-green-950/20' : 'border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
                       >
                         {wormholeAnonymousMode ? 'ON' : 'OFF'}
                       </button>
                     </div>
                     {wormholeAnonymousMode && (
-                      <div className="flex flex-col gap-1 text-[9px] font-mono">
+                      <div className="flex flex-col gap-1 text-[13px] font-mono">
                         <div className="flex items-center gap-2">
                           <span
                             className={`px-1.5 py-0.5 border ${anonModeReady ? 'border-green-500/40 text-green-400 bg-green-950/20' : 'border-yellow-500/40 text-yellow-300 bg-yellow-950/10'}`}
@@ -1352,7 +1352,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                       </div>
                     )}
                     {!wormholeAnonymousMode && (
-                      <div className="flex flex-col gap-1 text-[9px] font-mono">
+                      <div className="flex flex-col gap-1 text-[13px] font-mono">
                         <div className="flex items-center gap-2">
                           <span className="px-1.5 py-0.5 border border-orange-500/40 text-orange-300 bg-orange-950/20">
                             {trustModeLabel}
@@ -1371,7 +1371,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                     <button
                       onClick={() => saveWormholeSettings()}
                       disabled={!wormholeDirty || wormholeSaving}
-                      className="px-2 py-1 border border-green-500/40 text-green-400 bg-green-950/20 hover:bg-green-950/30 transition-colors text-[9px] font-mono tracking-widest disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="px-2 py-1 border border-green-500/40 text-green-400 bg-green-950/20 hover:bg-green-950/30 transition-colors text-[13px] font-mono tracking-widest disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       {wormholeSaving ? 'SAVING...' : 'SAVE LOCAL AGENT SETTINGS'}
                     </button>
@@ -1379,28 +1379,28 @@ const SettingsPanel = React.memo(function SettingsPanel({
                       <button
                         onClick={() => controlWormhole('connect')}
                         disabled={wormholeSaving}
-                        className="px-2 py-1 border border-green-500/40 text-green-400 bg-green-950/20 hover:bg-green-950/30 transition-colors text-[9px] font-mono tracking-widest disabled:opacity-40"
+                        className="px-2 py-1 border border-green-500/40 text-green-400 bg-green-950/20 hover:bg-green-950/30 transition-colors text-[13px] font-mono tracking-widest disabled:opacity-40"
                       >
                         CONNECT
                       </button>
                       <button
                         onClick={() => controlWormhole('restart')}
                         disabled={wormholeSaving || !wormholeEnabled}
-                        className="px-2 py-1 border border-yellow-500/40 text-yellow-300 bg-yellow-950/10 hover:bg-yellow-950/20 transition-colors text-[9px] font-mono tracking-widest disabled:opacity-40"
+                        className="px-2 py-1 border border-yellow-500/40 text-yellow-300 bg-yellow-950/10 hover:bg-yellow-950/20 transition-colors text-[13px] font-mono tracking-widest disabled:opacity-40"
                       >
                         RESTART
                       </button>
                       <button
                         onClick={() => controlWormhole('disconnect')}
                         disabled={wormholeSaving || !wormholeEnabled}
-                        className="px-2 py-1 border border-red-500/40 text-red-300 bg-red-950/10 hover:bg-red-950/20 transition-colors text-[9px] font-mono tracking-widest disabled:opacity-40"
+                        className="px-2 py-1 border border-red-500/40 text-red-300 bg-red-950/10 hover:bg-red-950/20 transition-colors text-[13px] font-mono tracking-widest disabled:opacity-40"
                       >
                         DISCONNECT
                       </button>
                     </div>
                   </div>
                   {rnsStatus && (
-                    <div className="mt-2 text-[9px] font-mono text-[var(--text-muted)] flex items-center gap-2">
+                    <div className="mt-2 text-[13px] font-mono text-[var(--text-muted)] flex items-center gap-2">
                       <span
                         className={`px-1.5 py-0.5 border ${rnsStatus.ready ? 'border-green-500/40 text-green-400 bg-green-950/20' : 'border-yellow-500/40 text-yellow-400 bg-yellow-950/20'}`}
                       >
@@ -1412,7 +1412,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                     </div>
                   )}
                   {wormholeStatus && (
-                    <div className="mt-1 space-y-2 text-[9px] font-mono text-[var(--text-muted)]">
+                    <div className="mt-1 space-y-2 text-[13px] font-mono text-[var(--text-muted)]">
                       <div className="flex items-center gap-2">
                         <span
                           className={`px-1.5 py-0.5 border ${
@@ -1454,22 +1454,22 @@ const SettingsPanel = React.memo(function SettingsPanel({
                         </span>
                       )}
                       {wormholeStatus.proxy_active && (
-                        <span className="text-[8px] text-[var(--text-muted)]">
+                        <span className="text-[12px] text-[var(--text-muted)]">
                           proxy {wormholeStatus.proxy_active}
                         </span>
                       )}
                       </div>
-                      <div className="text-[9px] leading-relaxed">
+                      <div className="text-[13px] leading-relaxed">
                         Public transport identity, gate personas, and the obfuscated DM alias are
                         compartmentalized inside the local agent.
                       </div>
                       {recentPrivateFallback && (
-                        <div className="text-[9px] text-red-300/90 leading-relaxed">
+                        <div className="text-[13px] text-red-300/90 leading-relaxed">
                           {recentPrivateFallbackReason}
                         </div>
                       )}
                       {wormholeStatus.last_error && (
-                        <div className="text-[9px] text-red-300/90 leading-relaxed">
+                        <div className="text-[13px] text-red-300/90 leading-relaxed">
                           {wormholeStatus.last_error}
                         </div>
                       )}
@@ -1487,7 +1487,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                 <div className="mx-4 mt-4 p-3 border border-cyan-900/30 bg-cyan-950/10">
                   <div className="flex items-start gap-2">
                     <Shield size={12} className="text-cyan-500 mt-0.5 flex-shrink-0" />
-                    <p className="text-[10px] text-[var(--text-secondary)] font-mono leading-relaxed">
+                    <p className="text-sm text-[var(--text-secondary)] font-mono leading-relaxed">
                       API keys are stored locally in the backend{' '}
                       <span className="text-cyan-400">.env</span> file. Keys marked with{' '}
                       <Key size={8} className="inline text-yellow-500" /> are required for full
@@ -1513,11 +1513,11 @@ const SettingsPanel = React.memo(function SettingsPanel({
                         >
                           <div className="flex items-center gap-2">
                             <span
-                              className={`text-[9px] font-mono tracking-widest font-bold px-2 py-0.5 border ${colorClass}`}
+                              className={`text-[13px] font-mono tracking-widest font-bold px-2 py-0.5 border ${colorClass}`}
                             >
                               {category.toUpperCase()}
                             </span>
-                            <span className="text-[10px] text-[var(--text-muted)] font-mono">
+                            <span className="text-sm text-[var(--text-muted)] font-mono">
                               {categoryApis.length}{' '}
                               {categoryApis.length === 1 ? 'service' : 'services'}
                             </span>
@@ -1553,16 +1553,16 @@ const SettingsPanel = React.memo(function SettingsPanel({
                                     <div className="flex items-center gap-1.5">
                                       {api.has_key ? (
                                         api.is_set ? (
-                                          <span className="text-[8px] font-mono px-1.5 py-0.5 border border-green-500/30 text-green-400 bg-green-950/20">
+                                          <span className="text-[12px] font-mono px-1.5 py-0.5 border border-green-500/30 text-green-400 bg-green-950/20">
                                             KEY SET
                                           </span>
                                         ) : (
-                                          <span className="text-[8px] font-mono px-1.5 py-0.5 border border-yellow-500/30 text-yellow-400 bg-yellow-950/20">
+                                          <span className="text-[12px] font-mono px-1.5 py-0.5 border border-yellow-500/30 text-yellow-400 bg-yellow-950/20">
                                             MISSING
                                           </span>
                                         )
                                       ) : (
-                                        <span className="text-[8px] font-mono px-1.5 py-0.5 border border-[var(--border-primary)] text-[var(--text-muted)]">
+                                        <span className="text-[12px] font-mono px-1.5 py-0.5 border border-[var(--border-primary)] text-[var(--text-muted)]">
                                           PUBLIC
                                         </span>
                                       )}
@@ -1579,7 +1579,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                                       )}
                                     </div>
                                   </div>
-                                  <p className="text-[10px] text-[var(--text-muted)] font-mono leading-relaxed mb-2">
+                                  <p className="text-sm text-[var(--text-muted)] font-mono leading-relaxed mb-2">
                                     {api.description}
                                   </p>
                                   {api.has_key && (
@@ -1597,14 +1597,14 @@ const SettingsPanel = React.memo(function SettingsPanel({
                                           <button
                                             onClick={() => saveKey(api)}
                                             disabled={saving}
-                                            className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 hover:bg-cyan-500/30 transition-colors text-[10px] font-mono flex items-center gap-1"
+                                            className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 hover:bg-cyan-500/30 transition-colors text-sm font-mono flex items-center gap-1"
                                           >
                                             <Save size={10} />
                                             {saving ? '...' : 'SAVE'}
                                           </button>
                                           <button
                                             onClick={() => setEditingId(null)}
-                                            className="px-2 py-1.5 border border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border-secondary)] transition-colors text-[10px] font-mono"
+                                            className="px-2 py-1.5 border border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border-secondary)] transition-colors text-sm font-mono"
                                           >
                                             ESC
                                           </button>
@@ -1637,7 +1637,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
 
                 {/* Footer */}
                 <div className="p-4 border-t border-[var(--border-primary)]/80">
-                  <div className="flex items-center justify-between text-[9px] text-[var(--text-muted)] font-mono">
+                  <div className="flex items-center justify-between text-[13px] text-[var(--text-muted)] font-mono">
                     <span>{apis.length} REGISTERED APIs</span>
                     <span>{apis.filter((a) => a.has_key).length} KEYS CONFIGURED</span>
                   </div>
@@ -1652,7 +1652,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                 <div className="mx-4 mt-4 p-3 border border-orange-900/30 bg-orange-950/10">
                   <div className="flex items-start gap-2">
                     <Rss size={12} className="text-orange-500 mt-0.5 flex-shrink-0" />
-                    <p className="text-[10px] text-[var(--text-secondary)] font-mono leading-relaxed">
+                    <p className="text-sm text-[var(--text-secondary)] font-mono leading-relaxed">
                       Configure RSS/Atom feeds for the Threat Intel news panel. Each feed is scored
                       by keyword heuristics and weighted by the priority you set. Up to{' '}
                       <span className="text-orange-400">{MAX_FEEDS}</span> sources.
@@ -1682,14 +1682,14 @@ const SettingsPanel = React.memo(function SettingsPanel({
                             <button
                               key={w}
                               onClick={() => updateFeed(idx, 'weight', w)}
-                              className={`w-5 h-5 text-[8px] font-mono font-bold border transition-all ${feed.weight === w ? WEIGHT_COLORS[w] + ' bg-black/40' : 'border-[var(--border-primary)]/40 text-[var(--text-muted)]/50 hover:border-[var(--border-secondary)]'}`}
+                              className={`w-5 h-5 text-[12px] font-mono font-bold border transition-all ${feed.weight === w ? WEIGHT_COLORS[w] + ' bg-black/40' : 'border-[var(--border-primary)]/40 text-[var(--text-muted)]/50 hover:border-[var(--border-secondary)]'}`}
                               title={WEIGHT_LABELS[w]}
                             >
                               {w}
                             </button>
                           ))}
                           <span
-                            className={`text-[8px] font-mono ml-1 w-7 ${WEIGHT_COLORS[feed.weight]?.split(' ')[0] || 'text-gray-400'}`}
+                            className={`text-[12px] font-mono ml-1 w-7 ${WEIGHT_COLORS[feed.weight]?.split(' ')[0] || 'text-gray-400'}`}
                           >
                             {WEIGHT_LABELS[feed.weight] || 'STD'}
                           </span>
@@ -1707,7 +1707,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                         type="text"
                         value={feed.url}
                         onChange={(e) => updateFeed(idx, 'url', e.target.value)}
-                        className="w-full bg-black/30 border border-[var(--border-primary)]/40 px-2 py-1 text-[10px] font-mono text-[var(--text-muted)] outline-none focus:border-cyan-500/50 focus:text-cyan-300 transition-colors"
+                        className="w-full bg-black/30 border border-[var(--border-primary)]/40 px-2 py-1 text-sm font-mono text-[var(--text-muted)] outline-none focus:border-cyan-500/50 focus:text-cyan-300 transition-colors"
                         placeholder="https://example.com/rss.xml"
                       />
                     </div>
@@ -1717,7 +1717,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                   <button
                     onClick={addFeed}
                     disabled={feeds.length >= MAX_FEEDS}
-                    className="w-full py-2.5 border border-dashed border-[var(--border-primary)]/60 text-[var(--text-muted)] hover:border-orange-500/50 hover:text-orange-400 hover:bg-orange-950/10 transition-all text-[10px] font-mono flex items-center justify-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="w-full py-2.5 border border-dashed border-[var(--border-primary)]/60 text-[var(--text-muted)] hover:border-orange-500/50 hover:text-orange-400 hover:bg-orange-950/10 transition-all text-sm font-mono flex items-center justify-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     <Plus size={10} />
                     ADD FEED ({feeds.length}/{MAX_FEEDS})
@@ -1727,7 +1727,7 @@ const SettingsPanel = React.memo(function SettingsPanel({
                 {/* Status message */}
                 {feedMsg && (
                   <div
-                    className={`mx-4 mb-2 px-3 py-2 text-[10px] font-mono ${feedMsg.type === 'ok' ? 'text-green-400 bg-green-950/20 border border-green-900/30' : 'text-red-400 bg-red-950/20 border border-red-900/30'}`}
+                    className={`mx-4 mb-2 px-3 py-2 text-sm font-mono ${feedMsg.type === 'ok' ? 'text-green-400 bg-green-950/20 border border-green-900/30' : 'text-red-400 bg-red-950/20 border border-red-900/30'}`}
                   >
                     {feedMsg.text}
                   </div>
@@ -1739,21 +1739,21 @@ const SettingsPanel = React.memo(function SettingsPanel({
                     <button
                       onClick={saveFeeds}
                       disabled={!feedsDirty || feedSaving}
-                      className="flex-1 px-4 py-2 bg-orange-500/20 border border-orange-500/40 text-orange-400 hover:bg-orange-500/30 transition-colors text-[10px] font-mono flex items-center justify-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed"
+                      className="flex-1 px-4 py-2 bg-orange-500/20 border border-orange-500/40 text-orange-400 hover:bg-orange-500/30 transition-colors text-sm font-mono flex items-center justify-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed"
                     >
                       <Save size={10} />
                       {feedSaving ? 'SAVING...' : 'SAVE FEEDS'}
                     </button>
                     <button
                       onClick={resetFeeds}
-                      className="px-3 py-2 border border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border-secondary)] transition-all text-[10px] font-mono flex items-center gap-1.5"
+                      className="px-3 py-2 border border-[var(--border-primary)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border-secondary)] transition-all text-sm font-mono flex items-center gap-1.5"
                       title="Reset to defaults"
                     >
                       <RotateCcw size={10} />
                       RESET
                     </button>
                   </div>
-                  <div className="flex items-center justify-between text-[9px] text-[var(--text-muted)] font-mono mt-2">
+                  <div className="flex items-center justify-between text-[13px] text-[var(--text-muted)] font-mono mt-2">
                     <span>
                       {feeds.length}/{MAX_FEEDS} SOURCES
                     </span>
@@ -1837,7 +1837,7 @@ function SentinelTab() {
       <div className="mx-4 mt-4 p-3 border border-purple-900/30 bg-purple-950/10">
         <div className="flex items-start gap-2">
           <Satellite size={12} className="text-purple-400 mt-0.5 flex-shrink-0" />
-          <div className="text-[10px] text-[var(--text-secondary)] font-mono leading-relaxed space-y-2">
+          <div className="text-sm text-[var(--text-secondary)] font-mono leading-relaxed space-y-2">
             <p className="text-purple-300 font-bold">COPERNICUS SENTINEL HUB SETUP</p>
             <p className="text-[var(--text-muted)]">
               Sentinel Hub gives you access to ESA satellite imagery (Sentinel-2 true color,
@@ -1894,7 +1894,7 @@ function SentinelTab() {
       {/* Credential Inputs */}
       <div className="p-4 space-y-3">
         <div>
-          <label className="text-[9px] font-mono text-[var(--text-muted)] tracking-widest mb-1 block">
+          <label className="text-[13px] font-mono text-[var(--text-muted)] tracking-widest mb-1 block">
             CLIENT ID
           </label>
           <input
@@ -1911,7 +1911,7 @@ function SentinelTab() {
           />
         </div>
         <div>
-          <label className="text-[9px] font-mono text-[var(--text-muted)] tracking-widest mb-1 block">
+          <label className="text-[13px] font-mono text-[var(--text-muted)] tracking-widest mb-1 block">
             CLIENT SECRET
           </label>
           <input
@@ -1929,7 +1929,7 @@ function SentinelTab() {
           <button
             type="button"
             onClick={() => setShowSecret((current) => !current)}
-            className="mt-2 inline-flex items-center gap-1.5 text-[9px] font-mono text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
+            className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-mono text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
           >
             {showSecret ? <EyeOff size={10} /> : <Eye size={10} />}
             {showSecret ? 'HIDE SECRET' : 'SHOW SECRET'}
@@ -1940,7 +1940,7 @@ function SentinelTab() {
       {/* Status */}
       {status && (
         <div
-          className={`mx-4 mb-2 px-3 py-2 text-[10px] font-mono ${status.ok ? 'text-green-400 bg-green-950/20 border border-green-900/30' : 'text-red-400 bg-red-950/20 border border-red-900/30'}`}
+          className={`mx-4 mb-2 px-3 py-2 text-sm font-mono ${status.ok ? 'text-green-400 bg-green-950/20 border border-green-900/30' : 'text-red-400 bg-red-950/20 border border-red-900/30'}`}
         >
           {status.msg}
         </div>
@@ -1952,7 +1952,7 @@ function SentinelTab() {
           <button
             onClick={save}
             disabled={!dirty}
-            className="flex-1 px-4 py-2 bg-purple-500/20 border border-purple-500/40 text-purple-400 hover:bg-purple-500/30 transition-colors text-[10px] font-mono flex items-center justify-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-2 bg-purple-500/20 border border-purple-500/40 text-purple-400 hover:bg-purple-500/30 transition-colors text-sm font-mono flex items-center justify-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <Save size={10} />
             SAVE
@@ -1960,13 +1960,13 @@ function SentinelTab() {
           <button
             onClick={testConnection}
             disabled={testing || !clientId || !clientSecret}
-            className="flex-1 px-4 py-2 bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 hover:bg-cyan-500/30 transition-colors text-[10px] font-mono flex items-center justify-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-2 bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 hover:bg-cyan-500/30 transition-colors text-sm font-mono flex items-center justify-center gap-1.5 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             {testing ? 'TESTING...' : 'TEST CONNECTION'}
           </button>
           <button
             onClick={clear}
-            className="px-3 py-2 border border-[var(--border-primary)] text-[var(--text-muted)] hover:text-red-400 hover:border-red-500/50 hover:bg-red-950/10 transition-all text-[10px] font-mono flex items-center gap-1.5"
+            className="px-3 py-2 border border-[var(--border-primary)] text-[var(--text-muted)] hover:text-red-400 hover:border-red-500/50 hover:bg-red-950/10 transition-all text-sm font-mono flex items-center gap-1.5"
             title="Clear credentials"
           >
             <Trash2 size={10} />
@@ -1976,7 +1976,7 @@ function SentinelTab() {
         <UsageMeter />
 
         <div className="mt-2 p-2 border border-[var(--border-primary)]/40 bg-[var(--bg-primary)]/30">
-          <p className="text-[9px] text-[var(--text-muted)] font-mono leading-relaxed">
+          <p className="text-[13px] text-[var(--text-muted)] font-mono leading-relaxed">
             Credentials stay in browser-only storage and never touch ShadowBroker servers.
             {storageMode === 'session'
               ? ' Current privacy mode keeps them in session storage only.'
@@ -2016,10 +2016,10 @@ function UsageMeter() {
   return (
     <div className="mt-3 p-3 border border-purple-900/30 bg-purple-950/10">
       <div className="flex items-center justify-between mb-1.5">
-        <span className="text-[9px] font-mono text-purple-400 tracking-widest">
+        <span className="text-[13px] font-mono text-purple-400 tracking-widest">
           MONTHLY USAGE
         </span>
-        <span className="text-[9px] font-mono text-[var(--text-muted)]">
+        <span className="text-[13px] font-mono text-[var(--text-muted)]">
           {usage.month || '—'}
         </span>
       </div>
@@ -2035,7 +2035,7 @@ function UsageMeter() {
           <div className={`text-[11px] font-mono font-bold ${textColor}`}>
             {usage.tiles.toLocaleString()}
           </div>
-          <div className="text-[8px] font-mono text-[var(--text-muted)]">
+          <div className="text-[12px] font-mono text-[var(--text-muted)]">
             / {maxRequests.toLocaleString()} tiles
           </div>
         </div>
@@ -2043,7 +2043,7 @@ function UsageMeter() {
           <div className={`text-[11px] font-mono font-bold ${textColor}`}>
             {usage.pu.toLocaleString()}
           </div>
-          <div className="text-[8px] font-mono text-[var(--text-muted)]">
+          <div className="text-[12px] font-mono text-[var(--text-muted)]">
             / {maxPU.toLocaleString()} PU
           </div>
         </div>
@@ -2051,7 +2051,7 @@ function UsageMeter() {
           <div className="text-[11px] font-mono font-bold text-[var(--text-secondary)]">
             {Math.round(100 - pct)}%
           </div>
-          <div className="text-[8px] font-mono text-[var(--text-muted)]">remaining</div>
+          <div className="text-[12px] font-mono text-[var(--text-muted)]">remaining</div>
         </div>
       </div>
     </div>

@@ -28,7 +28,7 @@ export default function WeatherWidget() {
   const dateString = time.toLocaleDateString('en-US', { timeZone: loc.tz, month: 'short', day: 'numeric' });
 
   return (
-    <div className="flex items-center gap-2 text-[10px] md:text-xs text-gray-400 border border-gray-800 bg-gray-900/30 px-2 py-1 shrink-0 font-mono tracking-widest uppercase whitespace-nowrap">
+    <div className="flex items-center gap-2 text-sm md:text-xs text-gray-400 border border-gray-800 bg-gray-900/30 px-2 py-1 shrink-0 font-mono tracking-widest uppercase whitespace-nowrap">
       <span>{dateString} {timeString}</span>
       <span className="text-gray-700">|</span>
       <span

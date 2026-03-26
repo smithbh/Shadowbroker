@@ -70,7 +70,7 @@ export default function TerminalDashboard({ onNavigate, onComingSoon }: Terminal
         <div className="flex items-center gap-2">
           <span className="text-xs text-cyan-400 uppercase tracking-widest font-bold">GLOBAL THREAT INTERCEPT</span>
           {threat && (
-            <span className={`text-[10px] px-2 py-0.5 ${threatStyle.bg} ${threatStyle.text} ${threatStyle.border} border animate-pulse font-bold`}>
+            <span className={`text-sm px-2 py-0.5 ${threatStyle.bg} ${threatStyle.text} ${threatStyle.border} border animate-pulse font-bold`}>
               {threat.level}
             </span>
           )}
@@ -101,16 +101,16 @@ export default function TerminalDashboard({ onNavigate, onComingSoon }: Terminal
             {filteredNews.length > 0 ? filteredNews.map((article, i) => (
               <div key={article.id || i} className="group cursor-pointer">
                 <div className="flex items-baseline gap-2 mb-0.5">
-                  <span className={`text-[10px] uppercase tracking-widest border border-gray-800 px-1 ${
+                  <span className={`text-sm uppercase tracking-widest border border-gray-800 px-1 ${
                     article.risk_score >= 7 ? 'text-red-400' :
                     article.risk_score >= 4 ? 'text-yellow-400' : 'text-green-400'
                   }`}>
                     {article.risk_score >= 7 ? 'HIGH' : article.risk_score >= 4 ? 'MED' : 'LOW'}
                   </span>
-                  <span className="text-[10px] text-gray-600 font-mono uppercase">{article.source}</span>
-                  <span className="text-[10px] text-gray-500 font-mono">{formatTime(article.pub_date)}</span>
+                  <span className="text-sm text-gray-600 font-mono uppercase">{article.source}</span>
+                  <span className="text-sm text-gray-500 font-mono">{formatTime(article.pub_date)}</span>
                   {article.breaking && (
-                    <span className="text-[10px] text-red-500 font-bold animate-pulse">BREAKING</span>
+                    <span className="text-sm text-red-500 font-bold animate-pulse">BREAKING</span>
                   )}
                 </div>
                 <p className="text-sm text-gray-300 group-hover:text-white transition-colors leading-snug">{article.title}</p>
@@ -204,28 +204,28 @@ export default function TerminalDashboard({ onNavigate, onComingSoon }: Terminal
           <div className="flex-1 border border-gray-800 bg-gray-900/20 p-3 flex flex-col justify-between">
             <div className="space-y-2">
               <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest">Tracked Flights</span>
+                <span className="text-sm text-gray-500 uppercase tracking-widest">Tracked Flights</span>
                 <span className="text-xs text-green-400 font-mono">{flightCount.toLocaleString()}</span>
               </div>
               <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest">Tracked Vessels</span>
+                <span className="text-sm text-gray-500 uppercase tracking-widest">Tracked Vessels</span>
                 <span className="text-xs text-cyan-400 font-mono">{shipCount.toLocaleString()}</span>
               </div>
               <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest">Satellites</span>
+                <span className="text-sm text-gray-500 uppercase tracking-widest">Satellites</span>
                 <span className="text-xs text-gray-300 font-mono">{satCount.toLocaleString()}</span>
               </div>
               <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest">Active Markets</span>
+                <span className="text-sm text-gray-500 uppercase tracking-widest">Active Markets</span>
                 <span className="text-xs text-gray-300 font-mono">{markets.length}</span>
               </div>
               <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest">Correlations</span>
+                <span className="text-sm text-gray-500 uppercase tracking-widest">Correlations</span>
                 <span className="text-xs text-amber-400 font-mono">{correlationCount}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest">Threat Level</span>
-                <span className={`text-[10px] px-2 py-0.5 ${threatStyle.bg} ${threatStyle.text} ${threatStyle.border} border ${threat?.level === 'SEVERE' || threat?.level === 'HIGH' ? 'animate-pulse' : ''}`}>
+                <span className="text-sm text-gray-500 uppercase tracking-widest">Threat Level</span>
+                <span className={`text-sm px-2 py-0.5 ${threatStyle.bg} ${threatStyle.text} ${threatStyle.border} border ${threat?.level === 'SEVERE' || threat?.level === 'HIGH' ? 'animate-pulse' : ''}`}>
                   {threat?.level || 'UNKNOWN'} {threat?.score != null ? `(${threat.score})` : ''}
                 </span>
               </div>
@@ -234,9 +234,9 @@ export default function TerminalDashboard({ onNavigate, onComingSoon }: Terminal
             {/* Threat drivers */}
             {threat?.drivers && threat.drivers.length > 0 && (
               <div className="mt-3 pt-2 border-t border-gray-800">
-                <span className="text-[8px] text-gray-500 uppercase tracking-widest block mb-1">THREAT DRIVERS</span>
+                <span className="text-[12px] text-gray-500 uppercase tracking-widest block mb-1">THREAT DRIVERS</span>
                 {threat.drivers.slice(0, 3).map((driver, i) => (
-                  <p key={i} className="text-[9px] text-gray-400 leading-tight">• {driver}</p>
+                  <p key={i} className="text-[13px] text-gray-400 leading-tight">• {driver}</p>
                 ))}
               </div>
             )}
@@ -247,8 +247,8 @@ export default function TerminalDashboard({ onNavigate, onComingSoon }: Terminal
                 <div className="bg-green-500 flex-1"></div>
               </div>
               <div className="flex justify-between mt-1">
-                <span className="text-[8px] text-gray-500 uppercase">Threat Score</span>
-                <span className="text-[8px] text-gray-500 uppercase">{threat?.score ?? '—'}/100</span>
+                <span className="text-[12px] text-gray-500 uppercase">Threat Score</span>
+                <span className="text-[12px] text-gray-500 uppercase">{threat?.score ?? '—'}/100</span>
               </div>
             </div>
           </div>

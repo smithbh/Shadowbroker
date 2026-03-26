@@ -496,7 +496,7 @@ export default function InfonetShell({ isOpen, onClose, onOpenLiveGate }: Infone
                 <button
                   key={section.name}
                   onClick={() => handleCommand(section.name === 'PROFILE' ? 'profile' : section.name.toLowerCase())}
-                  className="flex items-center px-2 py-1 bg-cyan-900/10 border border-cyan-900/50 text-cyan-500 hover:bg-cyan-900/30 hover:text-cyan-400 hover:border-cyan-500/50 transition-all text-[10px] md:text-xs uppercase tracking-widest whitespace-nowrap"
+                  className="flex items-center px-2 py-1 bg-cyan-900/10 border border-cyan-900/50 text-cyan-500 hover:bg-cyan-900/30 hover:text-cyan-400 hover:border-cyan-500/50 transition-all text-sm md:text-xs uppercase tracking-widest whitespace-nowrap"
                 >
                   {section.icon}
                   {section.name === 'PROFILE' ? 'SOVEREIGN' : section.name}
@@ -513,7 +513,7 @@ export default function InfonetShell({ isOpen, onClose, onOpenLiveGate }: Infone
 
               <div className="flex-1 flex flex-col items-center">
                 <pre
-                  className="text-white drop-shadow-[0_0_8px_rgba(156,163,175,0.8)] text-[10px] sm:text-xs md:text-sm leading-tight select-none text-left inline-block"
+                  className="text-white drop-shadow-[0_0_8px_rgba(156,163,175,0.8)] text-sm sm:text-xs md:text-sm leading-tight select-none text-left inline-block"
                   style={{ fontFamily: 'Consolas, "Courier New", monospace' }}
                 >
                   {ASCII_HEADER}
@@ -623,7 +623,7 @@ export default function InfonetShell({ isOpen, onClose, onOpenLiveGate }: Infone
             <div className="flex items-center justify-between px-4 py-2 border-b border-cyan-900/40 bg-cyan-950/20">
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse shadow-[0_0_6px_rgba(245,158,11,0.6)]" />
-                <span className="text-[9px] tracking-[0.3em] text-amber-400/80 uppercase">System Notice</span>
+                <span className="text-[13px] tracking-[0.3em] text-amber-400/80 uppercase">System Notice</span>
               </div>
               <button
                 onClick={() => setComingSoonModule(null)}
@@ -647,18 +647,18 @@ export default function InfonetShell({ isOpen, onClose, onOpenLiveGate }: Infone
 
               <div className="flex items-center gap-2 mb-4 px-1">
                 <span className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
-                <span className="text-[9px] tracking-[0.2em] text-amber-400/90 uppercase">
+                <span className="text-[13px] tracking-[0.2em] text-amber-400/90 uppercase">
                   {COMING_SOON_MODULES[comingSoonModule].status}
                 </span>
               </div>
 
               <div className="border-t border-gray-800 pt-4 flex items-center justify-between">
-                <span className="text-[8px] text-gray-600 tracking-[0.2em] uppercase">
+                <span className="text-[12px] text-gray-600 tracking-[0.2em] uppercase">
                   Infonet Sovereign Shell v0.1.1 — Test-Net
                 </span>
                 <button
                   onClick={() => setComingSoonModule(null)}
-                  className="px-4 py-1.5 border border-cyan-900/50 bg-cyan-950/20 text-cyan-400 text-[10px] tracking-[0.2em] uppercase hover:bg-cyan-900/30 hover:border-cyan-500/40 transition-all"
+                  className="px-4 py-1.5 border border-cyan-900/50 bg-cyan-950/20 text-cyan-400 text-sm tracking-[0.2em] uppercase hover:bg-cyan-900/30 hover:border-cyan-500/40 transition-all"
                 >
                   Acknowledged
                 </button>

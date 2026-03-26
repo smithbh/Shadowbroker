@@ -187,11 +187,11 @@ export default function ProfileView({ onBack, persona, isCitizen, nodeId, public
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-right">
                   <div>
-                    <p className="text-[10px] text-gray-500 uppercase tracking-widest">Lit</p>
+                    <p className="text-sm text-gray-500 uppercase tracking-widest">Lit</p>
                     <p className="text-lg font-bold text-green-400">{upvotes}</p>
                   </div>
                   <div>
-                    <p className="text-[10px] text-gray-500 uppercase tracking-widest">Dislikes</p>
+                    <p className="text-sm text-gray-500 uppercase tracking-widest">Dislikes</p>
                     <p className="text-lg font-bold text-red-400">{downvotes}</p>
                   </div>
                 </div>
@@ -202,21 +202,21 @@ export default function ProfileView({ onBack, persona, isCitizen, nodeId, public
                   style={{ width: `${repProgress}%` }}
                 />
               </div>
-              <p className="mt-2 text-[10px] text-gray-500 uppercase tracking-tighter">
+              <p className="mt-2 text-sm text-gray-500 uppercase tracking-tighter">
                 Reputation is derived from live lit/dislike activity. Net rep can drop below zero even when the bar is clamped at zero.
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4 md:col-span-2 mt-2">
               <div className="p-3 bg-gray-900/40 border border-gray-800">
-                <p className="text-[10px] text-gray-500 uppercase tracking-widest">Active Months</p>
+                <p className="text-sm text-gray-500 uppercase tracking-widest">Active Months</p>
                 <p className="text-xl text-white font-bold">0 MONTHS</p>
-                <p className="text-[9px] text-gray-600 mt-1 uppercase">No live citizenship accounting yet</p>
+                <p className="text-[13px] text-gray-600 mt-1 uppercase">No live citizenship accounting yet</p>
               </div>
               <div className="p-3 bg-gray-900/40 border border-gray-800">
-                <p className="text-[10px] text-gray-500 uppercase tracking-widest">Citizenship History</p>
+                <p className="text-sm text-gray-500 uppercase tracking-widest">Citizenship History</p>
                 <p className="text-xl text-gray-400 font-bold">0 MONTHS</p>
-                <p className="text-[9px] text-gray-600 mt-1 uppercase">Placeholder totals removed</p>
+                <p className="text-[13px] text-gray-600 mt-1 uppercase">Placeholder totals removed</p>
               </div>
             </div>
 
@@ -227,7 +227,7 @@ export default function ProfileView({ onBack, persona, isCitizen, nodeId, public
                   <p className="text-xl text-cyan-400 font-bold">
                     {oracleRep.toFixed(1)} <span className="text-xs text-gray-500 font-normal">AVAILABLE</span>
                   </p>
-                  <p className="text-[10px] text-gray-500 uppercase">
+                  <p className="text-sm text-gray-500 uppercase">
                     Win Rate {oracleProfile.win_rate}% • W {oracleProfile.predictions_won} / L {oracleProfile.predictions_lost}
                   </p>
                 </div>
@@ -237,7 +237,7 @@ export default function ProfileView({ onBack, persona, isCitizen, nodeId, public
                     style={{ width: `${oracleProgress}%` }}
                   />
                 </div>
-                <p className="text-[10px] text-gray-500 uppercase tracking-tighter">
+                <p className="text-sm text-gray-500 uppercase tracking-tighter">
                   Available: {oracleRep.toFixed(1)} | Locked: {oracleRepLocked.toFixed(1)} | Total: {oracleRepTotal.toFixed(1)}
                 </p>
               </div>
@@ -251,7 +251,7 @@ export default function ProfileView({ onBack, persona, isCitizen, nodeId, public
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex flex-col items-center justify-center p-4 border border-gray-800 bg-[#0a0a0a]">
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-2">Vote Correlation</p>
+              <p className="text-sm text-gray-500 uppercase tracking-widest mb-2">Vote Correlation</p>
               <div className="relative h-20 w-20">
                 <svg className="h-full w-full" viewBox="0 0 36 36">
                   <path className="stroke-gray-800 stroke-[3]" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
@@ -261,14 +261,14 @@ export default function ProfileView({ onBack, persona, isCitizen, nodeId, public
                   <span className="text-sm font-bold text-gray-400">0.00</span>
                 </div>
               </div>
-              <p className="text-[8px] text-gray-500 mt-2 uppercase">NOT CALIBRATED</p>
+              <p className="text-[12px] text-gray-500 mt-2 uppercase">NOT CALIBRATED</p>
             </div>
 
             <div className="md:col-span-2 space-y-4">
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <p className="text-[10px] text-gray-500 uppercase tracking-widest">Clustering Coefficient</p>
-                  <p className="text-[10px] text-gray-400 font-bold">0.00</p>
+                  <p className="text-sm text-gray-500 uppercase tracking-widest">Clustering Coefficient</p>
+                  <p className="text-sm text-gray-400 font-bold">0.00</p>
                 </div>
                 <div className="h-1 w-full bg-gray-900 overflow-hidden">
                   <div className="h-full bg-gray-500 w-0" />
@@ -276,8 +276,8 @@ export default function ProfileView({ onBack, persona, isCitizen, nodeId, public
               </div>
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <p className="text-[10px] text-gray-500 uppercase tracking-widest">Temporal Burst Detection</p>
-                  <p className="text-[10px] text-gray-400 font-bold">0.00</p>
+                  <p className="text-sm text-gray-500 uppercase tracking-widest">Temporal Burst Detection</p>
+                  <p className="text-sm text-gray-400 font-bold">0.00</p>
                 </div>
                 <div className="h-1 w-full bg-gray-900 overflow-hidden">
                   <div className="h-full bg-gray-500 w-0" />
@@ -285,7 +285,7 @@ export default function ProfileView({ onBack, persona, isCitizen, nodeId, public
               </div>
               <div className="p-2 border border-gray-800 bg-gray-900/20 flex items-start gap-2">
                 <AlertCircle size={14} className="text-gray-500 shrink-0 mt-0.5" />
-                <p className="text-[9px] text-gray-500 uppercase leading-tight">
+                <p className="text-[13px] text-gray-500 uppercase leading-tight">
                   Advanced network-health analytics are not calibrated for this profile yet. Live reputation above is authoritative; unresolved analytics stay zeroed.
                 </p>
               </div>
@@ -299,27 +299,27 @@ export default function ProfileView({ onBack, persona, isCitizen, nodeId, public
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <div className="border border-gray-800 p-2 bg-[#0a0a0a]">
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest">Root</p>
+              <p className="text-sm text-gray-500 uppercase tracking-widest">Root</p>
               <p className="text-xs text-red-400 font-bold">NEVER PUBLIC</p>
             </div>
             <div className="border border-gray-800 p-2 bg-[#0a0a0a]">
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest">Transport</p>
+              <p className="text-sm text-gray-500 uppercase tracking-widest">Transport</p>
               <p className="text-xs text-green-400 font-bold">PUBLIC MESH</p>
             </div>
             <div className="border border-gray-800 p-2 bg-[#0a0a0a]">
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest">DM Alias</p>
+              <p className="text-sm text-gray-500 uppercase tracking-widest">DM Alias</p>
               <p className="text-xs text-cyan-400 font-bold">SEMI-OBFUSCATED</p>
             </div>
             <div className="border border-gray-800 p-2 bg-[#0a0a0a]">
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest">Gate Session</p>
+              <p className="text-sm text-gray-500 uppercase tracking-widest">Gate Session</p>
               <p className="text-xs text-cyan-400 font-bold">ANONYMOUS</p>
             </div>
             <div className="border border-gray-800 p-2 bg-[#0a0a0a]">
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest">Gate Persona</p>
+              <p className="text-sm text-gray-500 uppercase tracking-widest">Gate Persona</p>
               <p className="text-xs text-cyan-400 font-bold">{displayPersona}</p>
             </div>
             <div className="border border-gray-800 p-2 bg-[#0a0a0a]">
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest">Credits</p>
+              <p className="text-sm text-gray-500 uppercase tracking-widest">Credits</p>
               <p className="text-xs text-gray-300 font-bold">0.00 AVAILABLE</p>
             </div>
           </div>

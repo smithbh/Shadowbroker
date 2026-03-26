@@ -198,14 +198,14 @@ export default function LiveActivityLog() {
           <Activity size={14} className="mr-2 animate-pulse text-green-400" />
           Live Network Telemetry
         </h3>
-        <span className="text-[10px] text-gray-500 font-mono">
+        <span className="text-sm text-gray-500 font-mono">
           FEEDS: {logs.length} EVENTS
         </span>
       </div>
 
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto font-mono text-[10px] sm:text-xs space-y-1.5 pr-2 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-800"
+        className="flex-1 overflow-y-auto font-mono text-sm sm:text-xs space-y-1.5 pr-2 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-800"
       >
         {logs.length === 0 && (
           <div className="text-gray-600 italic text-center py-4">Waiting for data stream...</div>

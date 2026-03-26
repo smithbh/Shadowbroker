@@ -107,7 +107,7 @@ export default function MarketView({ onBack }: MarketViewProps) {
             </button>
           ))}
         </div>
-        <span className="text-[10px] text-gray-500 font-mono">{filteredMarkets.length} RESULTS</span>
+        <span className="text-sm text-gray-500 font-mono">{filteredMarkets.length} RESULTS</span>
       </div>
 
       {/* Search Bar */}
@@ -144,7 +144,7 @@ export default function MarketView({ onBack }: MarketViewProps) {
               <div className="flex items-start justify-between gap-4 mb-3">
                 <div className="flex-1">
                   <div className="text-gray-300 font-bold text-sm md:text-base leading-snug">{market.title}</div>
-                  <div className="flex items-center gap-2 mt-1.5 text-[10px] font-mono">
+                  <div className="flex items-center gap-2 mt-1.5 text-sm font-mono">
                     <span className={`${catConfig.color} uppercase tracking-widest`}>{market.category}</span>
                     {vol && <span className="text-gray-500">VOL: {vol}</span>}
                     {vol24 && <span className="text-gray-500">24H: {vol24}</span>}
@@ -155,12 +155,12 @@ export default function MarketView({ onBack }: MarketViewProps) {
                   {outcomes && outcomes.length > 0 ? (
                     <>
                       <div className="text-2xl font-bold text-cyan-400 font-mono">{outcomes[0].pct}%</div>
-                      <div className="text-[9px] text-gray-400 uppercase truncate max-w-[100px]" title={outcomes[0].name}>{outcomes[0].name}</div>
+                      <div className="text-[13px] text-gray-400 uppercase truncate max-w-[100px]" title={outcomes[0].name}>{outcomes[0].name}</div>
                     </>
                   ) : (
                     <>
                       <div className="text-2xl font-bold text-emerald-400 font-mono">{pct}%</div>
-                      <div className="text-[9px] text-gray-500 uppercase">CONSENSUS</div>
+                      <div className="text-[13px] text-gray-500 uppercase">CONSENSUS</div>
                     </>
                   )}
                 </div>
@@ -169,21 +169,21 @@ export default function MarketView({ onBack }: MarketViewProps) {
               {/* Probability bar */}
               {outcomes && outcomes.length > 0 ? (
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-[9px] text-cyan-400 font-mono truncate max-w-[80px]" title={outcomes[0].name}>{outcomes[0].name}</span>
+                  <span className="text-[13px] text-cyan-400 font-mono truncate max-w-[80px]" title={outcomes[0].name}>{outcomes[0].name}</span>
                   <div className="flex-1 h-2 bg-gray-900 overflow-hidden flex">
                     <div className="bg-cyan-500/60" style={{ width: `${outcomes[0].pct}%` }} />
                     <div className="bg-gray-700/30 flex-1" />
                   </div>
-                  <span className="text-[9px] text-cyan-400 font-mono w-8 text-right">{outcomes[0].pct}%</span>
+                  <span className="text-[13px] text-cyan-400 font-mono w-8 text-right">{outcomes[0].pct}%</span>
                 </div>
               ) : (
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-[9px] text-green-400 font-mono w-8">YES</span>
+                  <span className="text-[13px] text-green-400 font-mono w-8">YES</span>
                   <div className="flex-1 h-2 bg-gray-900 overflow-hidden flex">
                     <div className="bg-emerald-500/60" style={{ width: `${pct}%` }} />
                     <div className="bg-red-500/30 flex-1" />
                   </div>
-                  <span className="text-[9px] text-red-400 font-mono w-8 text-right">NO</span>
+                  <span className="text-[13px] text-red-400 font-mono w-8 text-right">NO</span>
                 </div>
               )}
 
@@ -191,7 +191,7 @@ export default function MarketView({ onBack }: MarketViewProps) {
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {market.sources?.map((s, si) => (
-                    <span key={si} className={`text-[9px] font-mono px-1.5 py-0.5 border ${
+                    <span key={si} className={`text-[13px] font-mono px-1.5 py-0.5 border ${
                       s.name === 'POLY'
                         ? 'bg-purple-500/15 text-purple-400 border-purple-500/20'
                         : 'bg-blue-500/15 text-blue-400 border-blue-500/20'
@@ -200,7 +200,7 @@ export default function MarketView({ onBack }: MarketViewProps) {
                     </span>
                   ))}
                   {consensus && consensus.total_picks > 0 && (
-                    <span className="text-[9px] font-mono px-1.5 py-0.5 border bg-amber-500/10 text-amber-400 border-amber-500/20">
+                    <span className="text-[13px] font-mono px-1.5 py-0.5 border bg-amber-500/10 text-amber-400 border-amber-500/20">
                       {consensus.total_picks} pick{consensus.total_picks !== 1 ? 's' : ''}
                       {consensus.total_staked > 0 ? ` · ${consensus.total_staked.toFixed(1)} REP` : ''}
                     </span>
@@ -209,7 +209,7 @@ export default function MarketView({ onBack }: MarketViewProps) {
 
                 {/* Delta indicator */}
                 {market.delta_pct != null && market.delta_pct !== 0 && (
-                  <span className={`text-[10px] font-mono font-bold ${market.delta_pct > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  <span className={`text-sm font-mono font-bold ${market.delta_pct > 0 ? 'text-green-400' : 'text-red-400'}`}>
                     {market.delta_pct > 0 ? '▲' : '▼'} {Math.abs(market.delta_pct).toFixed(1)}%
                   </span>
                 )}
@@ -219,7 +219,7 @@ export default function MarketView({ onBack }: MarketViewProps) {
               {outcomes && outcomes.length > 0 && (
                 <div className="mt-3 pt-2 border-t border-gray-800 space-y-1">
                   {outcomes.slice(0, 5).map((outcome, oi) => (
-                    <div key={oi} className="flex items-center gap-2 text-[10px]">
+                    <div key={oi} className="flex items-center gap-2 text-sm">
                       <span className="text-gray-400 w-24 truncate">{outcome.name}</span>
                       <div className="flex-1 h-1 bg-gray-900 overflow-hidden">
                         <div className="bg-cyan-500/50 h-full" style={{ width: `${outcome.pct}%` }} />

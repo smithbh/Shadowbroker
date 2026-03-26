@@ -10,7 +10,7 @@ export default function TrendingPosts() {
         <MessageSquare size={14} className="mr-2" /> Gates
       </h3>
       <div className="space-y-3">
-        <div className="text-[10px] text-gray-500 leading-relaxed">
+        <div className="text-sm text-gray-500 leading-relaxed">
           <p className="text-amber-400/80 font-bold mb-1">TEST-NET ACTIVE</p>
           <p>Gates are decentralized chatrooms running on the Infonet mesh. All messages are end-to-end encrypted via Wormhole.</p>
           <p className="mt-2">Type <span className="text-green-400 font-bold">gates</span> or <span className="text-green-400 font-bold">g/</span> to browse available rooms.</p>

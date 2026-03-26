@@ -505,7 +505,7 @@ export default function ShodanPanel({
             SHODAN CONNECTOR
           </span>
         </div>
-        <div className="flex items-center gap-2 text-[8px] font-mono">
+        <div className="flex items-center gap-2 text-[12px] font-mono">
           <span className="border border-green-700/40 px-1.5 py-0.5 text-green-300">
             {currentResults.length.toLocaleString()} MAP
           </span>
@@ -522,7 +522,7 @@ export default function ShodanPanel({
 
       {!isMinimized && (
       <>
-      <div className="border-b border-green-900/40 bg-green-950/10 px-3 py-2 text-[10px] font-mono leading-relaxed text-green-200/90">
+      <div className="border-b border-green-900/40 bg-green-950/10 px-3 py-2 text-sm font-mono leading-relaxed text-green-200/90">
         <div className="flex items-start gap-2">
           <AlertTriangle size={12} className="mt-0.5 text-green-400" />
           <div>
@@ -536,7 +536,7 @@ export default function ShodanPanel({
       </div>
 
       <div className="px-3 py-2">
-        <div className="mb-2 flex items-center gap-2 text-[9px] font-mono">
+        <div className="mb-2 flex items-center gap-2 text-[13px] font-mono">
           {(['search', 'count', 'host'] as Mode[]).map((item) => (
             <button
               key={item}
@@ -559,7 +559,7 @@ export default function ShodanPanel({
         </div>
 
         {!status?.configured && (
-          <div className="mb-3 border border-yellow-700/30 bg-yellow-950/10 px-3 py-2 text-[10px] font-mono text-yellow-300">
+          <div className="mb-3 border border-yellow-700/30 bg-yellow-950/10 px-3 py-2 text-sm font-mono text-yellow-300">
             <div className="mb-2 flex items-center gap-2 font-bold tracking-wide">
               <KeyRound size={12} /> SHODAN_API_KEY REQUIRED
             </div>
@@ -572,7 +572,7 @@ export default function ShodanPanel({
           </div>
         )}
 
-        <div className="space-y-2 text-[10px] font-mono">
+        <div className="space-y-2 text-sm font-mono">
           {mode !== 'host' ? (
             <>
               <div className="flex items-center gap-2">
@@ -616,7 +616,7 @@ export default function ShodanPanel({
           )}
         </div>
 
-        <div className="mt-3 flex items-center gap-2 text-[9px] font-mono">
+        <div className="mt-3 flex items-center gap-2 text-[13px] font-mono">
           {mode === 'search' && (
             <button
               onClick={() => void handleSearch()}
@@ -655,7 +655,7 @@ export default function ShodanPanel({
         {/* ── Marker Style Configurator ── */}
         <div className="mt-3 border border-green-900/40 bg-black/80 px-3 py-2">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-[9px] font-mono tracking-[0.22em] text-green-500">MARKER STYLE</span>
+            <span className="text-[13px] font-mono tracking-[0.22em] text-green-500">MARKER STYLE</span>
             <span className="text-[14px] leading-none" style={{ color: styleConfig.color }}>
               {SHAPE_OPTIONS.find((s) => s.value === styleConfig.shape)?.glyph ?? '●'}
             </span>
@@ -663,7 +663,7 @@ export default function ShodanPanel({
 
           {/* Shape */}
           <div className="mb-2">
-            <div className="mb-1 text-[8px] font-mono tracking-widest text-green-600">SHAPE</div>
+            <div className="mb-1 text-[12px] font-mono tracking-widest text-green-600">SHAPE</div>
             <div className="flex items-center gap-1.5">
               {SHAPE_OPTIONS.map((opt) => (
                 <button
@@ -684,7 +684,7 @@ export default function ShodanPanel({
 
           {/* Color */}
           <div className="mb-2">
-            <div className="mb-1 text-[8px] font-mono tracking-widest text-green-600">COLOR</div>
+            <div className="mb-1 text-[12px] font-mono tracking-widest text-green-600">COLOR</div>
             <div className="flex items-center gap-1.5 flex-wrap">
               {COLOR_SWATCHES.map((hex) => (
                 <button
@@ -710,20 +710,20 @@ export default function ShodanPanel({
                 }}
                 placeholder="#hex"
                 maxLength={7}
-                className="w-16 border border-green-900/50 bg-black/70 px-1.5 py-0.5 text-[9px] font-mono text-green-300 outline-none focus:border-green-500/60"
+                className="w-16 border border-green-900/50 bg-black/70 px-1.5 py-0.5 text-[13px] font-mono text-green-300 outline-none focus:border-green-500/60"
               />
             </div>
           </div>
 
           {/* Size */}
           <div>
-            <div className="mb-1 text-[8px] font-mono tracking-widest text-green-600">SIZE</div>
+            <div className="mb-1 text-[12px] font-mono tracking-widest text-green-600">SIZE</div>
             <div className="flex items-center gap-1.5">
               {SIZE_OPTIONS.map((opt) => (
                 <button
                   key={opt.value}
                   onClick={() => updateStyle({ size: opt.value })}
-                  className={`px-2.5 py-1 border text-[9px] font-mono tracking-wider transition-colors ${
+                  className={`px-2.5 py-1 border text-[13px] font-mono tracking-wider transition-colors ${
                     styleConfig.size === opt.value
                       ? 'border-green-500/60 bg-green-950/40 text-green-300'
                       : 'border-green-900/40 text-green-700 hover:border-green-700/60 hover:text-green-400'
@@ -737,24 +737,24 @@ export default function ShodanPanel({
         </div>
 
         <div className="mt-3 border border-green-900/40 bg-black/80 px-3 py-2">
-          <div className="mb-2 text-[9px] font-mono tracking-[0.22em] text-green-500">PRESETS / EXPORT</div>
+          <div className="mb-2 text-[13px] font-mono tracking-[0.22em] text-green-500">PRESETS / EXPORT</div>
           <div className="mb-2 flex items-center gap-2">
             <input
               value={presetLabel}
               onChange={(e) => setPresetLabel(e.target.value)}
               placeholder="preset label"
-              className="flex-1 border border-green-900/50 bg-black/70 px-2 py-1.5 text-[10px] text-green-300 outline-none transition-colors focus:border-green-500/60"
+              className="flex-1 border border-green-900/50 bg-black/70 px-2 py-1.5 text-sm text-green-300 outline-none transition-colors focus:border-green-500/60"
             />
             <button
               onClick={handleSavePreset}
-              className="border border-green-600/40 px-2 py-1.5 text-[9px] font-mono text-green-400 transition-colors hover:border-green-500/70"
+              className="border border-green-600/40 px-2 py-1.5 text-[13px] font-mono text-green-400 transition-colors hover:border-green-500/70"
             >
               <span className="inline-flex items-center gap-1">
                 <Save size={10} /> SAVE
               </span>
             </button>
           </div>
-          <div className="flex flex-wrap gap-2 text-[9px] font-mono">
+          <div className="flex flex-wrap gap-2 text-[13px] font-mono">
             <button
               onClick={exportPresets}
               disabled={!presets.length}
@@ -822,13 +822,13 @@ export default function ShodanPanel({
                 >
                   <button
                     onClick={() => applyPreset(preset)}
-                    className="min-w-0 flex-1 truncate text-left text-[10px] font-mono text-green-300 transition-colors hover:text-green-200"
+                    className="min-w-0 flex-1 truncate text-left text-sm font-mono text-green-300 transition-colors hover:text-green-200"
                   >
                     {preset.label}
                   </button>
                   <button
                     onClick={() => removePreset(preset.id)}
-                    className="ml-2 text-[9px] font-mono text-green-700/70 transition-colors hover:text-red-300"
+                    className="ml-2 text-[13px] font-mono text-green-700/70 transition-colors hover:text-red-300"
                   >
                     DELETE
                   </button>
@@ -838,7 +838,7 @@ export default function ShodanPanel({
           )}
         </div>
 
-        <div className="mt-3 border border-green-900/40 bg-black/80 px-3 py-2 text-[10px] font-mono">
+        <div className="mt-3 border border-green-900/40 bg-black/80 px-3 py-2 text-sm font-mono">
           <div className="mb-1 flex items-center gap-2 text-green-500">
             <ShieldAlert size={12} />
             <span className="tracking-[0.25em]">SESSION STATUS</span>
@@ -852,7 +852,7 @@ export default function ShodanPanel({
                 <button
                   onClick={() => { setError(null); lastAction(); }}
                   disabled={busy}
-                  className="ml-2 inline-flex shrink-0 items-center gap-1 border border-red-700/40 px-1.5 py-0.5 text-[9px] font-mono text-red-300 transition-colors hover:border-red-500/60 hover:text-red-200 disabled:opacity-40"
+                  className="ml-2 inline-flex shrink-0 items-center gap-1 border border-red-700/40 px-1.5 py-0.5 text-[13px] font-mono text-red-300 transition-colors hover:border-red-500/60 hover:text-red-200 disabled:opacity-40"
                 >
                   <RefreshCw size={9} /> RETRY
                 </button>
@@ -863,16 +863,16 @@ export default function ShodanPanel({
 
         {countSummary && (
           <div className="mt-3 max-h-40 space-y-2 overflow-y-auto border border-green-900/40 bg-black/80 p-3 styled-scrollbar">
-            <div className="text-[9px] font-mono tracking-[0.22em] text-green-500">FACETS</div>
+            <div className="text-[13px] font-mono tracking-[0.22em] text-green-500">FACETS</div>
             {Object.entries(countSummary.facets).length === 0 ? (
-              <div className="text-[10px] font-mono text-green-300/80">No facet buckets returned.</div>
+              <div className="text-sm font-mono text-green-300/80">No facet buckets returned.</div>
             ) : (
               Object.entries(countSummary.facets).map(([name, buckets]) => (
                 <div key={name}>
-                  <div className="mb-1 text-[9px] font-mono text-green-400">{name.toUpperCase()}</div>
+                  <div className="mb-1 text-[13px] font-mono text-green-400">{name.toUpperCase()}</div>
                   <div className="space-y-1">
                     {buckets.map((bucket) => (
-                      <div key={`${name}-${bucket.value}`} className="flex items-center justify-between text-[10px] font-mono text-green-300/90">
+                      <div key={`${name}-${bucket.value}`} className="flex items-center justify-between text-sm font-mono text-green-300/90">
                         <span className="truncate pr-3">{bucket.value || 'UNKNOWN'}</span>
                         <span>{bucket.count.toLocaleString()}</span>
                       </div>
@@ -885,7 +885,7 @@ export default function ShodanPanel({
         )}
 
         {hostSummary && (
-          <div className="mt-3 max-h-40 overflow-y-auto border border-green-900/40 bg-black/80 p-3 styled-scrollbar text-[10px] font-mono">
+          <div className="mt-3 max-h-40 overflow-y-auto border border-green-900/40 bg-black/80 p-3 styled-scrollbar text-sm font-mono">
             <div className="mb-2 flex items-center justify-between text-green-400">
               <span>{hostSummary.ip}</span>
               <span>{hostSummary.location_label || 'UNMAPPED'}</span>
@@ -905,7 +905,7 @@ export default function ShodanPanel({
 
         {currentResults.length > 0 && (
           <div className="mt-3 max-h-44 overflow-y-auto border border-green-900/40 bg-black/80 p-2 styled-scrollbar">
-            <div className="mb-2 flex items-center justify-between text-[9px] font-mono text-green-500">
+            <div className="mb-2 flex items-center justify-between text-[13px] font-mono text-green-500">
               <span className="tracking-[0.22em]">MAPPED HOSTS</span>
               <span>{currentResults.length.toLocaleString()}</span>
             </div>
@@ -917,15 +917,15 @@ export default function ShodanPanel({
                   className="flex w-full items-center justify-between border border-green-950/40 bg-green-950/10 px-2 py-1.5 text-left transition-colors hover:border-green-700/60 hover:bg-green-950/20"
                 >
                   <div className="min-w-0">
-                    <div className="truncate text-[10px] font-mono text-green-300">
+                    <div className="truncate text-sm font-mono text-green-300">
                       {match.ip}
                       {match.port ? `:${match.port}` : ''}
                     </div>
-                    <div className="truncate text-[9px] font-mono text-green-600">
+                    <div className="truncate text-[13px] font-mono text-green-600">
                       {match.location_label || match.org || 'UNMAPPED'}
                     </div>
                   </div>
-                  <div className="ml-3 shrink-0 text-[8px] font-mono text-green-500">
+                  <div className="ml-3 shrink-0 text-[12px] font-mono text-green-500">
                     {match.product || match.transport || 'HOST'}
                   </div>
                 </button>

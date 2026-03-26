@@ -524,7 +524,7 @@ export default function GateView({
           </div>
           <button
             onClick={() => void refreshGate()}
-            className="inline-flex items-center gap-2 px-3 py-2 border border-cyan-500/30 bg-cyan-950/20 text-cyan-300 hover:bg-cyan-900/30 transition-colors text-[10px] uppercase tracking-[0.22em]"
+            className="inline-flex items-center gap-2 px-3 py-2 border border-cyan-500/30 bg-cyan-950/20 text-cyan-300 hover:bg-cyan-900/30 transition-colors text-sm uppercase tracking-[0.22em]"
           >
             <RefreshCw size={13} />
             Refresh
@@ -544,7 +544,7 @@ export default function GateView({
             : 'Saved gate face is active for this room. Posts stay scoped to this gate while the room history persists on the obfuscated gate lane.'}
         </div>
 
-        <div className="mt-3 text-[10px] font-mono text-cyan-400/85">
+        <div className="mt-3 text-sm font-mono text-cyan-400/85">
           {status?.has_local_access
             ? `LIVE ROOM READY • ${status.identity_scope || entryMode || 'gate'} access`
             : loading
@@ -588,7 +588,7 @@ export default function GateView({
         </div>
       ) : null}
       {voteNotice ? (
-        <div className="mb-2 shrink-0 border border-yellow-800/30 bg-yellow-950/10 px-3 py-1.5 text-[10px] text-yellow-400/80 font-mono">
+        <div className="mb-2 shrink-0 border border-yellow-800/30 bg-yellow-950/10 px-3 py-1.5 text-sm text-yellow-400/80 font-mono">
           {voteNotice}
         </div>
       ) : null}
@@ -604,7 +604,7 @@ export default function GateView({
               <span className="text-gray-600 ml-2">PINNED</span>
             </div>
             <h2 className="text-sm md:text-base text-gray-300 leading-relaxed">{introMessage}</h2>
-            <div className="mt-3 pt-2 border-t border-gray-800/50 text-[10px] text-amber-400/70 tracking-wider uppercase">
+            <div className="mt-3 pt-2 border-t border-gray-800/50 text-sm text-amber-400/70 tracking-wider uppercase">
               Fixed launch gate for the testnet catalog. Dynamic gate creation is disabled.
             </div>
           </div>
@@ -613,10 +613,10 @@ export default function GateView({
         {threadedMessages.map(({ message, depth }) =>
           message.system_seed ? (
             <div key={message.event_id} className="border border-cyan-900/30 bg-cyan-950/10 px-3 py-3 max-w-3xl">
-              <div className="text-[8px] font-mono tracking-[0.28em] text-cyan-300/85">
+              <div className="text-[12px] font-mono tracking-[0.28em] text-cyan-300/85">
                 {message.fixed_gate ? 'FIXED GATE NOTICE' : 'GATE NOTICE'}
               </div>
-              <div className="mt-2 text-[10px] font-mono text-cyan-100/80 leading-[1.7]">
+              <div className="mt-2 text-sm font-mono text-cyan-100/80 leading-[1.7]">
                 {message.message}
               </div>
             </div>
@@ -632,7 +632,7 @@ export default function GateView({
               <div className={`flex-1 border ${depth > 0 ? 'border-gray-800/40 bg-black/10' : 'border-gray-800/70 bg-black/20'} px-3 py-3`}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2 text-[10px] font-mono">
+                    <div className="flex items-center gap-2 text-sm font-mono">
                       <span className="text-green-400" title={String(message.public_key || message.node_id || '')}>
                         @{String(message.node_id || '').replace(/^!sb_/, '').slice(0, 8)
                           || String(message.public_key || '').slice(0, 8)
@@ -640,7 +640,7 @@ export default function GateView({
                       </span>
                       {isEncryptedGateEnvelope(message) ? (
                         <span
-                          className={`text-[8px] px-1 border ${
+                          className={`text-[12px] px-1 border ${
                             gateEnvelopeState(message) === 'decrypted'
                               ? 'text-cyan-300 border-cyan-700/60'
                               : 'text-amber-300 border-amber-700/60'
@@ -649,7 +649,7 @@ export default function GateView({
                           {gateEnvelopeState(message) === 'decrypted' ? 'DECRYPTED' : 'KEY LOCKED'}
                         </span>
                       ) : null}
-                      <span className="text-[var(--text-muted)] text-[9px]">{timeAgo(message.timestamp)}</span>
+                      <span className="text-[var(--text-muted)] text-[13px]">{timeAgo(message.timestamp)}</span>
                     </div>
                     <div
                       className={`mt-2 text-[12px] leading-[1.7] whitespace-pre-wrap break-words ${
@@ -668,7 +668,7 @@ export default function GateView({
                             nodeId: String(message.node_id || ''),
                           })
                         }
-                        className="inline-flex items-center gap-1 px-2 py-1 text-[9px] uppercase tracking-[0.18em] border border-cyan-900/40 text-cyan-400 hover:bg-cyan-950/20"
+                        className="inline-flex items-center gap-1 px-2 py-1 text-[13px] uppercase tracking-[0.18em] border border-cyan-900/40 text-cyan-400 hover:bg-cyan-950/20"
                       >
                         <Reply size={11} />
                         Reply
@@ -677,7 +677,7 @@ export default function GateView({
                         <>
                           <button
                             onClick={() => void handleVote(String(message.event_id || ''), 1)}
-                            className={`inline-flex items-center gap-1 px-2 py-1 text-[9px] uppercase tracking-[0.18em] border ${
+                            className={`inline-flex items-center gap-1 px-2 py-1 text-[13px] uppercase tracking-[0.18em] border ${
                               votedOn[voteScopeKey(String(message.event_id || ''))] === 1
                                 ? 'border-cyan-400/60 text-cyan-300 bg-cyan-950/20'
                                 : 'border-cyan-900/40 text-cyan-500 hover:bg-cyan-950/20'
@@ -688,7 +688,7 @@ export default function GateView({
                           </button>
                           <button
                             onClick={() => void handleVote(String(message.event_id || ''), -1)}
-                            className={`inline-flex items-center gap-1 px-2 py-1 text-[9px] uppercase tracking-[0.18em] border ${
+                            className={`inline-flex items-center gap-1 px-2 py-1 text-[13px] uppercase tracking-[0.18em] border ${
                               votedOn[voteScopeKey(String(message.event_id || ''))] === -1
                                 ? 'border-red-400/60 text-red-300 bg-red-950/20'
                                 : 'border-cyan-900/40 text-red-400 hover:bg-red-950/20'
@@ -697,7 +697,7 @@ export default function GateView({
                             <ArrowDown size={11} />
                             Down
                           </button>
-                          <span className="text-[10px] font-mono text-cyan-400/70">
+                          <span className="text-sm font-mono text-cyan-400/70">
                             SCORE {(() => { const s = reps[String(message.event_id || '')] ?? 0; return s % 1 === 0 ? s : s.toFixed(1); })()}
                           </span>
                         </>
@@ -714,7 +714,7 @@ export default function GateView({
 
       <div className="shrink-0 pt-3 mt-2 border-t border-gray-800/50">
         {replyContext ? (
-          <div className="mb-2 flex items-center justify-between gap-2 border border-amber-900/30 bg-amber-950/10 px-3 py-2 text-[10px] text-amber-200/80">
+          <div className="mb-2 flex items-center justify-between gap-2 border border-amber-900/30 bg-amber-950/10 px-3 py-2 text-sm text-amber-200/80">
             <span>
               Replying to @{replyContext.eventId.slice(0, 8)}
             </span>
@@ -745,7 +745,7 @@ export default function GateView({
           <button
             onClick={() => void handleSend()}
             disabled={busy || !composer.trim() || !status?.has_local_access}
-            className="inline-flex items-center gap-2 px-4 py-3 border border-cyan-500/40 bg-cyan-950/20 text-cyan-300 hover:bg-cyan-900/30 transition-colors text-[10px] uppercase tracking-[0.22em] disabled:opacity-40"
+            className="inline-flex items-center gap-2 px-4 py-3 border border-cyan-500/40 bg-cyan-950/20 text-cyan-300 hover:bg-cyan-900/30 transition-colors text-sm uppercase tracking-[0.22em] disabled:opacity-40"
           >
             <Send size={13} />
             Post

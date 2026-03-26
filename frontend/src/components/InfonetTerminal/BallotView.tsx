@@ -40,7 +40,7 @@ export default function BallotView({ onBack }: { onBack: () => void }) {
 
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             <div className="border border-gray-800 bg-black/20 p-4">
-              <div className="text-[10px] text-cyan-400 uppercase tracking-[0.22em]">
+              <div className="text-sm text-cyan-400 uppercase tracking-[0.22em]">
                 Principle
               </div>
               <div className="mt-2 text-sm text-gray-300 leading-relaxed">
@@ -48,7 +48,7 @@ export default function BallotView({ onBack }: { onBack: () => void }) {
               </div>
             </div>
             <div className="border border-gray-800 bg-black/20 p-4">
-              <div className="text-[10px] text-cyan-400 uppercase tracking-[0.22em]">
+              <div className="text-sm text-cyan-400 uppercase tracking-[0.22em]">
                 Current stance
               </div>
               <div className="mt-2 text-sm text-gray-300 leading-relaxed">
@@ -56,7 +56,7 @@ export default function BallotView({ onBack }: { onBack: () => void }) {
               </div>
             </div>
             <div className="border border-gray-800 bg-black/20 p-4">
-              <div className="text-[10px] text-cyan-400 uppercase tracking-[0.22em]">
+              <div className="text-sm text-cyan-400 uppercase tracking-[0.22em]">
                 Testnet focus
               </div>
               <div className="mt-2 text-sm text-gray-300 leading-relaxed">

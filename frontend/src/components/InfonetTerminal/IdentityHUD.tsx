@@ -30,7 +30,7 @@ export default function IdentityHUD({ currentDomain = 'TRANSPORT' }: { currentDo
       {isExpanded && (
         <div className="mb-2 w-64 bg-[#0a0a0a] border border-gray-800 p-3 shadow-[0_0_20px_rgba(6,182,212,0.1)]">
           <div className="flex justify-between items-center mb-3 border-b border-gray-800 pb-2">
-            <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Identity Domains</span>
+            <span className="text-sm text-gray-500 uppercase tracking-widest font-bold">Identity Domains</span>
             <button onClick={() => setIsExpanded(false)} className="text-gray-500 hover:text-white">&times;</button>
           </div>
 
@@ -43,8 +43,8 @@ export default function IdentityHUD({ currentDomain = 'TRANSPORT' }: { currentDo
                   <div className="flex items-center gap-2">
                     <span className={isActive ? 'text-cyan-400' : 'text-gray-600'}>{d.icon}</span>
                     <div>
-                      <p className={`text-[10px] font-bold tracking-tighter ${isActive ? 'text-white' : 'text-gray-500'}`}>{d.name}</p>
-                      <p className="text-[8px] text-gray-600 uppercase">{d.visibility}</p>
+                      <p className={`text-sm font-bold tracking-tighter ${isActive ? 'text-white' : 'text-gray-500'}`}>{d.name}</p>
+                      <p className="text-[12px] text-gray-600 uppercase">{d.visibility}</p>
                     </div>
                   </div>
                   {isActive && (
@@ -63,7 +63,7 @@ export default function IdentityHUD({ currentDomain = 'TRANSPORT' }: { currentDo
           </div>
 
           <div className="mt-3 pt-2 border-t border-gray-800">
-            <p className="text-[8px] text-red-500/70 uppercase leading-tight">
+            <p className="text-[12px] text-red-500/70 uppercase leading-tight">
               CRITICAL: CROSS-DOMAIN LINKAGE IS PROTOCOL-FORBIDDEN.
               ROTATING IDENTITY PURGES ALL LOCAL SESSION CACHE.
             </p>
@@ -76,7 +76,7 @@ export default function IdentityHUD({ currentDomain = 'TRANSPORT' }: { currentDo
         className={`flex items-center gap-3 px-4 py-2 border ${isExpanded ? 'border-cyan-500 bg-cyan-900/20' : 'border-gray-800 bg-gray-900/80'} backdrop-blur-md transition-all hover:border-cyan-400 group`}
       >
         <div className="flex flex-col items-end">
-          <span className="text-[10px] text-gray-500 uppercase tracking-widest leading-none mb-1">Active Domain</span>
+          <span className="text-sm text-gray-500 uppercase tracking-widest leading-none mb-1">Active Domain</span>
           <span className={`text-xs font-bold tracking-widest ${domain.color} flex items-center gap-1`}>
             {domain.icon} {domain.name}
           </span>
