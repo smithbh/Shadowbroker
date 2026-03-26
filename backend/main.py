@@ -1038,12 +1038,11 @@ def _validate_admin_startup() -> None:
     except Exception:
         debug_mode = False
 
-    if not debug_mode and not admin_key:
-        logger.critical(
-            "ADMIN_KEY must be set when MESH_DEBUG_MODE is False. "
-            "Set ADMIN_KEY or enable MESH_DEBUG_MODE for development. Refusing to start."
+    if not admin_key:
+        logger.warning(
+            "ADMIN_KEY is not set — admin/mesh endpoints will be unavailable. "
+            "Set ADMIN_KEY in your .env file to enable them."
         )
-        sys.exit(1)
 
     if admin_key:
         if len(admin_key) < 16:
@@ -1061,11 +1060,6 @@ def _validate_admin_startup() -> None:
                 "ADMIN_KEY is short (%s chars). Consider using at least 32 characters for production.",
                 len(admin_key),
             )
-    elif debug_mode:
-        logger.warning(
-            "ADMIN_KEY is not set — debug mode allows startup without admin auth hardening. "
-            "Set ADMIN_KEY for production."
-        )
 
 
 def require_admin(request: Request):
