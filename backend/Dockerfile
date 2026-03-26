@@ -1,3 +1,16 @@
+# ---- Stage 1: Compile privacy-core Rust library ----
+FROM rust:1.87-slim-bookworm AS rust-builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    pkg-config libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY privacy-core /build/privacy-core
+WORKDIR /build/privacy-core
+RUN cargo build --release --lib \
+    && ls -la target/release/libprivacy_core.so
+
+# ---- Stage 2: Python backend ----
 FROM python:3.11-slim-bookworm
 
 WORKDIR /app
@@ -35,6 +48,9 @@ RUN npm ci --omit=dev
 # Clean up workspace scaffold
 RUN rm -rf /workspace
 
+# Copy compiled privacy-core library from Rust builder stage
+COPY --from=rust-builder /build/privacy-core/target/release/libprivacy_core.so /app/libprivacy_core.so
+ENV PRIVACY_CORE_LIB=/app/libprivacy_core.so
 
 # Create a non-root user for security
 # Grant write access to /app so the auto-updater can extract files
