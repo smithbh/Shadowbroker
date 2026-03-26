@@ -1,17 +1,21 @@
 {
   "name": "frontend",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev": "node scripts/dev-all.cjs",
     "dev:frontend": "next dev",
     "dev:backend": "node ../start-backend.js",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "bundle:report": "node scripts/report-bundle-size.js",
+    "test": "npm run test:ci",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "set NODE_OPTIONS=--require ./scripts/vite-no-net-use.cjs && vitest run --coverage --pool=threads",
+    "test:ci": "set NODE_OPTIONS=--require ./scripts/vite-no-net-use.cjs && vitest run --pool=threads"
   },
   "dependencies": {
     "@mapbox/point-geometry": "^1.1.0",
@@ -23,7 +27,8 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-map-gl": "^8.1.0",
-    "satellite.js": "^6.0.2"
+    "satellite.js": "^6.0.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -37,6 +42,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "jsdom": "^28.1.0",
+    "prettier": "^3.3.3",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.0"

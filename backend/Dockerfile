@@ -1,4 +1,4 @@
-FROM python:3.10-slim-bookworm
+FROM python:3.11-slim-bookworm
 
 WORKDIR /app
 
@@ -9,32 +9,38 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Install UV for Python dependency management
+# Install UV for fast, reproducible Python dependency management
 ADD https://astral.sh/uv/install.sh /uv-installer.sh
 RUN sh /uv-installer.sh && rm /uv-installer.sh
-ENV PATH="/root/.local/bin/:$PATH"
-# Set environment variable for UV to install dependencies in the system Python environment
-# By default UV creates a new venv and installs dependencies there
+ENV PATH="/root/.local/bin:$PATH"
+# Install into system Python (no venv needed inside container)
 ENV UV_PROJECT_ENVIRONMENT=/usr/local
 
-# Copy pyproject.toml from root for dependency management
-COPY pyproject.toml .
-# Copy lock file for reproducible builds
-COPY uv.lock .
-# Copy source code
+# Copy workspace root files for UV resolution (build context is repo root)
+COPY pyproject.toml /workspace/pyproject.toml
+COPY uv.lock /workspace/uv.lock
+COPY backend/pyproject.toml /workspace/backend/pyproject.toml
+
+# Install Python dependencies using the lockfile
+RUN cd /workspace/backend && uv sync --frozen --no-dev \
+    && playwright install --with-deps chromium
+
+# Copy backend source code
 COPY backend/ .
-# Install Python dependencies using UV (this will use the lock file for reproducibility)
-RUN uv sync --frozen
-RUN uv run playwright install --with-deps chromium
 
 # Install Node.js dependencies (ws module for AIS WebSocket proxy)
-# Copy manifests first so this layer is cached unless deps change
 COPY backend/package*.json ./
 RUN npm ci --omit=dev
 
+# Clean up workspace scaffold
+RUN rm -rf /workspace
+
+
 # Create a non-root user for security
 # Grant write access to /app so the auto-updater can extract files
+# Pre-create /app/data so mounted volumes inherit correct ownership
 RUN adduser --system --uid 1001 backenduser \
+    && mkdir -p /app/data \
     && chown -R backenduser /app \
     && chmod -R u+w /app
 
@@ -45,4 +51,4 @@ USER backenduser
 EXPOSE 8000
 
 # Start FastAPI server
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--timeout-keep-alive", "120"]
