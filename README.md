@@ -31,21 +31,6 @@ Built with **Next.js**, **MapLibre GL**, **FastAPI**, and **Python**. 35+ toggle
 
 Designed for analysts, researchers, radio operators, and anyone who wants to see what the world looks like when every public signal is on the same map.
 
----
-
-## Experimental Testnet — No Privacy Guarantee
-
-ShadowBroker v0.9.6 introduces **InfoNet**, a decentralized intelligence mesh with obfuscated messaging. This is an **experimental testnet** — not a private messenger.
-
-| Channel | Privacy Status | Details |
-|---|---|---|
-| **Meshtastic / APRS** | **PUBLIC** | RF radio transmissions are public and interceptable by design. |
-| **InfoNet Gate Chat** | **OBFUSCATED** | Messages are obfuscated with gate personas and canonical payload signing, but NOT end-to-end encrypted. Metadata is not hidden. |
-| **Dead Drop DMs** | **STRONGEST CURRENT LANE** | Token-based epoch mailbox with SAS word verification. Strongest lane in this build, but still not Signal-tier. |
-
-**Do not transmit anything sensitive on any channel.** Treat all lanes as open and public for now. E2E encryption and deeper native/Tauri hardening are the next milestones. If you fork this project, keep these labels intact and do not make stronger privacy claims than the implementation supports.
-
----
 
 ## Why This Exists
 
@@ -189,6 +174,20 @@ helm install shadowbroker ./helm/chart --create-namespace --namespace shadowbrok
 *   **Ingress Ready:** Compatible with Traefik, Cert-Manager, and Gateway API for secure, external access to your intelligence node.
 
 *Special thanks to [@chr0n1x](https://github.com/chr0n1x) for contributing the initial Kubernetes architecture.*
+
+---
+
+## Experimental Testnet — No Privacy Guarantee
+
+ShadowBroker v0.9.6 introduces **InfoNet**, a decentralized intelligence mesh with obfuscated messaging. This is an **experimental testnet** — not a private messenger.
+
+| Channel | Privacy Status | Details |
+|---|---|---|
+| **Meshtastic / APRS** | **PUBLIC** | RF radio transmissions are public and interceptable by design. |
+| **InfoNet Gate Chat** | **OBFUSCATED** | Messages are obfuscated with gate personas and canonical payload signing, but NOT end-to-end encrypted. Metadata is not hidden. |
+| **Dead Drop DMs** | **STRONGEST CURRENT LANE** | Token-based epoch mailbox with SAS word verification. Strongest lane in this build, but still not Signal-tier. |
+
+**Do not transmit anything sensitive on any channel.** Treat all lanes as open and public for now. E2E encryption and deeper native/Tauri hardening are the next milestones. If you fork this project, keep these labels intact and do not make stronger privacy claims than the implementation supports.
 
 ---
 
