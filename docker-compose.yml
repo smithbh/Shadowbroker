@@ -1,5 +1,6 @@
 services:
   backend:
+    image: ghcr.io/bigbodycobain/shadowbroker-backend:latest
     build:
       context: .
       dockerfile: ./backend/Dockerfile
@@ -19,10 +20,10 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
-      interval: 30s
+      interval: 15s
       timeout: 10s
-      retries: 3
-      start_period: 30s
+      retries: 5
+      start_period: 60s
     deploy:
       resources:
         limits:
@@ -30,6 +31,7 @@ services:
           cpus: '2'
 
   frontend:
+    image: ghcr.io/bigbodycobain/shadowbroker-frontend:latest
     build:
       context: ./frontend
     container_name: shadowbroker-frontend
