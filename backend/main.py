@@ -1073,10 +1073,20 @@ def require_admin(request: Request):
     raise HTTPException(status_code=403, detail=detail)
 
 
+def _is_local_or_docker(host: str) -> bool:
+    """Return True if the IP is loopback or a Docker-internal private network."""
+    if host in {"127.0.0.1", "::1", "localhost"}:
+        return True
+    # Docker bridge networks use 172.x.x.x or 192.168.x.x ranges
+    if host.startswith("172.") or host.startswith("192.168.") or host.startswith("10."):
+        return True
+    return False
+
+
 def require_local_operator(request: Request):
-    """Allow local tooling on loopback, or a valid admin key from elsewhere."""
+    """Allow local tooling on loopback / Docker internal network, or a valid admin key."""
     host = (request.client.host or "").lower() if request.client else ""
-    if host in {"127.0.0.1", "::1", "localhost"} or (_debug_mode_enabled() and host == "test"):
+    if _is_local_or_docker(host) or (_debug_mode_enabled() and host == "test"):
         return
     admin_key = _current_admin_key()
     presented = str(request.headers.get("X-Admin-Key", "") or "").strip()
