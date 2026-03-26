@@ -13,6 +13,7 @@ import {
   X,
   Terminal,
   Server,
+  Copy,
 } from 'lucide-react';
 import { API_BASE } from '@/lib/api';
 import { controlPlaneFetch } from '@/lib/controlPlane';
@@ -41,7 +42,8 @@ type UpdateStatus =
   | 'confirming'
   | 'updating'
   | 'restarting'
-  | 'update_error';
+  | 'update_error'
+  | 'docker_update';
 
 const DEFAULT_RELEASES_URL = 'https://github.com/BigBodyCobain/Shadowbroker/releases/latest';
 
@@ -63,6 +65,7 @@ export default function TopRightControls({
   const [latestVersion, setLatestVersion] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState('');
   const [manualUpdateUrl, setManualUpdateUrl] = useState(DEFAULT_RELEASES_URL);
+  const [dockerCommands, setDockerCommands] = useState('');
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [launcherOpen, setLauncherOpen] = useState(false);
@@ -398,9 +401,15 @@ export default function TopRightControls({
         message?: string;
         detail?: string;
         manual_url?: string;
+        docker_commands?: string;
       };
       if (typeof data.manual_url === 'string' && data.manual_url.trim().length > 0) {
         setManualUpdateUrl(data.manual_url);
+      }
+      if (data?.status === 'docker') {
+        setDockerCommands(data.docker_commands || 'docker compose pull && docker compose up -d');
+        setUpdateStatus('docker_update');
+        return;
       }
       if (!res.ok || data?.ok === false || data?.status === 'error') {
         const message = data?.detail || data?.message || 'control_plane_request_failed';
@@ -510,6 +519,50 @@ export default function TopRightControls({
           >
             <ExternalLink size={12} />
             MANUAL DOWNLOAD
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── Docker Update Dialog ──
+  const renderDockerDialog = () => (
+    <div className="absolute top-full right-0 mt-2 w-80 z-[9999]">
+      <div className="bg-[var(--bg-primary)]/95 backdrop-blur-sm border border-cyan-800/60 shadow-[0_4px_30px_rgba(0,255,255,0.15)] overflow-hidden">
+        <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border-primary)]">
+          <span className="text-[10px] font-mono tracking-widest text-cyan-400">
+            DOCKER UPDATE — v{latestVersion}
+          </span>
+          <button
+            onClick={() => setUpdateStatus('idle')}
+            className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+          >
+            <X size={12} />
+          </button>
+        </div>
+        <div className="p-3 flex flex-col gap-2">
+          <p className="text-[9px] font-mono text-[var(--text-muted)] leading-relaxed">
+            Docker containers must be updated by pulling new images.
+            Run this on your host machine:
+          </p>
+          <div className="relative bg-black/40 border border-[var(--border-primary)] p-2 group">
+            <code className="text-[9px] font-mono text-green-400 break-all">{dockerCommands}</code>
+            <button
+              onClick={() => navigator.clipboard.writeText(dockerCommands)}
+              className="absolute top-1 right-1 p-1 opacity-0 group-hover:opacity-100 transition-opacity text-[var(--text-muted)] hover:text-cyan-400"
+              title="Copy command"
+            >
+              <Copy size={10} />
+            </button>
+          </div>
+          <a
+            href={manualUpdateUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-[var(--bg-secondary)]/50 border border-[var(--border-primary)] hover:border-[var(--text-muted)] transition-all text-[10px] text-[var(--text-muted)] font-mono tracking-widest"
+          >
+            <ExternalLink size={12} />
+            VIEW RELEASE
           </a>
         </div>
       </div>
@@ -1026,8 +1079,22 @@ export default function TopRightControls({
         </>
       )}
 
+      {/* ── Docker update → show pull instructions ── */}
+      {updateStatus === 'docker_update' && (
+        <>
+          <button
+            onClick={() => setUpdateStatus('docker_update')}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-cyan-500/10 backdrop-blur-sm border border-cyan-500/50 text-[10px] text-cyan-400 font-mono shadow-[0_0_15px_rgba(0,255,255,0.2)]"
+          >
+            <Terminal size={12} className="w-3 h-3" />
+            <span className="tracking-widest">DOCKER UPDATE</span>
+          </button>
+          {renderDockerDialog()}
+        </>
+      )}
+
       {/* ── Default states: idle / checking / uptodate / check-error ── */}
-      {!['available', 'confirming', 'updating', 'restarting', 'update_error'].includes(
+      {!['available', 'confirming', 'updating', 'restarting', 'update_error', 'docker_update'].includes(
         updateStatus,
       ) && (
         <button

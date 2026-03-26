@@ -25,6 +25,21 @@ logger = logging.getLogger(__name__)
 
 GITHUB_RELEASES_URL = "https://api.github.com/repos/BigBodyCobain/Shadowbroker/releases/latest"
 GITHUB_RELEASES_PAGE_URL = "https://github.com/BigBodyCobain/Shadowbroker/releases/latest"
+DOCKER_UPDATE_COMMANDS = (
+    "docker compose pull && docker compose up -d"
+)
+
+
+def _is_docker() -> bool:
+    """Detect if we're running inside a Docker container."""
+    if os.path.isfile("/.dockerenv"):
+        return True
+    try:
+        with open("/proc/1/cgroup", "r") as f:
+            return "docker" in f.read()
+    except (FileNotFoundError, PermissionError):
+        pass
+    return os.environ.get("container") == "docker"
 _EXPECTED_SHA256 = os.environ.get("MESH_UPDATE_SHA256", "").strip().lower()
 _ALLOWED_UPDATE_HOSTS = {
     "api.github.com",
@@ -314,12 +329,32 @@ def perform_update(project_root: str) -> dict:
     Returns a dict with status info on success, or {"status": "error", "message": ...}
     on failure.  Does NOT trigger restart — caller should call schedule_restart()
     separately after the HTTP response has been sent.
+
+    In Docker, file extraction is skipped because containers run from immutable
+    images.  Instead the response tells the frontend to show pull instructions.
     """
+    in_docker = _is_docker()
     temp_dir = tempfile.mkdtemp(prefix="sb_update_")
     manual_url = GITHUB_RELEASES_PAGE_URL
     try:
         zip_path, version, url, release_url = _download_release(temp_dir)
         manual_url = release_url or manual_url
+
+        if in_docker:
+            logger.info("Docker detected — skipping file extraction")
+            return {
+                "status": "docker",
+                "version": version,
+                "manual_url": manual_url,
+                "release_url": release_url,
+                "download_url": url,
+                "docker_commands": DOCKER_UPDATE_COMMANDS,
+                "message": (
+                    f"Version {version} is available. "
+                    "Docker containers must be updated by pulling the new images."
+                ),
+            }
+
         _validate_zip_hash(zip_path)
         backup_path = _backup_current(project_root, temp_dir)
         copied = _extract_and_copy(zip_path, project_root, temp_dir)

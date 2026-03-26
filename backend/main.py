@@ -8135,6 +8135,9 @@ async def system_update(request: Request):
             status_code=500,
             media_type="application/json",
         )
+    # Docker: skip restart — user must pull new images manually
+    if result.get("status") == "docker":
+        return result
     # Schedule restart AFTER response flushes (2s delay)
     threading.Timer(2.0, schedule_restart, args=[project_root]).start()
     return result
