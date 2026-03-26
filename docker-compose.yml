@@ -1,9 +1,6 @@
 services:
   backend:
     image: ghcr.io/bigbodycobain/shadowbroker-backend:latest
-    build:
-      context: .
-      dockerfile: ./backend/Dockerfile
     container_name: shadowbroker-backend
     ports:
       - "${BIND:-127.0.0.1}:8000:8000"
@@ -32,8 +29,6 @@ services:
 
   frontend:
     image: ghcr.io/bigbodycobain/shadowbroker-frontend:latest
-    build:
-      context: ./frontend
     container_name: shadowbroker-frontend
     ports:
       - "${BIND:-127.0.0.1}:3000:3000"
