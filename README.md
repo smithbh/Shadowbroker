@@ -185,7 +185,7 @@ ShadowBroker v0.9.6 introduces **InfoNet**, a decentralized intelligence mesh wi
 |---|---|---|
 | **Meshtastic / APRS** | **PUBLIC** | RF radio transmissions are public and interceptable by design. |
 | **InfoNet Gate Chat** | **OBFUSCATED** | Messages are obfuscated with gate personas and canonical payload signing, but NOT end-to-end encrypted. Metadata is not hidden. |
-| **Dead Drop DMs** | **STRONGEST CURRENT LANE** | Token-based epoch mailbox with SAS word verification. Strongest lane in this build, but still not Signal-tier. |
+| **Dead Drop DMs** | **STRONGEST CURRENT LANE** | Token-based epoch mailbox with SAS word verification. Strongest lane in this build, but not yet confidently private. |
 
 **Do not transmit anything sensitive on any channel.** Treat all lanes as open and public for now. E2E encryption and deeper native/Tauri hardening are the next milestones. If you fork this project, keep these labels intact and do not make stronger privacy claims than the implementation supports.
 
