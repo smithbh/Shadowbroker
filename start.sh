@@ -46,6 +46,7 @@ if ! command -v uv &> /dev/null; then
     fi
     export PATH="$HOME/.local/bin:$PATH"
     echo "[*] UV installed successfully."
+fi
 
 # Get the directory where this script lives
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"

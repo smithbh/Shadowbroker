@@ -41,6 +41,7 @@ const NEW_FEATURES = [
 ];
 
 const BUG_FIXES = [
+    "Fixed start.sh: added missing `fi` after UV install block — valid bash again; setup runs whether or not uv was preinstalled (2026-03-26)",
     "Stable entity IDs for GDELT & News popups — no more wrong popup after data refresh (PR #63)",
     "useCallback optimization for interpolation functions — eliminates redundant React re-renders on every 1s tick",
     "Restored missing GDELT and datacenter background refreshes in slow-tier loop",
