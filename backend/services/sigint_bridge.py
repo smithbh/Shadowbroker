@@ -536,15 +536,26 @@ class MeshtasticBridge:
             else:
                 logger.error(f"Meshtastic MQTT connection refused: rc={rc}")
 
+        def _on_disconnect(client, userdata, rc):
+            if rc != 0:
+                logger.warning(f"Meshtastic MQTT disconnected unexpectedly (rc={rc}), will auto-reconnect")
+            else:
+                logger.info("Meshtastic MQTT disconnected cleanly")
+
         client = mqtt.Client(client_id="shadowbroker-mesh", protocol=mqtt.MQTTv311)
         client.username_pw_set(self.USER, self.PASS)
         client.on_connect = _on_connect
         client.on_message = self._on_message
+        client.on_disconnect = _on_disconnect
+        client.reconnect_delay_set(min_delay=1, max_delay=30)
 
-        client.connect(self.HOST, self.PORT, keepalive=60)
+        client.connect(self.HOST, self.PORT, keepalive=30)
+        client.loop_start()
 
         while not self._stop.is_set():
-            client.loop(timeout=1.0)
+            self._stop.wait(1.0)
+
+        client.loop_stop()
         client.disconnect()
 
     def _on_message(self, client, userdata, msg):
