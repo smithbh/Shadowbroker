@@ -64,91 +64,48 @@ ShadowBroker includes an optional Shodan connector for operator-supplied API acc
 
 ---
 
-## ⚡ Quick Start (Docker or Podman)
-
-Linux/Mac
+## ⚡ Quick Start (Docker)
 
 ```bash
 git clone https://github.com/BigBodyCobain/Shadowbroker.git
 cd Shadowbroker
-./compose.sh up -d
+docker compose pull
+docker compose up -d
 ```
 
-Windows
+Open `http://localhost:3000` to view the dashboard! *(Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/) or Docker Engine)*
 
-```bash
-git clone https://github.com/BigBodyCobain/Shadowbroker.git
-cd Shadowbroker
-docker-compose up -d
-```
-
-Open `http://localhost:3000` to view the dashboard! *(Requires Docker or Podman)*
-
-`compose.sh` auto-detects `docker compose`, `docker-compose`, `podman compose`, and `podman-compose`.
-If both runtimes are installed, you can force Podman with `./compose.sh --engine podman up -d`.
-Do not append a trailing `.` to that command; Compose treats it as a service name.
+> **Podman users:** Replace `docker compose` with `podman compose`, or use the `compose.sh` wrapper which auto-detects your engine. Force Podman with `./compose.sh --engine podman up -d`.
 
 ---
 
 ##  🔄 **How to Update**
 
-If you are coming from v0.9.5 or older, you must pull the new code and rebuild your containers to get the InfoNet testnet, Shodan integration, train tracking, 8 new intelligence layers, and all performance fixes in v0.9.6.
+ShadowBroker uses pre-built Docker images — no local building required. Updating takes seconds:
 
-### 🐧 **Linux & 🍎 macOS** (Terminal / Zsh / Bash)
-
-Since these systems are Unix-based, you can use the helper script directly.
-
-**Pull the latest code:**
 ```bash
-git pull origin main
-```
-**Run the update script:**
-```bash
-./compose.sh down
-./compose.sh up --build -d
+docker compose pull
+docker compose up -d
 ```
 
-### 🪟 **Windows** (Command Prompt or PowerShell)
+That's it. `pull` grabs the latest images, `up -d` restarts the containers.
 
-Windows handles scripts differently. You have two ways to update:
-
-**Method A: The Direct Way (Recommended)**
-Use the docker compose commands directly. This works in any Windows terminal (CMD, PowerShell, or Windows Terminal).
-
-**Pull the latest code:**
-```DOS
-git pull origin main
-```
-
-**Rebuild the containers:**
-```DOS
-docker compose down
-docker compose up --build -d
-```
-
-**Method B: Using the Script (Git Bash)**
-
-If you prefer using the ./compose.sh script on Windows, you must use Git Bash (installed with Git for Windows).
-
-Open your project folder, Right-Click, and select "Open Git Bash here".
-
-**Run the Linux commands:**
-```bash
-./compose.sh down
-./compose.sh up --build -d
-```
-
----
+> **Coming from an older version?** Pull the latest repo code first, then pull images:
+>
+> ```bash
+> git pull origin main
+> docker compose down
+> docker compose pull
+> docker compose up -d
+> ```
 
 ### ⚠️ **Stuck on the old version?**
 
 **If the dashboard still shows old data after updating:**
 
-**Clear Docker Cache:** docker compose build --no-cache
-
-**Prune Images:** docker image prune -f
-
-**Check Logs:** ./compose.sh logs -f backend (or docker compose logs -f backend)
+* **Force re-pull:** `docker compose pull --no-cache`
+* **Prune old images:** `docker image prune -f`
+* **Check logs:** `docker compose logs -f backend`
 
 ---
 
@@ -330,48 +287,58 @@ The first decentralized intelligence communication layer built directly into an 
 ## 🏗️ Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                     FRONTEND (Next.js)                       │
-│                                                              │
-│  ┌─────────────┐  ┌──────────┐  ┌───────────┐  ┌─────────┐   │
-│  │ MapLibre GL │  │ NewsFeed │  │  Control  │  │  Mesh   │   │
-│  │  2D WebGL   │  │  SIGINT  │  │  Panels   │  │  Chat   │   │
-│  │ Map Render  │  │  Intel   │  │  Radio    │  │Terminal │   │
-│  └──────┬──────┘  └────┬─────┘  └─────┬─────┘  └────┬────┘   │
-│         └──────────────┼──────────────┼─────────────┘        │
-│                        │ REST + WebSocket                    │
-├────────────────────────┼─────────────────────────────────────┤
-│                   BACKEND (FastAPI)                          │
-│                        │                                     │
-│  ┌─────────────────────┼──────────────────────────────────┐  │
-│  │              Data Fetcher (Scheduler)                  │  │
-│  │                                                        │  │
-│  │  ┌──────────┬──────────┬──────────┬───────────┐        │  │
-│  │  │ OpenSky  │ adsb.lol │CelesTrak │   USGS    │        │  │
-│  │  │ Flights  │ Military │   Sats   │  Quakes   │        │  │
-│  │  ├──────────┼──────────┼──────────┼───────────┤        │  │
-│  │  │  AIS WS  │ Carrier  │  GDELT   │ CCTV (13) │        │  │
-│  │  │  Ships   │ Tracker  │ Conflict │  Cameras  │        │  │
-│  │  ├──────────┼──────────┼──────────┼───────────┤        │  │
-│  │  │ DeepState│   RSS    │  Region  │    GPS    │        │  │
-│  │  │ Frontline│  Intel   │ Dossier  │  Jamming  │        │  │
-│  │  ├──────────┼──────────┼──────────┼───────────┤        │  │
-│  │  │  NASA    │  NOAA    │  IODA    │  KiwiSDR  │        │  │
-│  │  │  FIRMS   │  Space Wx│ Outages  │  Radios   │        │  │
-│  │  ├──────────┼──────────┼──────────┼───────────┤        │  │
-│  │  │  Shodan  │  Amtrak  │ SatNOGS  │ Meshtastic│        │  │
-│  │  │ Devices  │  Trains  │ TinyGS   │   APRS    │        │  │
-│  │  ├──────────┼──────────┼──────────┼───────────┤        │  │
-│  │  │ Volcanoes│ Weather  │ Fishing  │ Mil Bases │        │  │
-│  │  │ Air Qual.│ Alerts   │ Activity │Power Plant│        │  │
-│  │  └──────────┴──────────┴──────────┴───────────┘        │  │
-│  └────────────────────────────────────────────────────────┘  │
-│                                                              │
-│  ┌────────────────────────────────────────────────────────┐  │
-│  │              Wormhole / InfoNet Relay                  │  │
-│  │  Gate Personas │ Canonical Signing │ Dead Drop DMs     │  │
-│  └────────────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                      FRONTEND (Next.js)                         │
+│                                                                 │
+│  ┌─────────────┐  ┌──────────┐  ┌───────────┐  ┌────────────┐  │
+│  │ MapLibre GL │  │ NewsFeed │  │  Control  │  │    Mesh    │  │
+│  │  2D WebGL   │  │  SIGINT  │  │  Panels   │  │    Chat    │  │
+│  │ Map Render  │  │  Intel   │  │  Radio    │  │  Terminal  │  │
+│  └──────┬──────┘  └────┬─────┘  └─────┬─────┘  └─────┬──────┘  │
+│         └───────────────┼──────────────┼──────────────┘         │
+│                         │ REST + WebSocket                      │
+├─────────────────────────┼───────────────────────────────────────┤
+│                    BACKEND (FastAPI)                             │
+│                         │                                       │
+│  ┌──────────────────────┼────────────────────────────────────┐  │
+│  │              Data Fetcher (Scheduler)                     │  │
+│  │                                                           │  │
+│  │  ┌───────────┬───────────┬───────────┬───────────┐        │  │
+│  │  │  OpenSky  │ adsb.lol  │ CelesTrak │   USGS    │        │  │
+│  │  │  Flights  │ Military  │   Sats    │  Quakes   │        │  │
+│  │  ├───────────┼───────────┼───────────┼───────────┤        │  │
+│  │  │  AIS WS   │ Carrier   │  GDELT    │ CCTV (13) │        │  │
+│  │  │  Ships    │ Tracker   │ Conflict  │  Cameras  │        │  │
+│  │  ├───────────┼───────────┼───────────┼───────────┤        │  │
+│  │  │ DeepState │   RSS     │  Region   │    GPS    │        │  │
+│  │  │ Frontline │  Intel    │ Dossier   │  Jamming  │        │  │
+│  │  ├───────────┼───────────┼───────────┼───────────┤        │  │
+│  │  │  NASA     │  NOAA     │   IODA    │  KiwiSDR  │        │  │
+│  │  │  FIRMS    │ Space Wx  │  Outages  │  Radios   │        │  │
+│  │  ├───────────┼───────────┼───────────┼───────────┤        │  │
+│  │  │  Shodan   │  Amtrak   │  SatNOGS  │Meshtastic │        │  │
+│  │  │ Devices   │ DigiTraf  │  TinyGS   │   APRS    │        │  │
+│  │  ├───────────┼───────────┼───────────┼───────────┤        │  │
+│  │  │ Volcanoes │ Weather   │  Fishing  │ Mil Bases │        │  │
+│  │  │ Air Qual. │ Alerts    │ Activity  │Pwr Plants │        │  │
+│  │  ├───────────┼───────────┼───────────┼───────────┤        │  │
+│  │  │  Sentinel │  MODIS    │  VIIRS    │  Data     │        │  │
+│  │  │  Hub/STAC │  Terra    │ Nightlts  │  Centers  │        │  │
+│  │  └───────────┴───────────┴───────────┴───────────┘        │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │              Wormhole / InfoNet Relay                     │  │
+│  │  Gate Personas │ Canonical Signing │ Dead Drop DMs        │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                   GHCR (Pre-built Images)                 │  │
+│  │  ghcr.io/bigbodycobain/shadowbroker-backend:latest        │  │
+│  │  ghcr.io/bigbodycobain/shadowbroker-frontend:latest       │  │
+│  │  Multi-arch: linux/amd64 + linux/arm64                    │  │
+│  └───────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -426,15 +393,16 @@ The first decentralized intelligence communication layer built directly into an 
 
 ## 🚀 Getting Started
 
-### 🐳 Docker / Podman Setup (Recommended for Self-Hosting)
+### 🐳 Docker Setup (Recommended for Self-Hosting)
 
-The repo includes a `docker-compose.yml` that builds both images locally.
+The repo includes a `docker-compose.yml` that pulls pre-built images from the GitHub Container Registry.
 
 ```bash
 git clone https://github.com/BigBodyCobain/Shadowbroker.git
 cd Shadowbroker
 # Add your API keys in a repo-root .env file (optional — see Environment Variables below)
-./compose.sh up -d
+docker compose pull
+docker compose up -d
 ```
 
 Open `http://localhost:3000` to view the dashboard.
@@ -460,8 +428,7 @@ Open `http://localhost:3000` to view the dashboard.
 > # BACKEND_URL=http://myserver.com:9096
 > ```
 
-If you prefer to call the container engine directly, Podman users can run `podman compose up -d`, or force the wrapper to use Podman with `./compose.sh --engine podman up -d`.
-Depending on your local Podman configuration, `podman compose` may still delegate to an external compose provider while talking to the Podman socket.
+**Podman users:** Replace `docker compose` with `podman compose`, or use the `compose.sh` wrapper which auto-detects your engine.
 
 ---
 
@@ -525,9 +492,8 @@ If you just want to run the dashboard without dealing with terminal commands:
 
 Local launcher notes:
 
-- `start.bat` / `start.sh` currently run the hardened web/local stack, not the final native desktop boundary.
-- Security-sensitive paths are hardened up to the pre-Tauri boundary, but operator-facing responsiveness still matters and is part of the acceptance bar.
-- If Wormhole identity or DM contact endpoints fail after an upgrade on Windows, see `F:\Codebase\Oracle\live-risk-dashboard\docs\mesh\pre-tauri-phase-closeout.md` for the secure-storage repair workflow.
+- `start.bat` / `start.sh` run the app without Docker — they install dependencies and start both servers directly.
+- If Wormhole identity or DM contact endpoints fail after an upgrade, check the `docs/mesh/` folder for troubleshooting.
 
 ---
 
