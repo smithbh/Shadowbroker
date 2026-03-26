@@ -435,7 +435,7 @@ def connect_wormhole(*, reason: str = "connect") -> dict[str, Any]:
             proxy=str(settings.get("socks_proxy", "")),
         )
 
-        deadline = time.monotonic() + 8.0
+        deadline = time.monotonic() + 20.0
         while time.monotonic() < deadline:
             if process.poll() is not None:
                 err = f"Wormhole exited with code {process.returncode}."
@@ -464,7 +464,7 @@ def connect_wormhole(*, reason: str = "connect") -> dict[str, Any]:
                     proxy=str(settings.get("socks_proxy", "")),
                 )
                 break
-            time.sleep(0.25)
+            time.sleep(0.5)
         return _store_state_cache(_current_runtime_state())
 
 
