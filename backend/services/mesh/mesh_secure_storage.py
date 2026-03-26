@@ -189,10 +189,27 @@ def _is_windows() -> bool:
     return os.name == "nt"
 
 
+def _is_docker_container() -> bool:
+    """Detect if we're running inside a Docker container."""
+    if os.path.isfile("/.dockerenv"):
+        return True
+    try:
+        with open("/proc/1/cgroup", "r") as f:
+            if "docker" in f.read():
+                return True
+    except OSError:
+        pass
+    return os.environ.get("container") == "docker"
+
+
 def _raw_fallback_allowed() -> bool:
     if _is_windows():
         return False
     if os.environ.get("PYTEST_CURRENT_TEST"):
+        return True
+    # Docker containers have no DPAPI or native keyring — auto-allow raw
+    # fallback so that Wormhole secure storage works out of the box.
+    if _is_docker_container():
         return True
     try:
         from services.config import get_settings
