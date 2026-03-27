@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { API_BASE } from '@/lib/api';
 import { controlPlaneJson } from '@/lib/controlPlane';
+import { useGateSSE } from '@/hooks/useGateSSE';
 import { requestSecureMeshTerminalLauncherOpen } from '@/lib/meshTerminalLauncher';
 import {
   loadIdentityBoundSensitiveValue,
@@ -1111,6 +1112,17 @@ const MeshChat = React.memo(function MeshChat({
   const [reps, setReps] = useState<Record<string, number>>({});
   const repsRef = useRef(reps);
   const [votedOn, setVotedOn] = useState<Record<string, 1 | -1>>({});
+
+  // SSE: bump tick counter to trigger immediate re-poll on gate events
+  const [sseGateTick, setSseGateTick] = useState(0);
+  const selectedGateRef = useRef(selectedGate);
+  selectedGateRef.current = selectedGate;
+  const handleSSEGateEvent = useCallback((eventGateId: string) => {
+    if (eventGateId === selectedGateRef.current.trim().toLowerCase()) {
+      setSseGateTick((t) => t + 1);
+    }
+  }, []);
+  useGateSSE(handleSSEGateEvent);
   const [gateReplyContext, setGateReplyContext] = useState<GateReplyContext | null>(null);
   const [showCreateGate, setShowCreateGate] = useState(false);
   const [newGateId, setNewGateId] = useState('');
@@ -1699,7 +1711,7 @@ const MeshChat = React.memo(function MeshChat({
       }
     };
     poll();
-    const iv = setInterval(poll, 10000);
+    const iv = setInterval(poll, 30_000); // SSE handles fast path; this is fallback
     return () => {
       cancelled = true;
       clearInterval(iv);
@@ -1712,6 +1724,7 @@ const MeshChat = React.memo(function MeshChat({
     gatePersonaBusy,
     gatePersonaPromptOpen,
     hydrateInfonetMessages,
+    sseGateTick, // SSE event triggers immediate re-poll
   ]);
 
   useEffect(() => {

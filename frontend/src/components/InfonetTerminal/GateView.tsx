@@ -13,6 +13,7 @@ import {
 } from '@/mesh/wormholeIdentityClient';
 import { gateEnvelopeDisplayText, gateEnvelopeState, isEncryptedGateEnvelope } from '@/mesh/gateEnvelope';
 import { validateEventPayload } from '@/mesh/meshSchema';
+import { useGateSSE } from '@/hooks/useGateSSE';
 
 const GATE_INTROS: Record<string, string> = {
   infonet:
@@ -357,11 +358,21 @@ export default function GateView({
     }
   }, [gateId, hydrateMessages]);
 
+  // SSE: instant delivery when new gate events arrive
+  const handleSSEEvent = useCallback(
+    (eventGateId: string) => {
+      if (eventGateId === gateId) void refreshGate();
+    },
+    [gateId, refreshGate],
+  );
+  useGateSSE(handleSSEEvent);
+
+  // Fallback poll (30s) in case SSE disconnects
   useEffect(() => {
     void refreshGate();
     const timer = window.setInterval(() => {
       void refreshGate();
-    }, 8000);
+    }, 30_000);
     return () => {
       window.clearInterval(timer);
     };

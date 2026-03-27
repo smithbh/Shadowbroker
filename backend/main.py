@@ -694,7 +694,7 @@ def _schedule_public_event_propagation(event_dict: dict[str, Any]) -> None:
 # Runs alongside the sync loop.  Every PUSH_INTERVAL seconds, batches new
 # Infonet events and sends them via HMAC-authenticated POST to push peers.
 
-_PEER_PUSH_INTERVAL_S = 30
+_PEER_PUSH_INTERVAL_S = 10
 _PEER_PUSH_BATCH_SIZE = 50
 _peer_push_last_index: dict[str, int] = {}  # peer_url → last pushed event index
 
@@ -782,7 +782,7 @@ def _http_peer_push_loop() -> None:
 # Complements the push loop: push sends OUR events to peers, pull fetches
 # THEIR events from peers (needed when this node is behind NAT).
 
-_GATE_PULL_INTERVAL_S = 30
+_GATE_PULL_INTERVAL_S = 10
 _gate_pull_last_count: dict[str, dict[str, int]] = {}  # peer → {gate_id → known count}
 
 
@@ -893,6 +893,7 @@ def _http_gate_pull_loop() -> None:
                         accepted = int(result.get("accepted", 0) or 0)
                         dups = int(result.get("duplicates", 0) or 0)
                         if accepted > 0:
+                            _broadcast_gate_events(gate_id, events[:accepted])
                             logger.info(
                                 "Gate pull: %d new event(s) for %s from %s",
                                 accepted, gate_id[:12], normalized[:40],
@@ -905,6 +906,35 @@ def _http_gate_pull_loop() -> None:
         except Exception:
             logger.exception("HTTP gate pull loop error")
         _NODE_SYNC_STOP.wait(_GATE_PULL_INTERVAL_S)
+
+
+# ─── SSE Gate Event Broadcast ─────────────────────────────────────────────
+# All connected SSE clients receive every gate event (encrypted blobs).
+# Clients filter locally by gate_id — the server never learns which gates
+# a client cares about (privacy-preserving broadcast).
+
+_gate_sse_clients: set[asyncio.Queue] = set()
+_gate_sse_lock = threading.Lock()
+
+
+def _broadcast_gate_events(gate_id: str, events: list[dict]) -> None:
+    """Notify all connected SSE clients about new gate events (non-blocking)."""
+    if not events:
+        return
+    payload = json_mod.dumps(
+        {"gate_id": gate_id, "count": len(events), "ts": time.time()},
+        separators=(",", ":"),
+        ensure_ascii=False,
+    )
+    with _gate_sse_lock:
+        dead: list[asyncio.Queue] = []
+        for q in _gate_sse_clients:
+            try:
+                q.put_nowait(payload)
+            except (asyncio.QueueFull, Exception):
+                dead.append(q)
+        for q in dead:
+            _gate_sse_clients.discard(q)
 
 
 # ─── Background Gate Message Push Worker ─────────────────────────────────
@@ -4008,6 +4038,7 @@ def _submit_gate_message_envelope(request: Request, gate_id: str, body: dict[str
             if reply_to:
                 store_payload["reply_to"] = reply_to
         stored_event = gate_store.append(gate_id, gate_event)
+        _broadcast_gate_events(gate_id, [gate_event])
         chain_event_id = chain_event_id or str(stored_event.get("event_id", ""))
         try:
             from services.mesh.mesh_rns import rns_bridge
@@ -4429,9 +4460,12 @@ async def gate_peer_push(request: Request):
     rejected = 0
     for event_gate_id, items in grouped_events.items():
         result = gate_store.ingest_peer_events(event_gate_id, items)
-        accepted += int(result.get("accepted", 0) or 0)
+        a = int(result.get("accepted", 0) or 0)
+        accepted += a
         duplicates += int(result.get("duplicates", 0) or 0)
         rejected += int(result.get("rejected", 0) or 0)
+        if a > 0:
+            _broadcast_gate_events(event_gate_id, items[:a])
     return {"ok": True, "accepted": accepted, "duplicates": duplicates, "rejected": rejected}
 
 
@@ -4487,6 +4521,47 @@ async def gate_peer_pull(request: Request):
 
     batch = all_events[after_count : after_count + _PEER_PUSH_BATCH_SIZE]
     return {"ok": True, "events": batch, "total": total, "gate_id": gate_id}
+
+
+# ---------------------------------------------------------------------------
+# SSE Gate Event Stream — real-time push of gate activity to frontends.
+# Delivers ALL gate events (encrypted blobs) to every connected client.
+# The client filters locally by gate_id — the server never learns which
+# gates a client cares about (privacy-preserving broadcast).
+# ---------------------------------------------------------------------------
+
+
+@app.get("/api/mesh/gate/stream")
+async def gate_event_stream(request: Request):
+    """SSE stream of all gate events for real-time delivery."""
+    client_queue: asyncio.Queue = asyncio.Queue(maxsize=256)
+    with _gate_sse_lock:
+        _gate_sse_clients.add(client_queue)
+
+    async def event_generator():
+        try:
+            yield ": connected\n\n"
+            while True:
+                if await request.is_disconnected():
+                    break
+                try:
+                    payload = await asyncio.wait_for(client_queue.get(), timeout=15.0)
+                    yield f"data: {payload}\n\n"
+                except asyncio.TimeoutError:
+                    yield ": keepalive\n\n"
+        finally:
+            with _gate_sse_lock:
+                _gate_sse_clients.discard(client_queue)
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 # ---------------------------------------------------------------------------
