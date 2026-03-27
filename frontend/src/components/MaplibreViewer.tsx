@@ -1595,6 +1595,8 @@ const MaplibreViewer = ({
     meshtasticGeoJSON && 'meshtastic-clusters',
     meshtasticGeoJSON && 'meshtastic-cluster-count',
     meshtasticGeoJSON && 'meshtastic-circles',
+    aprsGeoJSON && 'aprs-clusters',
+    aprsGeoJSON && 'aprs-cluster-count',
     aprsGeoJSON && 'aprs-triangles',
     ukraineAlertsGeoJSON && 'ukraine-alerts-fill',
     weatherAlertsGeoJSON && 'weather-alerts-fill',
@@ -3180,44 +3182,82 @@ const MaplibreViewer = ({
           />
         </Source>
 
-        {/* APRS / JS8Call — pink triangles */}
-        <Source id="aprs-source" type="geojson" data={EMPTY_FC}>
+        {/* APRS / JS8Call — pink triangles with clustering */}
+        <Source
+          id="aprs-source"
+          type="geojson"
+          data={EMPTY_FC}
+          cluster={true}
+          clusterRadius={42}
+          clusterMaxZoom={8}
+        >
           <Layer
-            id="aprs-halo"
-            type="circle"
-            paint={{
-              'circle-radius': ['interpolate', ['linear'], ['zoom'], 2, 4, 6, 6, 10, 8],
-              'circle-color': '#f472b6',
-              'circle-opacity': 0.14,
-              'circle-stroke-width': 1,
-              'circle-stroke-color': '#f9a8d4',
-              'circle-stroke-opacity': 0.45,
-            }}
-          />
-          <Layer
-            id="aprs-triangles"
+            id="aprs-clusters"
             type="symbol"
+            filter={['has', 'point_count']}
             layout={{
               'icon-image': 'icon-aprs-triangle',
-              'icon-size': ['interpolate', ['linear'], ['zoom'], 2, 0.8, 6, 1.0, 10, 1.15],
+              'icon-size': [
+                'step',
+                ['get', 'point_count'],
+                1.1,
+                10,
+                1.35,
+                50,
+                1.65,
+                100,
+                1.95,
+                500,
+                2.3,
+              ],
               'icon-allow-overlap': true,
-              'icon-ignore-placement': true,
             }}
             paint={{
               'icon-opacity': 0.95,
             }}
           />
           <Layer
+            id="aprs-cluster-count"
+            type="symbol"
+            filter={['has', 'point_count']}
+            layout={{
+              'text-field': ['get', 'point_count_abbreviated'],
+              'text-size': 11,
+              'text-font': ['Noto Sans Bold'],
+              'text-offset': [0, 0.05],
+              'text-anchor': 'center',
+              'text-allow-overlap': true,
+            }}
+            paint={{
+              'text-color': '#4a0525',
+              'text-halo-color': '#f9a8d4',
+              'text-halo-width': 0.8,
+            }}
+          />
+          <Layer
+            id="aprs-triangles"
+            type="symbol"
+            filter={['!', ['has', 'point_count']]}
+            layout={{
+              'icon-image': 'icon-aprs-triangle',
+              'icon-size': 0.7,
+              'icon-allow-overlap': true,
+            }}
+            paint={{
+              'icon-opacity': 0.85,
+            }}
+          />
+          <Layer
             id="aprs-labels"
             type="symbol"
-            minzoom={5}
+            minzoom={8}
             layout={{
               'text-field': ['get', 'callsign'],
               'text-size': 9,
               'text-offset': [0, 1.2],
               'text-anchor': 'top',
               'text-font': ['Noto Sans Regular'],
-              'text-allow-overlap': true,
+              'text-allow-overlap': false,
             }}
             paint={{
               'text-color': '#f9a8d4',

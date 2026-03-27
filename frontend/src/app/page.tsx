@@ -365,47 +365,55 @@ export default function Dashboard() {
   }, []);
 
   const [activeLayers, setActiveLayers] = useState<ActiveLayers>({
+    // Aircraft — all ON
     flights: true,
     private: true,
     jets: true,
     military: true,
     tracked: true,
-    satellites: true,
+    gps_jamming: true,
+    // Maritime — all ON
     ships_military: true,
     ships_cargo: true,
     ships_civilian: true,
     ships_passenger: true,
     ships_tracked_yachts: true,
-    earthquakes: true,
-    cctv: true,
-    ukraine_frontline: true,
-    global_incidents: true,
-    day_night: true,
-    gps_jamming: true,
+    fishing_activity: true,
+    // Space — only satellites
+    satellites: true,
     gibs_imagery: false,
     highres_satellite: false,
+    sentinel_hub: false,
+    viirs_nightlights: false,
+    // Hazards — no fire, rest ON
+    earthquakes: true,
+    firms: false,
+    ukraine_alerts: true,
+    weather_alerts: true,
+    volcanoes: true,
+    air_quality: true,
+    // Infrastructure — military bases + internet outages only
+    cctv: false,
+    datacenters: false,
+    internet_outages: true,
+    power_plants: false,
+    military_bases: true,
+    trains: false,
+    // SIGINT — all ON except HF digital spots
     kiwisdr: true,
-    psk_reporter: true,
+    psk_reporter: false,
     satnogs: true,
     tinygs: true,
     scanners: true,
-    firms: true,
-    internet_outages: true,
-    datacenters: true,
-    military_bases: true,
-    power_plants: false,
     sigint_meshtastic: true,
     sigint_aprs: true,
-    ukraine_alerts: true,
-    weather_alerts: true,
-    air_quality: true,
-    volcanoes: true,
-    fishing_activity: true,
-    sentinel_hub: false,
-    trains: true,
-    shodan_overlay: false,
-    viirs_nightlights: false,
+    // Overlays
+    ukraine_frontline: true,
+    global_incidents: true,
+    day_night: true,
     correlations: true,
+    // Shodan
+    shodan_overlay: false,
   });
   const [shodanResults, setShodanResults] = useState<ShodanSearchMatch[]>([]);
   const [, setShodanQueryLabel] = useState('');
