@@ -769,7 +769,7 @@ const PredictionsPanel = React.memo(function PredictionsPanel() {
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="w-full bg-[var(--bg-primary)]/40 backdrop-blur-sm border border-[var(--border-primary)] z-10 flex flex-col font-mono text-sm pointer-events-auto flex-shrink-0"
+        className="w-full bg-[#0a0a0a]/90 backdrop-blur-sm border border-cyan-900/40 z-10 flex flex-col font-mono text-sm pointer-events-auto flex-shrink-0"
       >
         {/* Header */}
         <div

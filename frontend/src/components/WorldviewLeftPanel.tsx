@@ -1103,7 +1103,7 @@ const WorldviewLeftPanel = React.memo(function WorldviewLeftPanel({
       </div>
 
       {/* Data Layers Box */}
-      <div className={`bg-[var(--bg-primary)]/40 backdrop-blur-sm border border-[var(--border-primary)] pointer-events-auto flex flex-col relative overflow-hidden max-h-full ${isMinimized ? 'flex-shrink-0' : 'flex-1 min-h-0'}`}>
+      <div className={`bg-[#0a0a0a]/90 backdrop-blur-sm border border-cyan-900/40 pointer-events-auto flex flex-col relative overflow-hidden max-h-full ${isMinimized ? 'flex-shrink-0' : 'flex-1 min-h-0'}`}>
         {/* Header / Toggle */}
         <div 
           className="flex justify-between items-center p-4 cursor-pointer hover:bg-[var(--bg-secondary)]/50 transition-colors border-b border-[var(--border-primary)]/50"

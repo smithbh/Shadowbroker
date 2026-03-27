@@ -175,7 +175,7 @@ const FindLocateBar = React.memo(function FindLocateBar({ onLocate, onFilter }: 
 
   return (
     <div ref={containerRef} className="relative w-full pointer-events-auto">
-      <div className="flex items-center gap-2 bg-[var(--bg-primary)]/40 backdrop-blur-sm border border-[var(--border-primary)] px-3 py-2 focus-within:border-cyan-500/40 transition-colors">
+      <div className="flex items-center gap-2 bg-[#0a0a0a]/90 backdrop-blur-sm border border-cyan-900/40 px-3 py-2 focus-within:border-cyan-500/40 transition-colors">
         <Search size={12} className="text-slate-500 flex-shrink-0" />
         <input
           ref={inputRef}

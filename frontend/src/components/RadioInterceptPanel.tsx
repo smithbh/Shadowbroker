@@ -291,7 +291,7 @@ export default function RadioInterceptPanel({
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 1, delay: 0.2 }}
-      className="w-full flex flex-col bg-[var(--bg-primary)]/40 backdrop-blur-sm border border-[var(--border-primary)] pointer-events-auto relative overflow-hidden max-h-full"
+      className="w-full flex flex-col bg-[#0a0a0a]/90 backdrop-blur-sm border border-cyan-900/40 pointer-events-auto relative overflow-hidden max-h-full"
     >
       <div
         className="flex items-center justify-between p-4 border-b border-[var(--border-primary)]/50 cursor-pointer hover:bg-[var(--bg-secondary)]/50 transition-colors"

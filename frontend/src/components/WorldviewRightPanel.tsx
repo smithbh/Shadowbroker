@@ -35,10 +35,10 @@ const WorldviewRightPanel = React.memo(function WorldviewRightPanel({
       initial={{ opacity: 0, x: -50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 1 }}
-      className={`w-full bg-[var(--bg-primary)]/40 backdrop-blur-sm border border-[var(--border-primary)] z-10 flex flex-col font-mono pointer-events-auto overflow-hidden transition-all duration-300 flex-shrink-0 ${isMinimized ? 'h-[50px]' : 'h-[320px]'}`}
+      className={`w-full bg-[#0a0a0a]/90 backdrop-blur-sm border border-cyan-900/40 z-10 flex flex-col font-mono pointer-events-auto overflow-hidden transition-all duration-300 flex-shrink-0 ${isMinimized ? 'h-[50px]' : 'h-[320px]'}`}
     >
       {/* Record / Orbit Tracker Header */}
-      <div className="flex items-center gap-3 mb-6 border border-[var(--border-primary)] bg-[var(--bg-primary)]/40 backdrop-blur-sm px-4 py-2 rounded-sm relative pointer-events-auto">
+      <div className="flex items-center gap-3 mb-6 border border-cyan-900/40 bg-[#0a0a0a]/90 backdrop-blur-sm px-4 py-2 rounded-sm relative pointer-events-auto">
         <div className="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-[var(--text-muted)]/50"></div>
         <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-[var(--text-muted)]/50"></div>
         <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
@@ -50,7 +50,7 @@ const WorldviewRightPanel = React.memo(function WorldviewRightPanel({
       </div>
 
       {/* Right side controls box */}
-      <div className="bg-[var(--bg-primary)]/40 backdrop-blur-sm border border-[var(--border-primary)] pointer-events-auto border-r-2 border-r-[var(--border-primary)] flex flex-col relative overflow-hidden h-full">
+      <div className="bg-[#0a0a0a]/90 backdrop-blur-sm border border-cyan-900/40 pointer-events-auto border-r-2 border-r-cyan-900/40 flex flex-col relative overflow-hidden h-full">
         {/* Header / Toggle */}
         <div
           className="flex justify-between items-center p-4 cursor-pointer hover:bg-[var(--bg-secondary)]/50 transition-colors border-b border-[var(--border-primary)]/50"

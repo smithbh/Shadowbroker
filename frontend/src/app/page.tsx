@@ -722,7 +722,7 @@ export default function Dashboard() {
             >
               <button
                 onClick={() => setLeftOpen(!leftOpen)}
-                className="flex flex-col items-center gap-1.5 py-5 px-1.5 bg-cyan-950/40 border border-cyan-800/30 border-l-0 rounded-r text-cyan-700 hover:text-cyan-400 hover:bg-cyan-950/60 hover:border-cyan-500/40 transition-colors"
+                className="flex flex-col items-center gap-1.5 py-5 px-1.5 bg-cyan-950/40 border border-cyan-800/50 border-l-0 rounded-r text-cyan-700 hover:text-cyan-400 hover:bg-cyan-950/60 hover:border-cyan-500/40 transition-colors"
               >
                 {leftOpen ? <ChevronLeft size={10} /> : <ChevronRight size={10} />}
                 <span
@@ -742,7 +742,7 @@ export default function Dashboard() {
             >
               <button
                 onClick={() => setRightOpen(!rightOpen)}
-                className="flex flex-col items-center gap-1.5 py-5 px-1.5 bg-cyan-950/40 border border-cyan-800/30 border-r-0 rounded-l text-cyan-700 hover:text-cyan-400 hover:bg-cyan-950/60 hover:border-cyan-500/40 transition-colors"
+                className="flex flex-col items-center gap-1.5 py-5 px-1.5 bg-cyan-950/40 border border-cyan-800/50 border-r-0 rounded-l text-cyan-700 hover:text-cyan-400 hover:bg-cyan-950/60 hover:border-cyan-500/40 transition-colors"
               >
                 {rightOpen ? <ChevronRight size={10} /> : <ChevronLeft size={10} />}
                 <span
@@ -837,7 +837,7 @@ export default function Dashboard() {
                 />
 
                 <div
-                  className="bg-[var(--bg-primary)]/80 border border-[var(--border-primary)] px-5 py-1.5 flex items-center gap-5 border-b-2 border-b-cyan-900 cursor-pointer"
+                  className="bg-[#0a0a0a]/90 border border-cyan-900/40 px-5 py-1.5 flex items-center gap-5 border-b-2 border-b-cyan-800 cursor-pointer backdrop-blur-sm"
                   onClick={cycleStyle}
                 >
                   {/* Coordinates */}
@@ -949,7 +949,7 @@ export default function Dashboard() {
 
         {/* SCANLINES OVERLAY */}
         <div
-          className="absolute inset-0 pointer-events-none z-[3] opacity-5 bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px)]"
+          className="absolute inset-0 pointer-events-none z-[3] opacity-[0.08] bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px)]"
           style={{ backgroundSize: '100% 4px' }}
         ></div>
 
@@ -1107,7 +1107,7 @@ export default function Dashboard() {
         >
           <button
             onClick={() => setTickerOpen(!tickerOpen)}
-            className="flex items-center gap-2 px-3 py-1 bg-cyan-950/40 border border-cyan-800/30 border-b-0 rounded-t text-cyan-700 hover:text-cyan-400 hover:bg-cyan-950/60 hover:border-cyan-500/40 transition-colors"
+            className="flex items-center gap-2 px-3 py-1 bg-cyan-950/40 border border-cyan-800/50 border-b-0 rounded-t text-cyan-700 hover:text-cyan-400 hover:bg-cyan-950/60 hover:border-cyan-500/40 transition-colors"
           >
             <div className="text-[7.5px] font-mono tracking-[0.25em] font-bold uppercase">
               MARKETS

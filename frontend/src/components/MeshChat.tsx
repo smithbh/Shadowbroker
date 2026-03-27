@@ -3893,7 +3893,7 @@ const MeshChat = React.memo(function MeshChat({
     >
       {/* Single unified box — matches Data Layers panel skin */}
       <div
-        className={`bg-black/50 backdrop-blur-sm border border-cyan-800/40 flex flex-col relative overflow-hidden`}
+        className={`bg-[#0a0a0a]/90 backdrop-blur-sm border border-cyan-900/40 flex flex-col relative overflow-hidden`}
         style={{ boxShadow: '0 0 15px rgba(8,145,178,0.06), inset 0 0 20px rgba(0,0,0,0.4)', ...(expanded ? { flex: '1 1 0', minHeight: 0 } : {}) }}
       >
         {/* HEADER */}

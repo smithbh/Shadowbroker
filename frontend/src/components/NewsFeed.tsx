@@ -1053,7 +1053,7 @@ function NewsFeedInner({ selectedEntity, regionDossier, regionDossierLoading, on
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className={`w-full bg-[var(--bg-primary)]/40 backdrop-blur-sm border border-[var(--border-primary)] flex flex-col z-10 font-mono pointer-events-auto overflow-hidden transition-all duration-300 ${isMinimized ? 'h-[50px] flex-shrink-0' : 'flex-1 min-h-0'}`}
+            className={`w-full bg-[#0a0a0a]/90 backdrop-blur-sm border border-cyan-900/40 flex flex-col z-10 font-mono pointer-events-auto overflow-hidden transition-all duration-300 ${isMinimized ? 'h-[50px] flex-shrink-0' : 'flex-1 min-h-0'}`}
         >
             <div
                 className="p-3 border-b border-[var(--border-primary)]/50 relative overflow-hidden cursor-pointer hover:bg-[var(--bg-secondary)]/50 transition-colors"

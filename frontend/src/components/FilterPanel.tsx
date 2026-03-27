@@ -300,7 +300,7 @@ const FilterPanel = React.memo(function FilterPanel({ activeFilters, setActiveFi
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.3 }}
-        className="w-full bg-[var(--bg-primary)]/40 backdrop-blur-sm border border-[var(--border-primary)] z-10 flex flex-col font-mono text-sm pointer-events-auto flex-shrink-0"
+        className="w-full bg-[#0a0a0a]/90 backdrop-blur-sm border border-cyan-900/40 z-10 flex flex-col font-mono text-sm pointer-events-auto flex-shrink-0"
       >
         {/* Header Toggle */}
         <div

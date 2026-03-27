@@ -1,22 +1,22 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #000000;
-  --foreground: #ededed;
-  --bg-primary: #000000;
-  --bg-secondary: rgb(5, 5, 8);
-  --bg-tertiary: rgb(12, 12, 16);
-  --bg-panel: rgba(0, 0, 0, 0.85);
-  --border-primary: rgba(8, 145, 178, 0.18);
-  --border-secondary: rgba(8, 145, 178, 0.30);
-  --border-glow: rgba(6, 182, 212, 0.12);
-  --text-primary: rgb(243, 244, 246);
+  --background: #0a0a0a;
+  --foreground: #d1d5db;
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #080808;
+  --bg-tertiary: #0f0f0f;
+  --bg-panel: rgba(10, 10, 10, 0.92);
+  --border-primary: rgba(8, 145, 178, 0.30);
+  --border-secondary: rgba(8, 145, 178, 0.45);
+  --border-glow: rgba(6, 182, 212, 0.18);
+  --text-primary: rgb(209, 213, 219);
   --text-secondary: rgb(34, 211, 238);
   --text-muted: rgb(8, 145, 178);
-  --text-heading: rgb(236, 254, 255);
+  --text-heading: rgb(207, 250, 254);
   --hover-accent: rgba(8, 51, 68, 0.2);
-  --scrollbar-thumb: rgba(255, 255, 255, 0.12);
-  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.25);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.15);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.28);
   --font-geist-sans:
     ui-sans-serif, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans',
     sans-serif;
@@ -27,22 +27,22 @@
 
 /* Light theme: only the map basemap changes — UI stays dark */
 [data-theme='light'] {
-  --background: #000000;
-  --foreground: #ededed;
-  --bg-primary: #000000;
-  --bg-secondary: rgb(5, 5, 8);
-  --bg-tertiary: rgb(12, 12, 16);
-  --bg-panel: rgba(0, 0, 0, 0.85);
-  --border-primary: rgba(8, 145, 178, 0.18);
-  --border-secondary: rgba(8, 145, 178, 0.30);
-  --border-glow: rgba(6, 182, 212, 0.12);
-  --text-primary: rgb(243, 244, 246);
+  --background: #0a0a0a;
+  --foreground: #d1d5db;
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #080808;
+  --bg-tertiary: #0f0f0f;
+  --bg-panel: rgba(10, 10, 10, 0.92);
+  --border-primary: rgba(8, 145, 178, 0.30);
+  --border-secondary: rgba(8, 145, 178, 0.45);
+  --border-glow: rgba(6, 182, 212, 0.18);
+  --text-primary: rgb(209, 213, 219);
   --text-secondary: rgb(34, 211, 238);
   --text-muted: rgb(8, 145, 178);
-  --text-heading: rgb(236, 254, 255);
+  --text-heading: rgb(207, 250, 254);
   --hover-accent: rgba(8, 51, 68, 0.2);
-  --scrollbar-thumb: rgba(255, 255, 255, 0.12);
-  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.25);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.15);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.28);
 }
 
 @theme inline {
@@ -55,7 +55,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-roboto-mono), 'Roboto Mono', monospace;
+  font-family: 'JetBrains Mono', var(--font-roboto-mono), 'Roboto Mono', monospace;
 }
 
 /* Global interactive cursor hints */
@@ -116,30 +116,30 @@ textarea:disabled {
 
 /* Subtle text glow for cyan headings */
 .text-glow {
-  text-shadow: 0 0 8px rgba(34, 211, 238, 0.3);
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.45), 0 0 20px rgba(34, 211, 238, 0.15);
 }
 
 /* Terminal input — prompt style */
 .terminal-input {
   border-radius: 0;
-  border: 1px solid rgba(8, 145, 178, 0.25);
-  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(8, 145, 178, 0.35);
+  background: rgba(10, 10, 10, 0.5);
 }
 .terminal-input:focus {
   border-color: rgba(34, 211, 238, 0.5);
-  box-shadow: 0 0 6px rgba(34, 211, 238, 0.15);
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.2);
   outline: none;
 }
 
 /* Map popup shared utilities */
 .map-popup {
-  background: rgba(10, 14, 26, 0.95);
+  background: rgba(10, 14, 20, 0.96);
   border-radius: 2px;
-  border: 1px solid rgba(8, 145, 178, 0.25);
+  border: 1px solid rgba(8, 145, 178, 0.35);
   padding: 10px 14px;
-  color: #e0e6f0;
+  color: #d1d5db;
   font-family:
-    var(--font-roboto-mono), 'Roboto Mono', monospace, 'Microsoft YaHei', 'PingFang SC',
+    'JetBrains Mono', var(--font-roboto-mono), 'Roboto Mono', monospace, 'Microsoft YaHei', 'PingFang SC',
     'Noto Sans SC', 'Noto Sans JP', 'Noto Sans KR', sans-serif;
   font-size: 11px;
   min-width: 220px;
@@ -150,7 +150,8 @@ textarea:disabled {
   font-weight: 700;
   font-size: 13px;
   margin-bottom: 6px;
-  letter-spacing: 1px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .map-popup-row {
@@ -185,12 +186,12 @@ textarea:disabled {
   --hover-accent: rgba(5, 46, 22, 0.2);
   --scrollbar-thumb: rgba(255, 255, 255, 0.12);
   --scrollbar-thumb-hover: rgba(255, 255, 255, 0.25);
-  --border-primary: rgba(22, 163, 74, 0.18);
-  --border-secondary: rgba(22, 163, 74, 0.30);
-  --border-glow: rgba(34, 197, 94, 0.12);
+  --border-primary: rgba(22, 163, 74, 0.30);
+  --border-secondary: rgba(22, 163, 74, 0.45);
+  --border-glow: rgba(34, 197, 94, 0.18);
 }
 [data-hud='matrix'] .hud-zone .text-glow {
-  text-shadow: 0 0 8px rgba(74, 222, 128, 0.3);
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.45), 0 0 20px rgba(74, 222, 128, 0.15);
 }
 
 /* --- Text color overrides --- */
