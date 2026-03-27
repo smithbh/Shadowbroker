@@ -3595,7 +3595,7 @@ const MaplibreViewer = ({
 
         {/* HTML labels for UAVs (orange names) */}
         {uavGeoJSON && !selectedEntity && !isMapInteracting && data?.uavs && (
-          <UavLabels uavs={data.uavs} inView={inView} zoom={zoom} />
+          <UavLabels uavs={data.uavs} inView={inView} zoom={mapZoom} />
         )}
 
         {/* HTML labels for earthquakes (yellow) - only show when zoomed in (~2000 miles = zoom ~5) */}
