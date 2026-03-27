@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     MESH_RELAY_PUSH_TIMEOUT_S: int = 10
     MESH_RELAY_MAX_FAILURES: int = 3
     MESH_RELAY_FAILURE_COOLDOWN_S: int = 120
-    MESH_PEER_PUSH_SECRET: str = ""
+    MESH_PEER_PUSH_SECRET: str = "sb-public-testnet-v1-2026"
     MESH_RNS_APP_NAME: str = "shadowbroker"
     MESH_RNS_ASPECT: str = "infonet"
     MESH_RNS_IDENTITY_PATH: str = ""

@@ -3695,10 +3695,11 @@ async def gate_create(request: Request):
 @app.get("/api/mesh/gate/list")
 @limiter.limit("30/minute")
 async def gate_list(request: Request):
-    """List all known gates."""
+    """List all known gates.  Includes per-gate content keys so members can
+    encrypt/decrypt gate_envelope payloads across nodes."""
     from services.mesh.mesh_reputation import gate_manager
 
-    return {"gates": gate_manager.list_gates()}
+    return {"gates": gate_manager.list_gates(include_secrets=True)}
 
 
 @app.get("/api/mesh/gate/{gate_id}")

@@ -58,22 +58,41 @@ MLS_GATE_FORMAT = "mls1"
 _GATE_ENVELOPE_DOMAIN = "gate_persona"
 
 
-def _gate_envelope_key_shared(gate_id: str) -> bytes:
-    """Derive a 256-bit AES key from the gate ID via HKDF.
+def _gate_envelope_key_shared(gate_id: str, gate_secret: str = "") -> bytes:
+    """Derive a 256-bit AES key for gate envelope encryption.
 
-    Every node that knows the gate name derives the same key, enabling
-    cross-node decryption of gate_envelope payloads.
+    When *gate_secret* is provided (Phase 2), the random per-gate secret is
+    the primary input key material — knowing the gate name alone is no longer
+    sufficient.  Without it, falls back to the legacy gate-name-only derivation
+    for backward compatibility with pre-Phase-2 messages.
     """
     from cryptography.hazmat.primitives.kdf.hkdf import HKDF
     from cryptography.hazmat.primitives import hashes
 
-    ikm = gate_id.strip().lower().encode("utf-8")
+    gate_key = gate_id.strip().lower()
+    if gate_secret:
+        # Phase 2: IKM = gate_secret, info includes gate_id for domain separation
+        ikm = gate_secret.encode("utf-8")
+        info = f"gate_envelope_aes256gcm|{gate_key}".encode("utf-8")
+    else:
+        # Legacy: IKM = gate_id only (backward compat)
+        ikm = gate_key.encode("utf-8")
+        info = b"gate_envelope_aes256gcm"
     return HKDF(
         algorithm=hashes.SHA256(),
         length=32,
         salt=b"shadowbroker-gate-envelope-v1",
-        info=b"gate_envelope_aes256gcm",
+        info=info,
     ).derive(ikm)
+
+
+def _resolve_gate_secret(gate_id: str) -> str:
+    """Look up the per-gate content key from the gate manager."""
+    try:
+        from services.mesh.mesh_reputation import gate_manager
+        return gate_manager.get_gate_secret(gate_id)
+    except Exception:
+        return ""
 
 
 def _gate_envelope_key_legacy() -> bytes | None:
@@ -86,8 +105,9 @@ def _gate_envelope_key_legacy() -> bytes | None:
 
 
 def _gate_envelope_encrypt(gate_id: str, plaintext: str) -> str:
-    """Encrypt plaintext under the shared gate-derived key.  Returns base64."""
-    key = _gate_envelope_key_shared(gate_id)
+    """Encrypt plaintext under the per-gate secret key.  Returns base64."""
+    gate_secret = _resolve_gate_secret(gate_id)
+    key = _gate_envelope_key_shared(gate_id, gate_secret)
     nonce = _os.urandom(12)
     aad = f"gate_envelope|{gate_id}".encode("utf-8")
     ct = _AESGCM(key).encrypt(nonce, plaintext.encode("utf-8"), aad)
@@ -95,20 +115,32 @@ def _gate_envelope_encrypt(gate_id: str, plaintext: str) -> str:
 
 
 def _gate_envelope_decrypt(gate_id: str, token: str) -> str | None:
-    """Decrypt a gate envelope token.  Tries the shared key first, then
-    falls back to the legacy node-local key for old messages."""
+    """Decrypt a gate envelope token.
+
+    Tries keys in priority order:
+    1. Phase 2 per-gate secret key (gate_secret + gate_id)
+    2. Legacy shared key (gate_id only — for pre-Phase-2 messages)
+    3. Legacy node-local domain key (for very old messages)
+    """
     try:
         raw = base64.b64decode(token)
         if len(raw) < 13:
             return None
         nonce, ct = raw[:12], raw[12:]
         aad = f"gate_envelope|{gate_id}".encode("utf-8")
-        # Try shared (cross-node) key first
+        # 1. Try Phase 2 per-gate secret key
+        gate_secret = _resolve_gate_secret(gate_id)
+        if gate_secret:
+            try:
+                return _AESGCM(_gate_envelope_key_shared(gate_id, gate_secret)).decrypt(nonce, ct, aad).decode("utf-8")
+            except Exception:
+                pass
+        # 2. Try legacy gate-name-only key (backward compat)
         try:
-            return _AESGCM(_gate_envelope_key_shared(gate_id)).decrypt(nonce, ct, aad).decode("utf-8")
+            return _AESGCM(_gate_envelope_key_shared(gate_id, "")).decrypt(nonce, ct, aad).decode("utf-8")
         except Exception:
             pass
-        # Fall back to legacy node-local key for pre-migration messages
+        # 3. Fall back to legacy node-local key for very old messages
         legacy_key = _gate_envelope_key_legacy()
         if legacy_key:
             return _AESGCM(legacy_key).decrypt(nonce, ct, aad).decode("utf-8")

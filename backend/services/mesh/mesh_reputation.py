@@ -9,7 +9,9 @@ Getting downvoted below the threshold bars you automatically — no moderator ne
 Persistence: JSON files in backend/data/ (auto-saved on change, loaded on start).
 """
 
+import base64
 import math
+import secrets
 import time
 import logging
 import os
@@ -48,6 +50,11 @@ GATE_RATIFICATION_REP = (
 ALLOW_DYNAMIC_GATES = False
 _VOTE_STORAGE_SALT_CACHE: bytes | None = None
 _VOTE_STORAGE_SALT_WARNING_EMITTED = False
+
+
+def _generate_gate_secret() -> str:
+    """Generate a cryptographically random 32-byte gate secret (URL-safe base64)."""
+    return base64.urlsafe_b64encode(secrets.token_bytes(32)).decode("ascii")
 
 DEFAULT_PRIVATE_GATES: dict[str, dict] = {
     "infonet": {
@@ -762,6 +769,7 @@ class GateManager:
                     "message_count": 0,
                     "fixed": True,
                     "sort_order": seed["sort_order"],
+                    "gate_secret": _generate_gate_secret(),
                 }
                 changed = True
                 continue
@@ -780,6 +788,10 @@ class GateManager:
             gate["rules"].setdefault("min_gate_rep", {})
             gate.setdefault("message_count", 0)
             gate.setdefault("created_at", time.time())
+            # Backfill gate_secret for gates created before Phase 2
+            if not gate.get("gate_secret"):
+                gate["gate_secret"] = _generate_gate_secret()
+                changed = True
 
         return changed
 
@@ -838,6 +850,7 @@ class GateManager:
             "message_count": 0,
             "fixed": False,
             "sort_order": 1000,
+            "gate_secret": _generate_gate_secret(),
         }
         self._save()
         logger.info(
@@ -869,22 +882,28 @@ class GateManager:
 
         return True, "Access granted"
 
-    def list_gates(self) -> list[dict]:
-        """List all gates with metadata."""
+    def list_gates(self, *, include_secrets: bool = False) -> list[dict]:
+        """List all gates with metadata.
+
+        When *include_secrets* is True the per-gate content key is included so
+        the frontend can encrypt/decrypt gate_envelope payloads.  The caller
+        must ensure the request is authenticated before passing True.
+        """
         result = []
         for gid, gate in self.gates.items():
-            result.append(
-                {
-                    "gate_id": gid,
-                    "display_name": gate.get("display_name", gid),
-                    "description": gate.get("description", ""),
-                    "welcome": gate.get("welcome", ""),
-                    "rules": gate.get("rules", {}),
-                    "created_at": gate.get("created_at", 0),
-                    "fixed": bool(gate.get("fixed", False)),
-                    "sort_order": int(gate.get("sort_order", 1000) or 1000),
-                }
-            )
+            entry: dict = {
+                "gate_id": gid,
+                "display_name": gate.get("display_name", gid),
+                "description": gate.get("description", ""),
+                "welcome": gate.get("welcome", ""),
+                "rules": gate.get("rules", {}),
+                "created_at": gate.get("created_at", 0),
+                "fixed": bool(gate.get("fixed", False)),
+                "sort_order": int(gate.get("sort_order", 1000) or 1000),
+            }
+            if include_secrets:
+                entry["gate_secret"] = gate.get("gate_secret", "")
+            result.append(entry)
         return sorted(
             result,
             key=lambda x: (
@@ -894,6 +913,13 @@ class GateManager:
                 x.get("gate_id", ""),
             ),
         )
+
+    def get_gate_secret(self, gate_id: str) -> str:
+        """Return the per-gate content key, or empty string if unknown."""
+        gate = self.gates.get(str(gate_id or "").strip().lower())
+        if not gate:
+            return ""
+        return str(gate.get("gate_secret", "") or "")
 
     def get_gate(self, gate_id: str) -> Optional[dict]:
         """Get gate details."""
