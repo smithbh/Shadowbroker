@@ -8,6 +8,24 @@ echo "   S H A D O W B R O K E R   -   macOS / Linux Start   "
 echo "======================================================="
 echo ""
 
+# Check for stale docker-compose.yml from pre-migration clones
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ -f "$SCRIPT_DIR/docker-compose.yml" ] && grep -q '^\s*build:' "$SCRIPT_DIR/docker-compose.yml" 2>/dev/null; then
+    echo ""
+    echo "================================================================"
+    echo "  [!] WARNING: Your docker-compose.yml is outdated."
+    echo ""
+    echo "  It contains 'build:' directives, which means Docker will"
+    echo "  compile from local source instead of pulling pre-built images."
+    echo "  You will NOT receive updates this way."
+    echo ""
+    echo "  If you use Docker, re-clone the repository:"
+    echo "    git clone https://github.com/BigBodyCobain/Shadowbroker.git"
+    echo "    cd Shadowbroker && docker compose pull && docker compose up -d"
+    echo "================================================================"
+    echo ""
+fi
+
 # Check for Node.js
 if ! command -v npm &> /dev/null; then
     echo "[!] ERROR: npm is not installed. Please install Node.js 18+ (https://nodejs.org/)"

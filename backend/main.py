@@ -12,6 +12,8 @@ from dataclasses import dataclass, field
 from typing import Any
 from json import JSONDecodeError
 
+APP_VERSION = "0.9.6"
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 _start_time = time.time()
@@ -6667,6 +6669,7 @@ async def health_check(request: Request):
     last = d.get("last_updated")
     return {
         "status": "ok",
+        "version": APP_VERSION,
         "last_updated": last,
         "sources": {
             "flights": len(d.get("commercial_flights", [])),

@@ -6,6 +6,26 @@ echo     S H A D O W B R O K E R   --   STARTUP
 echo ===================================================
 echo.
 
+:: Check for stale docker-compose.yml from pre-migration clones
+findstr /R /C:"build:" docker-compose.yml >nul 2>&1
+if %errorlevel% equ 0 (
+    echo.
+    echo ================================================================
+    echo   [!] WARNING: Your docker-compose.yml is outdated.
+    echo.
+    echo   It contains 'build:' directives, which means Docker will
+    echo   compile from local source instead of pulling pre-built images.
+    echo   You will NOT receive updates this way.
+    echo.
+    echo   If you use Docker, re-clone the repository:
+    echo     git clone https://github.com/BigBodyCobain/Shadowbroker.git
+    echo     cd Shadowbroker
+    echo     docker compose pull
+    echo     docker compose up -d
+    echo ================================================================
+    echo.
+)
+
 :: Check for Python
 where python >nul 2>&1
 if %errorlevel% neq 0 (

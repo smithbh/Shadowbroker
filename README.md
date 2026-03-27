@@ -101,7 +101,21 @@ That's it. `pull` grabs the latest images, `up -d` restarts the containers.
 
 ### ⚠️ **Stuck on the old version?**
 
-**If the dashboard still shows old data after updating:**
+**If `git pull` fails or `docker compose up` keeps building from source instead of pulling images**, your clone predates a March 2026 repository migration that rewrote commit history. A normal `git pull` cannot fix this. Run:
+
+```bash
+# Back up any local config you want to keep (.env, etc.)
+cd ..
+rm -rf Shadowbroker
+git clone https://github.com/BigBodyCobain/Shadowbroker.git
+cd Shadowbroker
+docker compose pull
+docker compose up -d
+```
+
+**How to tell if you're affected:** If `docker compose up` shows `RUN apt-get`, `RUN npm ci`, or `RUN pip install` — it's building from source instead of pulling pre-built images. You need a fresh clone.
+
+**Other troubleshooting:**
 
 * **Force re-pull:** `docker compose pull --no-cache`
 * **Prune old images:** `docker image prune -f`
