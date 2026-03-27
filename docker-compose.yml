@@ -16,7 +16,7 @@ services:
       # Default Infonet relay peer so fresh installs can sync immediately.
       - MESH_RELAY_PEERS=${MESH_RELAY_PEERS:-http://cipher0.shadowbroker.info:8000}
       # Shared transport auth for mesh peer push (default matches baked-in testnet secret).
-      - MESH_PEER_PUSH_SECRET=${MESH_PEER_PUSH_SECRET:-sb-public-testnet-v1-2026}
+      - MESH_PEER_PUSH_SECRET=${MESH_PEER_PUSH_SECRET:-Mv63UvLfwqOEVWeRBXjA8MtFl2nEkkhUlLYVHiX1Zzo}
     volumes:
       - backend_data:/app/data
     restart: unless-stopped
