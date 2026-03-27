@@ -17,5 +17,5 @@ export const NOMINATIM_DEBOUNCE_MS = 350;
 export const INTERP_TICK_MS = 2000;
 
 // ─── News/Alert Layout ──────────────────────────────────────────────────────
-export const ALERT_BOX_WIDTH_PX = 180;
+export const ALERT_BOX_WIDTH_PX = 280;
 export const ALERT_MAX_OFFSET_PX = 350;

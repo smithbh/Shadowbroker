@@ -375,19 +375,19 @@ export function ThreatMarkers({
                 style={{
                   opacity: isVisible ? 1.0 : 0.0,
                   pointerEvents: isVisible ? 'auto' : 'none',
-                  backgroundColor: 'rgba(5, 5, 5, 0.95)',
-                  border: `1.5px solid ${riskColor}`,
+                  backgroundColor: 'rgba(5, 5, 5, 0.96)',
+                  border: `2px solid ${riskColor}`,
                   borderRadius: '4px',
-                  padding: '5px 16px 5px 8px',
+                  padding: '8px 20px 8px 12px',
                   color: riskColor,
-                  fontFamily: 'monospace',
-                  fontSize: '9px',
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: '12px',
                   fontWeight: 'bold',
                   textAlign: 'center',
-                  boxShadow: `0 0 12px ${riskColor}60`,
+                  boxShadow: `0 0 20px ${riskColor}80, 0 0 40px ${riskColor}30`,
                   zIndex: 10,
-                  lineHeight: '1.2',
-                  minWidth: '120px',
+                  lineHeight: '1.3',
+                  minWidth: '200px',
                 }}
               >
                 {n.showLine && isVisible && (
@@ -419,13 +419,13 @@ export function ThreatMarkers({
                     }}
                     style={{
                       position: 'absolute',
-                      top: '2px',
-                      right: '4px',
+                      top: '4px',
+                      right: '6px',
                       background: 'transparent',
                       border: 'none',
                       cursor: 'pointer',
                       color: riskColor,
-                      fontSize: '12px',
+                      fontSize: '16px',
                       fontWeight: 'bold',
                       lineHeight: 1,
                       padding: '0 2px',
@@ -438,24 +438,23 @@ export function ThreatMarkers({
                     ×
                   </button>
                 )}
-                <div style={{ fontSize: '10px', letterSpacing: '0.5px' }}>
+                <div style={{ fontSize: '14px', letterSpacing: '1.5px', textTransform: 'uppercase' as const }}>
                   !! ALERT LVL {score} !!
                 </div>
                 <div
                   style={{
                     color: '#fff',
-                    fontSize: '9px',
-                    marginTop: '2px',
-                    maxWidth: '160px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
+                    fontSize: '12px',
+                    marginTop: '4px',
+                    maxWidth: '260px',
+                    lineHeight: '1.4',
                   }}
                 >
                   {n.title}
                 </div>
                 {count > 1 && (
                   <div
-                    style={{ color: riskColor, opacity: 0.8, fontSize: '8px', marginTop: '2px' }}
+                    style={{ color: riskColor, opacity: 0.9, fontSize: '10px', marginTop: '4px', letterSpacing: '0.5px' }}
                   >
                     [+{count - 1} ACTIVE THREATS IN AREA]
                   </div>
