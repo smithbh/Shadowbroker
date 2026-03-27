@@ -4249,6 +4249,14 @@ async def gate_peer_push(request: Request):
         epoch = _safe_int(payload.get("epoch", 0) or 0)
         if epoch > 0:
             clean_event["payload"]["epoch"] = epoch
+        # Preserve gate_envelope and reply_to — these are required for
+        # cross-node decryption and threading.
+        gate_envelope_val = str(payload.get("gate_envelope", "") or "").strip()
+        reply_to_val = str(payload.get("reply_to", "") or "").strip()
+        if gate_envelope_val:
+            clean_event["payload"]["gate_envelope"] = gate_envelope_val
+        if reply_to_val:
+            clean_event["payload"]["reply_to"] = reply_to_val
         event_gate_id = str(payload.get("gate", "") or evt_dict.get("gate", "") or "").strip().lower()
         if not event_gate_id:
             event_gate_id = resolve_gate_wire_ref(
@@ -4257,6 +4265,19 @@ async def gate_peer_push(request: Request):
             )
         if not event_gate_id:
             return {"ok": False, "detail": "gate resolution failed"}
+        final_payload: dict[str, Any] = {
+            "gate": event_gate_id,
+            "ciphertext": clean_event["payload"]["ciphertext"],
+            "format": clean_event["payload"]["format"],
+            "nonce": clean_event["payload"]["nonce"],
+            "sender_ref": clean_event["payload"]["sender_ref"],
+        }
+        if epoch > 0:
+            final_payload["epoch"] = epoch
+        if clean_event["payload"].get("gate_envelope"):
+            final_payload["gate_envelope"] = clean_event["payload"]["gate_envelope"]
+        if clean_event["payload"].get("reply_to"):
+            final_payload["reply_to"] = clean_event["payload"]["reply_to"]
         grouped_events.setdefault(event_gate_id, []).append(
             {
                 "event_id": clean_event["event_id"],
@@ -4268,17 +4289,9 @@ async def gate_peer_push(request: Request):
                 "public_key": clean_event["public_key"],
                 "public_key_algo": clean_event["public_key_algo"],
                 "protocol_version": clean_event["protocol_version"],
-                "payload": {
-                    "gate": event_gate_id,
-                    "ciphertext": clean_event["payload"]["ciphertext"],
-                    "format": clean_event["payload"]["format"],
-                    "nonce": clean_event["payload"]["nonce"],
-                    "sender_ref": clean_event["payload"]["sender_ref"],
-                },
+                "payload": final_payload,
             }
         )
-        if epoch > 0:
-            grouped_events[event_gate_id][-1]["payload"]["epoch"] = epoch
 
     accepted = 0
     duplicates = 0
