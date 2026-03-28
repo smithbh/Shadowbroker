@@ -286,6 +286,15 @@ def _sanitize_private_gate_event(gate_id: str, event: dict[str, Any]) -> dict[st
     return sanitized
 
 
+def _is_relay_node() -> bool:
+    """Return True when this node is running in relay mode."""
+    try:
+        from services.config import get_settings
+        return str(get_settings().MESH_NODE_MODE or "participant").strip().lower() == "relay"
+    except Exception:
+        return False
+
+
 def _authorize_private_gate_transport_author(
     gate_id: str,
     node_id: str,
@@ -304,6 +313,11 @@ def _authorize_private_gate_transport_author(
         reputation_ledger.register_node(candidate, public_key, public_key_algo)
     except Exception:
         return False, "private gate authorization unavailable"
+    # Relay nodes are store-and-forward: they don't manage gates locally,
+    # so they won't have gate configs.  Skip the gate-existence check —
+    # the message is already signature-verified at this point.
+    if _is_relay_node():
+        return True, "ok (relay passthrough)"
     ok, reason = gate_manager.can_enter(candidate, gate_key)
     if ok:
         return True, "ok"
