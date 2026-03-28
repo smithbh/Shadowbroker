@@ -23,13 +23,16 @@ export interface SpreadAlertItem extends NewsArticle {
 /** Estimate rendered box height based on title length */
 function estimateBoxH(n: { title?: string; cluster_count?: number }): number {
   const titleLen = (n.title || '').length;
-  const titleLines = Math.max(1, Math.ceil(titleLen / 20)); // ~20 chars per line at 9px in 160px
+  // Title wraps at ~22 chars per line inside 260px maxWidth at 12px font
+  const titleLines = Math.max(1, Math.ceil(titleLen / 22));
   const hasFooter = (n.cluster_count || 1) > 1;
-  return 10 + 14 + titleLines * 13 + (hasFooter ? 14 : 0) + 10; // padding + header + title + footer + padding
+  // padding(8+8) + header("!! ALERT LVL X !!" ~20px) + gap(4) + title(lines*17) + footer(18) + padding
+  return 16 + 20 + 4 + titleLines * 17 + (hasFooter ? 18 : 0) + 8;
 }
 
 /**
- * Resolves alert box collisions using a grid-based spatial algorithm (O(n) per iteration).
+ * Resolves alert box collisions using iterative repulsion.
+ * Higher-risk alerts get priority (sorted first, pushed less).
  * Returns positioned items with offsets and alert keys.
  */
 export function spreadAlertItems(
@@ -51,14 +54,17 @@ export function spreadAlertItems(
       boxH: estimateBoxH(n as { title?: string; cluster_count?: number }),
     }));
 
+  // Sort by risk score descending — high-risk alerts stay closer to origin
+  items.sort((a, b) => ((b as any).risk_score || 0) - ((a as any).risk_score || 0));
+
   const BOX_W = ALERT_BOX_WIDTH_PX;
-  const GAP = 6;
+  const GAP = 12; // Increased gap for breathing room
   const MAX_OFFSET = ALERT_MAX_OFFSET_PX;
 
-  // Grid-based Collision Resolution (O(n) per iteration instead of O(n²))
+  // Grid-based Collision Resolution
   const CELL_W = BOX_W + GAP;
-  const CELL_H = 100;
-  const maxIter = 30;
+  const CELL_H = 80; // Smaller cells = better overlap detection
+  const maxIter = 60; // More iterations for dense clusters
 
   for (let iter = 0; iter < maxIter; iter++) {
     let moved = false;
@@ -89,31 +95,41 @@ export function spreadAlertItems(
               if (i === j) continue;
               const a = items[i],
                 b = items[j];
-              const adx = Math.abs(a.x + a.offsetX - (b.x + b.offsetX));
-              const ady = Math.abs(a.y + a.offsetY - (b.y + b.offsetY));
+              const ax = a.x + a.offsetX,
+                ay = a.y + a.offsetY;
+              const bx = b.x + b.offsetX,
+                by = b.y + b.offsetY;
+              const adx = Math.abs(ax - bx);
+              const ady = Math.abs(ay - by);
               const minDistX = BOX_W + GAP;
               const minDistY = (a.boxH + b.boxH) / 2 + GAP;
               if (adx < minDistX && ady < minDistY) {
                 moved = true;
                 const overlapX = minDistX - adx;
                 const overlapY = minDistY - ady;
+
+                // Higher-index items (lower risk) get pushed more
+                // This keeps high-risk alerts closer to their true position
+                const weightA = i < j ? 0.35 : 0.65;
+                const weightB = 1 - weightA;
+
                 if (overlapY < overlapX) {
-                  const push = overlapY / 2 + 1;
-                  if (a.y + a.offsetY <= b.y + b.offsetY) {
-                    a.offsetY -= push;
-                    b.offsetY += push;
+                  const push = overlapY + 2;
+                  if (ay <= by) {
+                    a.offsetY -= push * weightA;
+                    b.offsetY += push * weightB;
                   } else {
-                    a.offsetY += push;
-                    b.offsetY -= push;
+                    a.offsetY += push * weightA;
+                    b.offsetY -= push * weightB;
                   }
                 } else {
-                  const push = overlapX / 2 + 1;
-                  if (a.x + a.offsetX <= b.x + b.offsetX) {
-                    a.offsetX -= push;
-                    b.offsetX += push;
+                  const push = overlapX + 2;
+                  if (ax <= bx) {
+                    a.offsetX -= push * weightA;
+                    b.offsetX += push * weightB;
                   } else {
-                    a.offsetX += push;
-                    b.offsetX -= push;
+                    a.offsetX += push * weightA;
+                    b.offsetX -= push * weightB;
                   }
                 }
               }
