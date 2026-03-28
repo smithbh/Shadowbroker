@@ -10,7 +10,7 @@ _cache: dict | None = None
 _cache_ts: float = 0.0
 _CACHE_TTL = 5.0
 _DEFAULTS = {
-    "enabled": False,
+    "enabled": True,
 }
 
 
