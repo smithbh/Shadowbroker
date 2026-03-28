@@ -10,14 +10,13 @@ echo ""
 
 # Check for stale docker-compose.yml from pre-migration clones
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-if [ -f "$SCRIPT_DIR/docker-compose.yml" ] && grep -q '^\s*build:' "$SCRIPT_DIR/docker-compose.yml" 2>/dev/null; then
+if [ -f "$SCRIPT_DIR/docker-compose.yml" ] && grep -q 'ghcr\.io' "$SCRIPT_DIR/docker-compose.yml" 2>/dev/null; then
     echo ""
     echo "================================================================"
     echo "  [!] WARNING: Your docker-compose.yml is outdated."
     echo ""
-    echo "  It contains 'build:' directives, which means Docker will"
-    echo "  compile from local source instead of pulling pre-built images."
-    echo "  You will NOT receive updates this way."
+    echo "  It references ghcr.io which may require authentication."
+    echo "  The current version uses Docker Hub for anonymous pulls."
     echo ""
     echo "  If you use Docker, re-clone the repository:"
     echo "    git clone https://github.com/BigBodyCobain/Shadowbroker.git"

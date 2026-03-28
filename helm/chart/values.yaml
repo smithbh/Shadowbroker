@@ -13,7 +13,7 @@ shadowbroker:
             runAsGroup: 1001
           image:
             pullPolicy: Always
-            repository: ghcr.io/bigbodycobain/shadowbroker-backend
+            repository: bigbodycobain/shadowbroker-backend
             tag: latest
           env:
             AIS_API_KEY:
@@ -41,7 +41,7 @@ shadowbroker:
             runAsGroup: 1001
           image:
             pullPolicy: Always
-            repository: ghcr.io/bigbodycobain/shadowbroker-frontend
+            repository: bigbodycobain/shadowbroker-frontend
             tag: latest
 
           env:
