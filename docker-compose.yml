@@ -1,6 +1,10 @@
+## Two registries available — swap the image lines to switch:
+##   registry.gitlab.com/bigbodycobain/shadowbroker/backend:latest
+##   ghcr.io/bigbodycobain/shadowbroker-backend:latest
+
 services:
   backend:
-    image: ghcr.io/bigbodycobain/shadowbroker-backend:latest
+    image: registry.gitlab.com/bigbodycobain/shadowbroker/backend:latest
     container_name: shadowbroker-backend
     ports:
       - "${BIND:-127.0.0.1}:8000:8000"
@@ -15,8 +19,8 @@ services:
       - CORS_ORIGINS=${CORS_ORIGINS:-}
       # Default Infonet relay peer so fresh installs can sync immediately.
       - MESH_RELAY_PEERS=${MESH_RELAY_PEERS:-http://cipher0.shadowbroker.info:8000}
-      # Shared transport auth for mesh peer push (default matches baked-in testnet secret).
-      - MESH_PEER_PUSH_SECRET=${MESH_PEER_PUSH_SECRET:-Mv63UvLfwqOEVWeRBXjA8MtFl2nEkkhUlLYVHiX1Zzo}
+      # Shared transport auth for mesh peer push. Must be set to a unique secret per deployment.
+      - MESH_PEER_PUSH_SECRET=${MESH_PEER_PUSH_SECRET}
     volumes:
       - backend_data:/app/data
     restart: unless-stopped
@@ -33,7 +37,7 @@ services:
           cpus: '2'
 
   frontend:
-    image: ghcr.io/bigbodycobain/shadowbroker-frontend:latest
+    image: registry.gitlab.com/bigbodycobain/shadowbroker/frontend:latest
     container_name: shadowbroker-frontend
     ports:
       - "${BIND:-127.0.0.1}:3000:3000"
