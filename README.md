@@ -19,7 +19,7 @@
 
 
 
-https://gitlab.com/bigbodycobain/Shadowbroker/uploads/1b8bac8ec01827d9fa282cab43f75cea/shadowbroker-hero.mp4
+<video src="https://gitlab.com/bigbodycobain/Shadowbroker/uploads/1b8bac8ec01827d9fa282cab43f75cea/shadowbroker-hero.mp4" autoplay loop muted playsinline width="100%"></video>
 
 
 
