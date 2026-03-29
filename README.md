@@ -27,7 +27,7 @@ https://github.com/user-attachments/assets/248208ec-62f7-49d1-831d-4bd0a1fa6852
 
 **ShadowBroker** is a real-time, multi-domain OSINT dashboard that fuses 60+ live intelligence feeds into a single dark-ops map interface. Aircraft, ships, satellites, conflict zones, CCTV networks, GPS jamming, internet-connected devices, police scanners, mesh radio nodes, and breaking geopolitical events — all updating in real time on one screen.
 
-Built with **Next.js**, **MapLibre GL**, **FastAPI**, and **Python**. 35+ toggleable data layers. Right-click any point on Earth for a region/country dossier, head-of-state lookup, and the latest Sentinel-2 satellite photo. No user data is collected or transmitted — the dashboard runs entirely in your browser against a self-hosted backend.
+Built with **Next.js**, **MapLibre GL**, **FastAPI**, and **Python**. 35+ toggleable data layers. TMany visual modes (DEFAULT / SATELLITE / NIGHTLIGHT ETC>). Right-click any point on Earth for a country dossier, head-of-state lookup, and the latest Sentinel-2 satellite photo. No user data is collected or transmitted — the dashboard runs entirely in your browser against a self-hosted backend.
 
 Designed for analysts, researchers, radio operators, and anyone who wants to see what the world looks like when every public signal is on the same map.
 
@@ -67,7 +67,7 @@ ShadowBroker includes an optional Shodan connector for operator-supplied API acc
 ## ⚡ Quick Start (Docker)
 
 ```bash
-git clone https://github.com/BigBodyCobain/Shadowbroker.git
+git clone https://gitlab.com/bigbodycobain/Shadowbroker.git
 cd Shadowbroker
 docker compose pull
 docker compose up -d
@@ -107,7 +107,7 @@ That's it. `pull` grabs the latest images, `up -d` restarts the containers.
 # Back up any local config you want to keep (.env, etc.)
 cd ..
 rm -rf Shadowbroker
-git clone https://github.com/BigBodyCobain/Shadowbroker.git
+git clone https://gitlab.com/bigbodycobain/Shadowbroker.git
 cd Shadowbroker
 docker compose pull
 docker compose up -d
@@ -347,9 +347,16 @@ The first decentralized intelligence communication layer built directly into an 
 │  └───────────────────────────────────────────────────────────┘  │
 │                                                                 │
 │  ┌───────────────────────────────────────────────────────────┐  │
-│  │                   GHCR (Pre-built Images)                 │  │
-│  │  ghcr.io/bigbodycobain/shadowbroker-backend:latest        │  │
-│  │  ghcr.io/bigbodycobain/shadowbroker-frontend:latest       │  │
+│  │           Container Registries (Pre-built Images)         │  │
+│  │                                                           │  │
+│  │  GitLab (primary):                                        │  │
+│  │    registry.gitlab.com/bigbodycobain/shadowbroker/backend │  │
+│  │    registry.gitlab.com/bigbodycobain/shadowbroker/frontend│  │
+│  │                                                           │  │
+│  │  GitHub (mirror):                                         │  │
+│  │    ghcr.io/bigbodycobain/shadowbroker-backend             │  │
+│  │    ghcr.io/bigbodycobain/shadowbroker-frontend            │  │
+│  │                                                           │  │
 │  │  Multi-arch: linux/amd64 + linux/arm64                    │  │
 │  └───────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
@@ -409,10 +416,10 @@ The first decentralized intelligence communication layer built directly into an 
 
 ### 🐳 Docker Setup (Recommended for Self-Hosting)
 
-The repo includes a `docker-compose.yml` that pulls pre-built images from the GitHub Container Registry.
+The repo includes a `docker-compose.yml` that pulls pre-built images from the GitLab Container Registry.
 
 ```bash
-git clone https://github.com/BigBodyCobain/Shadowbroker.git
+git clone https://gitlab.com/bigbodycobain/Shadowbroker.git
 cd Shadowbroker
 # Add your API keys in a repo-root .env file (optional — see Environment Variables below)
 docker compose pull
@@ -448,14 +455,19 @@ Open `http://localhost:3000` to view the dashboard.
 
 ### 🐋 Standalone Deploy (Portainer, Uncloud, NAS, etc.)
 
-No need to clone the repo. Use the pre-built images published to the GitHub Container Registry.
+No need to clone the repo. Use the pre-built images from the GitLab Container Registry (primary) or GitHub Container Registry (mirror).
 
 Create a `docker-compose.yml` with the following content and deploy it directly — paste it into Portainer's stack editor, `uncloud deploy`, or any Docker host:
 
 ```yaml
+## Image registry — uncomment ONE line per service:
+##   GitLab  (primary):  registry.gitlab.com/bigbodycobain/shadowbroker/backend:latest
+##   GitHub  (mirror):   ghcr.io/bigbodycobain/shadowbroker-backend:latest
+
 services:
   backend:
-    image: ghcr.io/bigbodycobain/shadowbroker-backend:latest
+    image: registry.gitlab.com/bigbodycobain/shadowbroker/backend:latest
+    # image: ghcr.io/bigbodycobain/shadowbroker-backend:latest
     container_name: shadowbroker-backend
     ports:
       - "8000:8000"
@@ -473,7 +485,8 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: ghcr.io/bigbodycobain/shadowbroker-frontend:latest
+    image: registry.gitlab.com/bigbodycobain/shadowbroker/frontend:latest
+    # image: ghcr.io/bigbodycobain/shadowbroker-frontend:latest
     container_name: shadowbroker-frontend
     ports:
       - "3000:3000"
@@ -497,7 +510,7 @@ volumes:
 
 If you just want to run the dashboard without dealing with terminal commands:
 
-1. Go to the **[Releases](../../releases)** tab on the right side of this GitHub page.
+1. Go to the **[Releases](../../releases)** tab on the right side of this repo page.
 2. Download the latest `.zip` file from the release.
 3. Extract the folder to your computer.
 4. **Windows:** Double-click `start.bat`.
@@ -526,7 +539,7 @@ If you want to modify the code or run from source:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/shadowbroker.git
+git clone https://gitlab.com/bigbodycobain/Shadowbroker.git
 cd shadowbroker/live-risk-dashboard
 
 # Backend setup
