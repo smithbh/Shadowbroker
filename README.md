@@ -1,10 +1,6 @@
-<p align="center">
-  <h1 align="center">🛰️ S H A D O W B R O K E R</h1>
-  <p align="center"><strong>Global Threat Intercept — Real-Time Geospatial Intelligence Platform</strong></p>
-  <p align="center">
+<h1 align="center">🛰️ S H A D O W B R O K E R</h1>
+<p align="center"><strong>Global Threat Intercept — Real-Time Geospatial Intelligence Platform</strong></p>
 
-  </p>
-</p>
 
 ---
 
