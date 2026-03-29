@@ -11,7 +11,7 @@
 
 
 
-https://github.com/user-attachments/assets/248208ec-62f7-49d1-831d-4bd0a1fa6852
+https://gitlab.com/bigbodycobain/Shadowbroker/uploads/1b8bac8ec01827d9fa282cab43f75cea/shadowbroker-hero.mp4
 
 
 
@@ -286,7 +286,7 @@ The first decentralized intelligence communication layer built directly into an 
 * **Measurement Tool** — Point-to-point distance & bearing measurement on the map
 * **LOCATE Bar** — Search by coordinates (31.8, 34.8) or place name (Tehran, Strait of Hormuz) to fly directly to any location — geocoded via OpenStreetMap Nominatim
 
-![Gaza](https://github.com/user-attachments/assets/f2c953b2-3528-4360-af5a-7ea34ff28489)
+![Gaza](https://gitlab.com/bigbodycobain/Shadowbroker/uploads/c55a0c8d49e5e05c6cd094279e6e089b/gaza-screenshot.jpg)
 
 ---
 
