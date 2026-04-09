@@ -25,9 +25,69 @@ function getLanOrigins(): string[] {
 
 const lanOrigins = getLanOrigins();
 
+const skipTypecheck = process.env.NEXT_SKIP_TYPECHECK === '1';
+const isDev = process.env.NODE_ENV !== 'production';
+const securityHeaders = [
+  {
+    key: 'Content-Security-Policy',
+    value: [
+      "default-src 'self'",
+      isDev
+        ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:"
+        : "script-src 'self' 'unsafe-inline' blob:",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob: https:",
+      isDev
+        ? "connect-src 'self' ws: wss: http://127.0.0.1:8000 http://127.0.0.1:8787 https:"
+        : "connect-src 'self' ws: wss: https:",
+      "font-src 'self' data:",
+      "object-src 'none'",
+      "worker-src 'self' blob:",
+      "child-src 'self' blob:",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join('; '),
+  },
+  {
+    key: 'Referrer-Policy',
+    value: 'no-referrer',
+  },
+  {
+    key: 'X-Content-Type-Options',
+    value: 'nosniff',
+  },
+  {
+    key: 'X-Frame-Options',
+    value: 'DENY',
+  },
+];
+
 const nextConfig: NextConfig = {
-  transpilePackages: ["react-map-gl", "mapbox-gl", "maplibre-gl"],
-  output: "standalone",
+  transpilePackages: ['react-map-gl', 'mapbox-gl', 'maplibre-gl'],
+  output: 'standalone',
+  devIndicators: false,
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'upload.wikimedia.org' },
+      { protocol: 'https', hostname: 'via.placeholder.com' },
+      { protocol: 'https', hostname: 'services.sentinel-hub.com' },
+      { protocol: 'https', hostname: 'data.sentinel-hub.com' },
+      { protocol: 'https', hostname: 'sentinel-hub.com' },
+      { protocol: 'https', hostname: 'dataspace.copernicus.eu' },
+    ],
+  },
+  typescript: {
+    ignoreBuildErrors: skipTypecheck,
+  },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: securityHeaders,
+      },
+    ];
+  },
   ...(lanOrigins.length > 0 && { allowedDevOrigins: lanOrigins }),
 };
 
