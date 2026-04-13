@@ -13,6 +13,14 @@
 
 ---
 
+###UPDATE:
+
+**The primary repository is no longer hosted on github and has moved to gitlab. It can be found here:**
+
+**https://gitlab.com/bigbodycobain/Shadowbroker**
+
+
+---
 
 
 ![ShadowBroker](/uploads/46f99d19fa141a2efba37feee9de8aab/Title.jpg)

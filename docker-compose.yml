@@ -24,6 +24,24 @@ services:
     volumes:
       - backend_data:/app/data
     restart: unless-stopped
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./backend
+          target: /app
+          ignore:
+            - __pycache__/
+            - "*.pyc"
+            - "*.pyc"
+            - node_modules/
+        - action: rebuild
+          path: pyproject.toml
+        - action: rebuild
+          path: uv.lock
+        - action: rebuild
+          path: backend/package.json
+        - action: rebuild
+          path: backend/package-lock.json
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
       interval: 15s
@@ -45,10 +63,21 @@ services:
       # Points the Next.js server-side proxy at the backend container via Docker networking.
       # Change this if your backend runs on a different host or port.
       - BACKEND_URL=http://backend:8000
+      - HOST=${HOST:-127.0.0.1}
     depends_on:
       backend:
         condition: service_healthy
     restart: unless-stopped
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+          ignore:
+            - node_modules/
+            - .next/
+        - action: rebuild
+          path: ./frontend/package.json
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/"]
       interval: 30s
